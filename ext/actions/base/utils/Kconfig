@@ -1,0 +1,43 @@
+menuconfig ACTIONS_UTILS
+    bool
+    prompt "Actions Utils Support"
+    default y
+    help
+    This option enables the actions test service.
+
+config ACTS_RING_BUFFER
+	bool
+	prompt "Actions Ring Buffers Support"
+	depends on ACTIONS_UTILS
+	default n
+	help
+	Enable usage of actions ring buffers. This is similar to kernel ring buffer,
+	except that it contains a device address and support arbitrary buffer size.
+	For optimal performance, use buffer sizes that are a power of 2.
+
+config ACTS_EBERGY_STATISTICS
+	bool
+	prompt "Actions Energy statistics"
+	depends on ACTIONS_UTILS
+	default n
+	help
+	Enable usage of actsions Enable actions Energy statistics.
+
+config ACTS_TRANSCODE
+	bool
+	prompt "Actions Transcode Support"
+	depends on ACTIONS_UTILS
+	default n
+	help
+	Enable usage of actsions Enable actions transcode.
+
+config LOGIC_ANALYZER
+	bool
+	prompt "Enable support to logic analyzer."
+	default n
+
+source "ext/actions/base/utils/stream/Kconfig"
+source "ext/actions/base/utils/iterator/Kconfig"
+source "ext/actions/base/utils/trace/Kconfig"
+source "ext/actions/base/utils/img_load/Kconfig"
+source "ext/actions/base/utils/at_parser/Kconfig"

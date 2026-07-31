@@ -1,0 +1,178 @@
+#
+# Copyright (c) 2016 Intel Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+menu "Actions sdk"
+
+config ACTIONS_SDK
+	bool
+	prompt "Actions SDK Support"
+	default n
+	select ACTIONS_SDK_PORTING
+	select ACTIONS_COMPONENT_FUNCTION
+	select ACTIONS_LIBRARY
+	select ACTIONS_EXTERNAL_LIBRARY
+	select ACTIONS_UTILS
+	select MEMOYR
+	help
+	  This option enables the Actions SDK FUNCTION.
+
+choice
+	prompt "Actions SDk Mode"
+	default ACTIONS_SDK_FULL_MODE
+	depends on ACTIONS_SDK
+	help
+	  Select Actions SDK mode.
+
+config ACTIONS_SDK_FULL_MODE
+	bool
+	prompt "Actions SDK Full Function Mode"
+	select SYSTEM
+	select BLUETOOTH
+	select MEDIA
+	select INPUT
+	select AUDIO_SYSTEM
+	select DISPLAY
+	select UI_MANAGER
+	select POWER
+	select CORE
+	select PROPERTY
+	select PROPERTY_CACHE
+	select STREAM
+	select ESD_MANAGER
+	select SYS_STANDBY
+	select PLAYTTS
+	select PLAY_MERGE_TTS
+	select DVFS
+	select THREAD_TIMER
+	select SYS_LOG
+	select PRINTK
+	select SYSTEM_SHELL
+	select KERNEL_SHELL
+	select INIT_STACKS
+	select THREAD_MONITOR
+	#select OBJECT_TRACING
+	select CPU_LOAD_STAT
+	select CPU_LOAD_DEBUG
+	select SECTION_OVERLAY
+	select THREAD_STACK_INFO
+	select SYS_IRQ_LOCK
+	select SYS_IRQ_LOCK_EXCEPT_BT_CON
+	select XSPI_NOR_AUTO_CHECK_RB
+	select XSPI_NOR_SUSPEND_RESUME
+	select STACK_BACKTRACE
+	select ASSERT
+	select ALARM
+	select SOC_FAMILY_ACTS
+	select WATCHDOG
+	select WDOG_ACTS
+	select DEBUG_RAMDUMP
+	help
+	  This option enables the Actions SDK Full FUNCTION Mode.
+
+config ACTIONS_SDK_MEM_OPT_MODE
+	bool
+	prompt "Actions SDK MEM OPT Function Mode"
+	select SYSTEM
+	select BLUETOOTH
+	select MEDIA
+	select INPUT
+	select AUDIO
+	select DISPLAY
+	select POWER
+	select PROPERTY
+	select PROPERTY_CACHE
+	select STREAM
+	select ESD_MANAGER
+	select SYS_STANDBY
+	select PLAYTTS
+	#select PLAY_KEYTONE
+	select ACTS_RING_BUFFER
+	select DVFS
+	select THREAD_TIMER
+	select SYS_LOG
+	select PRINTK
+	#select SYSTEM_SHELL
+	#select KERNEL_SHELL
+	select INIT_STACKS
+	select THREAD_MONITOR
+	#select OBJECT_TRACING
+	#select CPU_LOAD_STAT
+	#select CPU_LOAD_DEBUG
+	select SECTION_OVERLAY
+	select THREAD_STACK_INFO
+	select SYS_IRQ_LOCK
+	select SYS_IRQ_LOCK_EXCEPT_BT_CON
+	select XSPI_NOR_AUTO_CHECK_RB
+	select XSPI_NOR_SUSPEND_RESUME
+	select STACK_BACKTRACE
+	#select ASSERT
+	select ALARM
+	select DEBUG_RAMDUMP
+	help
+	  This option enables the Actions SDK MEM OPT Mode.
+
+config ACTIONS_SDK_TINY_MODE
+	bool
+	prompt "Actions SDK Tiny Function Mode"
+	select SYSTEM
+	select PROPERTY
+	select INIT_STACKS
+	select THREAD_MONITOR
+	select SYS_IRQ_LOCK
+	select SYS_IRQ_LOCK_EXCEPT_BT_CON
+	select XSPI_NOR_AUTO_CHECK_RB
+	select XSPI_NOR_SUSPEND_RESUME
+	help
+	  This option enables the Actions SDK Tiny FUNCTION mode.
+
+config ACTIONS_SDK_RECOVERY_MODE
+	bool
+	prompt "Actions SDK recovery Mode"
+	select SYSTEM
+	select PROPERTY
+	select INIT_STACKS
+	select THREAD_MONITOR
+	select SYS_IRQ_LOCK
+	select SYS_IRQ_LOCK_EXCEPT_BT_CON
+	select XSPI_NOR_AUTO_CHECK_RB
+	select XSPI_NOR_SUSPEND_RESUME
+	select POWER
+	select CORE
+	select PROPERTY
+	select PROPERTY_CACHE
+	select STREAM
+	select SYS_STANDBY
+	select THREAD_TIMER
+	select CPU_LOAD_STAT
+	select SYS_LOG
+	select PRINTK
+	select SYSTEM_SHELL
+	select KERNEL_SHELL
+	select INIT_STACKS
+	select THREAD_MONITOR
+	select SECTION_OVERLAY
+	select ASSERT
+	select ALARM
+	select ACTS_RING_BUFFER
+	select WATCHDOG
+	select WDOG_ACTS
+	help
+	  This option enables the Actions SDK RECOVERY FUNCTION mode.
+
+endchoice
+
+source "ext/actions/audio/Kconfig"
+source "ext/actions/base/Kconfig"
+source "ext/actions/system/Kconfig"
+source "ext/actions/bluetooth/Kconfig"
+source "ext/actions/media/Kconfig"
+source "ext/actions/usb/Kconfig"
+source "ext/actions/display/Kconfig"
+source "ext/actions/ota/Kconfig"
+source "ext/actions/porting/Kconfig"
+source "ext/actions/att/Kconfig"
+source "ext/actions/mp/Kconfig"
+endmenu

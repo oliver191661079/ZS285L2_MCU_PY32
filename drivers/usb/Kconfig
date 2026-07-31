@@ -1,0 +1,22 @@
+# Kconfig - USB configuration options
+#
+# Copyright (c) 2016 Wind River Systems, Inc.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+menuconfig USB_DEVICE
+	bool "USB DEVICE"
+	select USB_DEVICE_STACK
+	default n
+	help
+	  Enable USB device drivers.
+
+menuconfig USB_HOST
+	bool "USB HOST"
+	select USB_HOST_STACK
+	default n
+	help
+	  Enable USB host drivers.
+
+source "drivers/usb/otg/Kconfig"

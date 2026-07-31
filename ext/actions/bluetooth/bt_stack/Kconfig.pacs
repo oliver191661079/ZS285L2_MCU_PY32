@@ -1,0 +1,52 @@
+# Bluetooth Audio - Published Audio Capabilities Service options
+#
+# Copyright (c) 2021 Actions Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+if BT_AUDIO
+
+config BT_PACS
+	bool "Published Audio Capabilities Service Support"
+	default n
+	help
+	  This option enables support for Published Audio Capabilities Service.
+
+if BT_PACS
+
+config BT_PACS_BUF_SIZE
+	int "Buffer size of each PACS instance"
+	default 32
+	help
+	  Sets the buffer size of Published Audio Capabilities Service (PACS)
+	  instance.
+
+config BT_DEBUG_PACS
+	bool "Published Audio Capabilities Service debug"
+	depends on BT_AUDIO_DEBUG
+	help
+	  Use this option to enable Published Audio Capabilities Service debug
+	  logs for the Bluetooth Audio functionality.
+
+endif # BT_PACS
+
+config BT_PACS_CLIENT
+	bool "Published Audio Capabilities Profile Support"
+	select BT_GATT_CLIENT
+	default n
+	help
+	  This option enables support for Published Audio Capabilities Profile.
+
+if BT_PACS_CLIENT
+
+config BT_DEBUG_PACS_CLIENT
+	bool "Published Audio Capabilities Service client debug"
+	depends on BT_AUDIO_DEBUG
+	help
+	  Use this option to enable Published Audio Capabilities Service client
+	  debug logs for the Bluetooth Audio functionality.
+
+endif # BT_PACS_CLIENT
+
+endif # BT_AUDIO

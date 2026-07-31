@@ -1,0 +1,277 @@
+# Kconfig - Actions arithmetic library
+
+#
+# Copyright (c) 2016 Actions Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+menuconfig ACTIONS_ALGORITHMS_LIBRARY
+	bool
+	prompt "ACTIONS SDK Algorithms library Support"
+	depends on ACTIONS_LIBRARY
+	default n
+	help
+	  This option enables Actions Algorithms library.
+
+
+menuconfig ACTIONS_DECODER
+	bool
+	prompt "ACTIONS Decoder Support"
+	depends on ACTIONS_ALGORITHMS_LIBRARY
+	default n
+	help
+	  This option enables the  SDK DECODER FUNCTION.
+
+config DECODER_AAC
+	bool
+	prompt "support aac decoder"
+	depends on ACTIONS_DECODER
+	default n
+	help
+	This option enables the aac decoder.
+
+config DECODER_ACT
+	bool
+	prompt "support actii decoder"
+	depends on ACTIONS_DECODER
+	default n
+	help
+	This option enables the actii decoder.
+
+config DECODER_APE
+	bool
+	prompt "support ape decoder"
+	depends on ACTIONS_DECODER
+	default n
+	help
+	This option enables the APE decoder.
+
+config DECODER_CVSD
+	bool
+	prompt "support cvsd decoder"
+	depends on ACTIONS_DECODER
+	default n
+	help
+	This option enables the cvsd decoder.
+
+config DECODER_FLAC
+	bool
+	prompt "support flac decoder"
+	depends on ACTIONS_DECODER
+	default n
+	help
+	This option enables the flac decoder.
+
+config DECODER_MP3
+	bool
+	prompt "support mp3 decoder "
+	depends on ACTIONS_DECODER
+	default n
+	help
+	This option enables the mp3 decoder.
+
+config DECODER_PCM
+	bool
+	prompt "support pcm convert decoder"
+	depends on ACTIONS_DECODER
+	default n
+	help
+	This option enables the pcm convert decoder.
+
+config DECODER_SBC
+	bool
+	prompt "support sbc decoder"
+	depends on ACTIONS_DECODER
+	default n
+	help
+	This option enables the sbc decoder.
+
+config DECODER_SBC_HW_ACCELERATION
+	bool
+	prompt "support sbc dsp hw acceleration decoder"
+	depends on DECODER_SBC
+	default n
+	help
+	This option enables the sbc dsp hw acceleration.
+
+config DECODER_WAV
+	bool
+	prompt "support wav decoder"
+	depends on ACTIONS_DECODER
+	default n
+	help
+	This option enables the  wav decoder.
+
+config DECODER_WAV_HW_ACCELERATION
+	bool
+	prompt "support wav dsp hw acceleration decoder"
+	depends on DECODER_WAV
+	default n
+	help
+	This option enables the wav dsp hw acceleration .
+
+config DECODER_WMA
+	bool
+	prompt "support wma decoder"
+	depends on ACTIONS_DECODER
+	default n
+	help
+	This option enables the wma decoder.
+
+
+menuconfig ACTIONS_ENCODER
+	bool
+	prompt "ACTIONS Encoder Support"
+	depends on ACTIONS_ALGORITHMS_LIBRARY
+	default n
+	help
+	  This option enables the ENCODER FUNCTION.
+
+config ENCODER_CVSD
+	bool
+	prompt "support cvsd encoder"
+	depends on ACTIONS_ENCODER
+	default n
+	help
+	This option enables the cvsd encoder.
+
+config ENCODER_MP3
+	bool
+	prompt "support mp3 encoder"
+	depends on ACTIONS_ENCODER
+	default n
+	help
+	This option enables the mp3 encoder.
+
+config ENCODER_OPUS
+	bool
+	prompt "support opus encoder"
+	depends on ACTIONS_ENCODER
+	default n
+	help
+	This option enables the opus encoder.
+
+config ENCODER_OPUS_HW_ACCELERATION
+	bool
+	prompt "support opus dsp hw acceleration decoder"
+	depends on ENCODER_OPUS
+	default n
+	help
+	This option enables the opus dsp hw acceleration .
+
+config ENCODER_PCM
+	bool
+	prompt "support pcm encoder"
+	depends on ACTIONS_ENCODER
+	default n
+	help
+	This option enables the PCM encoder.
+
+config ENCODER_SBC
+	bool
+	prompt "support sbc encoder"
+	depends on ACTIONS_ENCODER
+	default n
+	help
+	This option enables the sbc encoder.
+
+config ENCODER_WAV
+	bool
+	prompt "support wav encoder"
+	depends on ACTIONS_ENCODER
+	default n
+	help
+	This option enables the wav encoder.
+
+
+menuconfig ACTIONS_PARSER
+	bool
+	prompt "Actions Parser Support"
+	depends on ACTIONS_ALGORITHMS_LIBRARY
+	default n
+	help
+	  This option enables the PARSER FUNCTION.
+
+config PARSER_WAV
+	bool
+	prompt "support wav parser"
+	depends on ACTIONS_PARSER
+	default n
+	help
+	This option enables the wav parser.
+
+
+config HFP_PLC
+	bool
+	prompt "support hfp plc"
+	depends on ACTIONS_ALGORITHMS_LIBRARY
+	default n
+	help
+	This option enables the hfp plc.
+
+config HFP_SPEECH
+	bool
+	prompt "support hfp speech aec/agc"
+	depends on ACTIONS_ALGORITHMS_LIBRARY
+	select HFP_PLC
+	default n
+	help
+	This option enables the hfp speech aec/agc.
+
+config HFP_DAE
+	bool
+	prompt "support hfp dae"
+	depends on ACTIONS_ALGORITHMS_LIBRARY
+	default n
+	help
+	This option enables the hfp dae.
+
+config MUSIC_DAE
+	bool
+	prompt "support music dae"
+	depends on ACTIONS_ALGORITHMS_LIBRARY
+	default n
+	help
+	This option enables the music dae.
+
+config MUSIC_DAE_FADE
+	bool
+	prompt "support music dae fade in/out"
+	depends on MUSIC_DAE
+	default n
+	help
+	This option enables the music dae fade in/out.
+
+config AUDIO_MIX
+	bool "support audio mixing"
+	depends on ACTIONS_ALGORITHMS_LIBRARY
+	default n
+	help
+	This option enables the audio mixing.
+
+config RESAMPLE
+	bool
+	prompt "support resample"
+	depends on ACTIONS_ALGORITHMS_LIBRARY
+	default n
+	select ACCELERATOR_ACTS
+	select ACCELERATOR_ACTS_WOODPECKER
+	help
+	This option enables the resample.
+
+config OUTPUT_RESAMPLE_SW
+	bool
+	prompt "resample use hardware"
+	default n
+	depends on RESAMPLE
+	help
+	This option consent to use hardware/software resample.
+
+config SF_APS
+	bool
+	prompt "support software aps "
+	depends on ACTIONS_ALGORITHMS_LIBRARY
+	default n
+	help
+	This option enables the software aps.

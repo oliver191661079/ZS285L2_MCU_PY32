@@ -1,0 +1,660 @@
+# Kconfig - ACTIONS primitive options for sdk version 2.0
+
+#
+# Copyright (c) 2015 Intel Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+config BT_STACK
+	bool
+	prompt "Blutooth Stack Support"
+    select BLUETOOTH_PORTING
+	select ACTS_TRANSCODE
+	default n
+	help
+	This option enables actions Blutooth Stack.
+
+source "ext/actions/bluetooth/bt_stack/Kconfig"
+
+menuconfig BLUETOOTH
+	bool
+	prompt "BlueTooth"
+	default n
+	#select BT_MANAGER
+	help
+	This option enables actions bluetooth funcion.
+
+config BT_MANAGER
+    bool
+    prompt "Bt Manager Support"
+	select BT_SERVICE
+	#select BT_STACK
+	#select BLUETOOTH_PORTING
+	select ACTS_TRANSCODE
+    default n
+    help
+    This option enables bt manager.
+
+config BT_SERVICE
+	bool
+	prompt "Blutooth Service Support"
+	select THREAD_TIMER
+	default n
+	help
+	This option enables actions Blutooth service.
+
+config BT_DOUBLE_PHONE
+    bool
+    prompt "Bt double phone Support"
+	depends on BT_MANAGER
+    default n
+    help
+    This option enables Bt double phone manager.
+
+config BT_DOUBLE_PHONE_EXT_MODE
+    bool
+    prompt "Bt double phone ext mode Support"
+    depends on BT_DOUBLE_PHONE
+    default n
+    help
+    This option enables Bt double phone ext mode Support.
+
+config BT_DOUBLE_PHONE_PREEMPTION_MODE
+    bool
+    prompt "Bt double phone preemption mode Support"
+    depends on BT_DOUBLE_PHONE
+    default n
+    help
+    This option enables Bt double phone preemption mode Support.
+
+config BT_DOUBLE_PHONE_TAKEOVER_MODE
+    bool
+    prompt "Bt double phone takeover mode Support"
+    depends on BT_MANAGER
+    default n
+    help
+    This option enables Bt double phone takeover mode Support.    
+
+config BT_PHONE_FILTER_PROMPT_TONE
+    bool
+    prompt "Bt phone filter prompt tone Support"
+    depends on BT_MANAGER
+    default n
+    help
+    This option enables Bt phone filter prompt tone Support.
+
+config BT_DOUBLE_PHONE_TAKEOVER_POLICY
+    int
+    prompt "Bt double phone takeover policy"
+    default 1
+    help
+    This option enables Bt double phone takeover policy.
+
+config MUTI_POINT_USER_PAUSE_POLICY
+	int
+	prompt "1: When user press pause button, it is deemed to be device stop playing"
+	default 0
+
+config BT_PLAY_FIRST_STOP_RECONNECT
+    bool
+    prompt "Bt play first stop reconnect Support"
+    depends on BT_MANAGER
+    default n
+    help
+    This option enables Bt play first stop reconnect Support.
+config BT_PHONE_ROLE_MASTER
+    bool
+    prompt "Set bt phone role to master"
+	depends on BT_MANAGER
+    default n
+    help
+    This option enables Set bt phone role to master.
+
+config BT_PHONE_ROLE_SLAVE
+    bool
+    prompt "Set bt phone role to slave"
+	depends on BT_MANAGER
+    default n
+    help
+    This option enables Set bt phone role to slave.
+    
+config BT_BLE
+    bool
+    prompt "Bt Ble Support"
+	depends on BT_MANAGER
+	depends on BT_LE_ATT
+    default n
+    help
+    This option enables bt manager.
+
+
+config BT_AVRCP_GET_ID3
+    bool
+    prompt "Bt avrcp get ID3 Support"
+    depends on BT_MANAGER
+    default y
+    help
+    This option enables Bt avrcp get ID3 .
+
+config BT_AVRCP_ID3_UART_DUMP
+    bool
+    prompt "Send AVRCP media text (title/artist/album) over UART as binary frames"
+    depends on BT_AVRCP_GET_ID3
+    default n
+    help
+      When ID3 element attributes arrive, sends a compact binary frame per field so an
+      external MCU can parse without ASCII "ID3" clutter. Frame layout:
+        [SYNC][VER][attr_id][len_hi][len_lo][UTF-8 payload...][CRC8][optional LF]
+      SYNC = BT_AVRCP_ID3_UART_FRAME_MAGIC (default 0xD3), VER = protocol version byte
+      (default 0x01). Length is 16-bit (endian per BT_AVRCP_ID3_UART_LEN_BIG_ENDIAN).
+      CRC8 is computed over [VER][attr_id][len_hi][len_lo] and all payload bytes
+      (CRC-8 Dallas/Maxim: poly 0x31, init 0; same routine as in bt_manager_avrcp.c).
+      attr_id matches AVRCP element id (e.g. 0x01 title, 0x02 artist, 0x03 album).
+      Cover art (0x08) is skipped.
+      UART is often shared with printk logs — disable verbose traces and consider
+      lowering global SYS_LOG / printk elsewhere if you need a quiet wire.
+      Note: magic/length are binary bytes — in a text terminal they look like garbled
+      characters before readable UTF-8 title text. Enable BT_AVRCP_ID3_UART_TRACE_HEADER
+      during bring-up to print id/len as ASCII, or capture with a hex view.
+
+config BT_AVRCP_ID3_UART_TRACE_HEADER
+    bool "Print one ASCII line (magic, id, len) before each binary frame"
+    depends on BT_AVRCP_ID3_UART_DUMP
+    default n
+    help
+      Emits a line such as: [LYRIC] m=d3 v=01 id=01 len=42 crc=.. (binary frame follows).
+      Helps verify framing on UART0 when shared with printk. Disable for production
+      or when the peer MCU must parse a purely binary stream without text lines.
+
+config BT_AVRCP_ID3_UART_FRAME_MAGIC
+    hex "First byte of each lyrics UART frame (SYNC)"
+    depends on BT_AVRCP_ID3_UART_DUMP
+    default 0xD3
+    help
+      First sync byte (default 0xD3). Second byte is VER (protocol version).
+
+config BT_AVRCP_ID3_UART_FRAME_VER
+    hex "Second header byte (protocol version)"
+    depends on BT_AVRCP_ID3_UART_DUMP
+    default 0x01
+    help
+      Receiver checks this after SYNC; bump when changing header or CRC algorithm.
+
+config BT_AVRCP_ID3_UART_LEN_BIG_ENDIAN
+    bool "16-bit payload length is big-endian"
+    depends on BT_AVRCP_ID3_UART_DUMP
+    default y
+    help
+      If n, length is little-endian.
+
+config BT_AVRCP_ID3_UART_APPEND_LF
+    bool "Append 0x0A after payload"
+    depends on BT_AVRCP_ID3_UART_DUMP
+    default n
+    help
+      Helps naive line-based readers; pure binary parsers should leave this off.
+
+config BT_AVRCP_ID3_UART_VERBOSE
+    bool "Verbose printk traces on lyrics UART path"
+    depends on BT_AVRCP_ID3_UART_DUMP
+    default n
+
+config BT_AVRCP_ID3_UART_SUPPRESS_ID3_SYSLOG
+    bool "Suppress SYS_LOG on ID3 UART path (shared UART0 stays binary-only)"
+    depends on BT_AVRCP_ID3_UART_DUMP
+    default y
+    help
+      When y, omits "avrcp id3 info" and per-field "id3 N ..." SYS_LOG lines so only
+      binary frames (and any other unrelated printk) appear on the console UART.
+
+choice BT_AVRCP_ID3_UART_OUT_MODE
+    prompt "AVRCP ID3 UART transmit implementation"
+    depends on BT_AVRCP_ID3_UART_DUMP
+    default BT_AVRCP_ID3_UART_OUT_CONSOLE if UART_CONSOLE
+    default BT_AVRCP_ID3_UART_OUT_POLL
+
+config BT_AVRCP_ID3_UART_OUT_CONSOLE
+    bool "Send ID3 via printk (same TX path as logs; required if console UART uses DMA)"
+    depends on UART_CONSOLE
+
+config BT_AVRCP_ID3_UART_OUT_POLL
+    bool "uart_poll_out on a named UART device"
+
+endchoice
+
+config BT_AVRCP_ID3_UART_POLL_DEV_NAME
+    string "UART device name for poll_out ID3 dump"
+    depends on BT_AVRCP_ID3_UART_DUMP
+    depends on BT_AVRCP_ID3_UART_OUT_POLL
+    default "UART_1"
+    help
+      Must match an enabled driver instance (e.g. CONFIG_UART_ACTS_PORT_0_NAME).
+
+config BT_MANAGER_UART_RX
+    bool
+    prompt "Bt manager UART RX thread (line-oriented)"
+    depends on SERIAL
+    depends on UART_INTERRUPT_DRIVEN
+    default n
+    help
+      IRQ-driven RX (uart_fifo_read in ISR) into a ring buffer; a thread assembles
+      lines and calls bt_manager_uart_rx_line_hook(). Requires interrupt-mode UART.
+      Do not share the same UART with shell/console RX unless console RX is disabled.
+
+config BT_MANAGER_UART_RX_DEV_NAME
+    string "UART device name for RX thread"
+    depends on BT_MANAGER_UART_RX
+    default "UART_0"
+    help
+      Must match device_get_binding() name (e.g. CONFIG_UART_ACTS_PORT_0_NAME is usually UART_0).
+      If this is the same UART as the console, only one subsystem can own uart_irq_callback_set —
+      avoid shell/console RX on that port or use a second UART for RX.
+
+config BT_MANAGER_UART_RX_RING_SIZE
+    int "ISR ring buffer size (bytes)"
+    depends on BT_MANAGER_UART_RX
+    default 512
+
+config BT_MANAGER_UART_RX_PRIO
+    int "Preemptible priority for RX thread (higher number = lower urgency)"
+    depends on BT_MANAGER_UART_RX
+    default 14
+    help
+      Range is 0 .. CONFIG_NUM_PREEMPT_PRIORITIES-1 on Zephyr. Avoid low numbers
+      reserved for Bluetooth/audio (they preempt too aggressively).
+
+config BT_MANAGER_UART_RX_STACK_SIZE
+    int "Stack size (bytes) for UART RX k_thread (full usable stack; k_thread is separate)"
+    depends on BT_MANAGER_UART_RX
+    default 2048
+
+config BT_MANAGER_UART_RX_LINE_MAX
+    int "Maximum bytes per received line (excl. NUL)"
+    depends on BT_MANAGER_UART_RX
+    default 128
+
+choice BT_MANAGER_UART_RX_PROTO
+    prompt "UART RX protocol on CONFIG_BT_MANAGER_UART_RX_DEV_NAME"
+    depends on BT_MANAGER_UART_RX
+    default BT_MANAGER_UART_RX_PROTO_LINE
+
+config BT_MANAGER_UART_RX_PROTO_LINE
+    bool "Line mode (CR/LF terminated ASCII, bt_manager_uart_rx_line_hook)"
+    help
+      One text line per command; see bt_manager_uart_rx_line_hook() in application.
+
+config BT_MANAGER_UART_RX_PROTO_BINARY_CMD
+    bool "Binary command frames (D3 sync + CRC8, media keys)"
+    help
+      Wire format per byte:
+        [0] SYNC = 0xD3
+        [1] VER  = CONFIG_BT_MANAGER_UART_RX_BIN_VER (default 0x02)
+        [2][3] LEN = payload length, big-endian (0..CONFIG_BT_MANAGER_UART_RX_BIN_MAX_PAYLOAD)
+        [4 .. 3+LEN] payload (e.g. 0xD2 0x00 = previous track)
+        [4+LEN] CRC8 Dallas/Maxim over [VER][LEN_H][LEN_L] + each payload byte
+      On success calls bt_manager_uart_rx_binary_dispatch(payload, len); default weak
+      maps 0xD2 0x00 previous, 0xD2 0x01 next, 0xD2 0x02 pause, 0xD2 0x03 play,
+      0xD2 0x04 play/pause toggle, 0xD2 0x05 volume up, 0xD2 0x06 volume down,
+      0xD2 0x07 audio effect (DAE) toggle, 0xD2 0x08 answer call,
+      0xD2 0x09 hang up / reject call.
+
+endchoice
+
+config BT_MANAGER_UART_RX_BIN_VER
+    hex "Binary frame version byte (after 0xD3 SYNC)"
+    depends on BT_MANAGER_UART_RX_PROTO_BINARY_CMD
+    default 0x02
+
+config BT_MANAGER_UART_RX_BIN_MAX_PAYLOAD
+    int "Max payload bytes in one binary UART command frame"
+    depends on BT_MANAGER_UART_RX_PROTO_BINARY_CMD
+    default 32
+
+
+config BT_A2DP_AAC
+    bool
+    prompt "Bt a2dp aac Support"
+	depends on BT_MANAGER
+    default n
+    help
+    This option enables bt a2dp aac.
+
+config BT_A2DP_LDAC
+    bool
+    prompt "Bt a2dp ldac Support"
+	depends on BT_MANAGER
+    default n
+    help
+    This option enables bt a2dp ladc.
+    
+config BT_A2DP_MAX_BITPOOL
+    int
+    prompt "Bt a2dp bit pool config"
+	depends on BT_A2DP
+    default 53
+    help
+    This option enables bt a2dp bit pool.
+
+config BT_DEV_NAME
+    string
+    prompt "bt device name"
+    depends on BT_MANAGER
+    help
+    This option specifies bt device classic name
+
+config TWS
+    bool
+    prompt "bt manager Support tws"
+	depends on BT_MANAGER
+    default n
+    help
+    This option enables bt tws.
+
+config TWS_MONO_MODE
+    bool
+    prompt "bt manager Support tws mono mode"
+	depends on TWS
+    default n
+    help
+    This option enables bt tws mono mode.
+
+config TWS_BACKGROUND_BT
+    bool
+    prompt "bt manager Support local tws support background bt"
+	depends on TWS
+    default n
+    help
+    This option enables local tws support background bt.
+
+config BT_HFP_TWS
+    bool
+    prompt "bt manager Support hfp tws"
+    depends on TWS
+    default n
+    help
+    This option enables bt hfp tws.
+
+config CSB
+    bool
+    prompt "bt manager Support csb"
+	depends on BT_MANAGER
+    default n
+    help
+    This option enables bt csb.
+
+config MGR_TEST_SAMPLE
+    bool
+    prompt "bt manager test sample"
+	depends on BT_MANAGER
+    default n
+    help
+    This option enables bt manager test sample.
+
+config BT_TWS_US281B
+    bool
+    prompt "Whether adaptive to us281b tws"
+    default n
+    depends on BT_SERVICE
+    help
+    This option set whether adaptive to us281b tws
+
+config BT_LE_AUDIO_LOW_LATENCY
+	bool
+	prompt "BT LE Audio low latency mode Support"
+	depends on BT_MANAGER
+	depends on BT_LE_ATT
+	default n
+	help
+	  This option enables bt le audio low latency mode.
+
+config BT_LE_AUDIO_BUF_SIZE
+	int
+	prompt "BT LE Audio Buffer Size"
+	depends on BT_MANAGER
+	default 4096
+	help
+	  This option defines buffer size for bt le audio.
+
+config BT_LE_AUDIO_ENCRYPT
+	bool
+	prompt "BT LE Audio Service Encryption Support"
+	depends on BT_MANAGER
+	default n
+	help
+	  This option enables bt le audio service encryption.
+
+config BT_ASCS_SERVICE
+	bool
+	prompt "BT LE ASCS Service Support"
+	depends on BT_MANAGER
+	default n
+	help
+	  This option enables bt le ascs service.
+
+config BT_CSIS_SERVICE
+	bool
+	prompt "BT LE CICS Service Support"
+	depends on BT_MANAGER
+	default n
+	help
+	  This option enables bt le cics service.
+
+config BT_MCS_SERVICE
+	bool
+	prompt "BT LE MCS Service Support"
+	depends on BT_MANAGER
+	default n
+	help
+	  This option enables bt le mcs service.
+
+config BT_MICS_SERVICE
+	bool
+	prompt "BT LE MICS Service Support"
+	depends on BT_MANAGER
+	default n
+	help
+	  This option enables bt le mics service.
+
+config BT_PACS_SERVICE
+	bool
+	prompt "BT LE AICS Service Support"
+	depends on BT_MANAGER
+	default n
+	help
+	  This option enables bt le aics service.
+
+config BT_TBS_SERVICE
+	bool
+	prompt "BT LE TBS Service Support"
+	depends on BT_MANAGER
+	default n
+	help
+	  This option enables bt le tbs service.
+
+config BT_VCS_SERVICE
+	bool
+	prompt "BT LE VCS Service Support"
+	depends on BT_MANAGER
+	default n
+	help
+	  This option enables bt le vcs service.
+
+config BT_CAS_SERVICE
+	bool
+	prompt "BT LE CAS Service Support"
+	depends on BT_MANAGER
+	default n
+	help
+	  This option enables bt le cas service.
+
+config BT_AUDIO_VND_SERVICE
+	bool
+	prompt "BT LE Audio Vendor Service Support"
+	depends on BT_MANAGER
+	default n
+	help
+	  This option enables bt le audio vendor service.
+
+config BT_TMAS_SERVICE
+	bool
+	prompt "BT LE TMAS Service Support"
+	depends on BT_MANAGER
+	default n
+	help
+	  This option enables bt le tmas service.
+
+config BT_BASS_SERVICE
+	bool
+	prompt "BT LE BASS Service Support"
+	depends on BT_MANAGER
+	default n
+	help
+	  This option enables bt le bass service.
+
+config BT_PAWR
+	bool
+	prompt "BT PER ADV WITH RSP"
+	depends on BT_MANAGER
+	default n
+	help
+	  This option enables bt pawr.	  
+
+config GFP_PROFILE
+	bool
+	prompt "GFP Support"
+	default n
+	help
+	This option enable or disable gfp
+
+config BT_GATT_OVER_BR
+    bool "BT GATT OVER BR Support"
+    default n
+    help
+    This option enables bt gatt over br.
+
+ config BT_VENDOR_ID
+    hex
+    prompt "BT Vendor id"
+    depends on BT_MANAGER
+    default 0x03E0
+    help
+        This option defines Vendor ID bt device id.
+
+config BT_PRODUCT_ID
+	hex
+	prompt "BT Product id"
+	depends on BT_MANAGER
+	default 0x0001
+	help
+		This option defines Product ID bt device id.
+
+config BT_LEATWS
+	bool
+	prompt "BT LEATWS Support"
+	depends on BT_MANAGER
+	default n
+	help
+	  This option enables bt leatws.
+
+config BT_LEATWS_FL
+	bool
+	prompt "BT LEATWS Set Left Channel"
+	depends on BT_LEATWS
+	default n
+	help
+	  This option bt leatws set left channel.
+
+config BT_LEATWS_FR
+	bool
+	prompt "BT LEATWS Set Right Channel"
+	depends on BT_LEATWS
+	default n
+	help
+	  This option bt leatws set right channel.
+
+config BT_LETWS
+  bool
+  prompt "enable letws"
+	depends on BT_MANAGER
+  default n
+
+config BT_LETWS_ROLE_SWITCH
+  bool
+  prompt "enable letws role switch"
+	depends on BT_LETWS
+  default n
+  
+config BT_LETWS_AIRTOUCH
+  bool
+  prompt "enable letws Airtouch"
+	depends on BT_LETWS
+  default n  
+  
+config BT_LETWS_AIRTOUCH_RSSI
+  int
+  prompt "rssi"
+	depends on BT_LETWS_AIRTOUCH
+  default -50
+
+
+config BT_PER_ADV_SYNC_TRANSFER_SENDER
+  bool   
+  depends on BT_MANAGER
+  default n
+
+config BT_GMAS_SERVICE
+	bool
+	prompt "BT LE GMAS Service Support"
+	depends on BT_MANAGER
+	default n
+	help
+	  This option enables bt le gmas service.
+
+config BT_GMAS_SERVICE_UGG
+	bool
+	prompt "BT LE GMAS Service UGG role Support"
+	depends on BT_GMAS_SERVICE
+	default n
+	help
+	  This option enables bt le gmas service ugg role.
+
+config BT_GMAS_SERVICE_UGT
+	bool
+	prompt "BT LE GMAS Service UGT role Support"
+	depends on BT_GMAS_SERVICE
+	default n
+	help
+	  This option enables bt le gmas service ugt role.
+
+config BT_GMAS_SERVICE_BGS
+	bool
+	prompt "BT LE GMAS Service BGS role Support"
+	depends on BT_GMAS_SERVICE
+	default n
+	help
+	  This option enables bt le gmas service bgs role.
+config BT_GMAS_SERVICE_BGR
+	bool
+	prompt "BT LE GMAS Service BGR role Support"
+	depends on BT_GMAS_SERVICE
+	default n
+	help
+	  This option enables bt le gmas service bgr role.
+config GFP_BLE_DEVICE
+	bool
+	prompt "GFP ble device Support"
+	depends on GFP_PROFILE
+	default n
+	help
+	This option enable or disable gfp ble device

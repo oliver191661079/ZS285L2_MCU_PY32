@@ -1,0 +1,52 @@
+# Kconfig - GPIO driver configuration options
+
+#
+# Copyright (c) 2018 Actions Semiconductor Co., Ltd
+# 
+# SPDX-License-Identifier: Apache-2.0
+#
+
+menuconfig GPIO_ACTS
+	bool "Actions SoC GPIO driver"
+	depends on GPIO && SOC_FAMILY_ACTS
+	default y
+	help
+	 Enable support for the Actions SoC GPIO driver.
+
+if GPIO_ACTS
+
+config GPIO_ACTS_DEV_NAME
+	string
+	prompt "GPIO device name"
+	depends on GPIO_ACTS
+	default "GPIO_0"
+
+config GPIO_ACTS_IRQ_PRI
+	int "GPIO interrupt priority"
+	default 1
+
+config GPIO_ACTS_INIT_PRIORITY
+	int
+	default 20
+	prompt "GPIO init priority"
+	help
+	  Device driver initialization priority.
+
+endif # GPIO_ACTS
+
+menuconfig GPIO_WIO_ACTS
+	bool "Actions SoC Wakeup GPIO driver"
+	depends on GPIO && SOC_FAMILY_ACTS
+	default y
+	help
+	 Enable support for the Actions SoC Wakeup GPIO driver.
+
+if GPIO_WIO_ACTS
+
+config GPIO_WIO_ACTS_DEV_NAME
+	string
+	prompt "WIO device name"
+	depends on GPIO_WIO_ACTS
+	default "WIO"
+
+endif # GPIO_WIO_ACTS

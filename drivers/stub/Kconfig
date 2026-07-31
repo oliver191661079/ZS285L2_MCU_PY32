@@ -1,0 +1,62 @@
+# Kconfig - STUB device configuration options
+#
+#
+# Copyright (c) 2017 Actions Semiconductor Co., Ltd
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+menuconfig STUB_DEV
+	bool
+	prompt "STUB device drivers"
+	default n
+	help
+	  Enable STUB device driver configuration
+
+if STUB_DEV
+config SYS_LOG_STUB_DEV_LEVEL
+	int
+	prompt "STUB Device drivers log level"
+	depends on SYS_LOG
+	range 0 4
+	default 0
+	help
+	  Sets log level for INPUT Device driver.
+
+	  Levels are:
+	  - 0 OFF, do not write
+	  - 1 ERROR, only write SYS_LOG_ERR
+	  - 2 WARNING, write SYS_LOG_WRN in addition to previous level
+	  - 3 INFO, write SYS_LOG_INF in addition to previous levels
+	  - 4 DEBUG, write SYS_LOG_DBG in addition to previous levels
+
+config STUB_DEV_USB
+	bool "Actions STUB_USB driver"
+	depends on SOC_FAMILY_ACTS
+	default n
+	help
+	  Enable support for Actions SoC stub usb driver.
+
+config STUB_DEV_USB_NAME
+	string "Device Name for Actions STUB_USB"
+	depends on SOC_FAMILY_ACTS
+	default "stub_usb"
+	help
+	  Device name for Actions STUB_DEV_USB.
+
+config STUB_DEV_UART
+	bool "Actions STUB_UART driver"
+	depends on SOC_FAMILY_ACTS
+	depends on UART_ACTS
+	default n
+	help
+	  Enable support for Actions SoC stub uart driver.
+
+config STUB_DEV_UART_NAME
+	string "Device Name for Actions STUB_UART"
+	depends on SOC_FAMILY_ACTS
+	default "stub_uart"
+	help
+	  Device name for Actions STUB_DEV_UART.
+
+endif # STUB_DEV

@@ -1,0 +1,31 @@
+# Kconfig - ACTIONS primitive options for sdk version 2.0
+
+#
+# Copyright (c) 2023 Actions Semiconductor Co., Ltd
+# PDX-License-Identifier: Apache-2.0
+#
+
+menu "Image load Configuration"
+
+config ACTIONS_IMG_LOAD
+    bool
+    prompt "ACTIONS image load"
+    default n
+
+config ACTIONS_IMG_FCC
+    bool
+    prompt "ACTIONS FCC test"
+    default n
+    help
+        This option ACTIONS FCC test
+
+config ACTIONS_IMG_RF_NS
+    bool
+    prompt "ACTIONS RF no signaling mode"
+    default n
+
+config ACTIONS_IMG_TEST_ALWAYS
+    bool
+    prompt "ACTIONS imagine test always or not"
+    default n
+endmenu

@@ -1,0 +1,11 @@
+obj-y += ascs_service.o
+obj-y += mcs_service.o
+obj-y += mics_service.o
+obj-y += pacs_service.o
+obj-y += tbs_service.o
+obj-y += vcs_service.o
+obj-y += cas_service.o
+obj-y += vnd_service.o
+obj-$(CONFIG_BT_TMAS_SERVICE) += tmas_service.o
+obj-y += bass_service.o
+obj-y += gmas_service.o

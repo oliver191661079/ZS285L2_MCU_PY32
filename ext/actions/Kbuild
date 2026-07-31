@@ -1,0 +1,16 @@
+obj-$(CONFIG_CORE) += base/
+obj-$(CONFIG_SYSTEM) += system/
+obj-$(CONFIG_BLUETOOTH) += bluetooth/
+obj-$(CONFIG_DISPLAY) += display/
+obj-$(CONFIG_MEDIA) += media/
+obj-$(CONFIG_AUDIO) += audio/
+obj-$(CONFIG_OTA_UPGRADE) += ota/
+obj-$(CONFIG_USB_DEVICE_STACK) += usb/
+obj-$(CONFIG_USB_HOST_STACK) += usb/
+obj-$(CONFIG_ACTIONS_SDK_PORTING) += porting/
+obj-$(CONFIG_BT_MP) += mp/
+#obj-$(CONFIG_SOC_SECURE_BOOT) += secure_boot/
+
+
+
+

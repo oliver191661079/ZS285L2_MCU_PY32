@@ -1,0 +1,129 @@
+# Kconfig - I2C Slave configuration options
+
+#
+# Copyright (c) 2018 Actions Semiconductor Co., Ltd
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+#
+# I2C Slave options
+#
+menuconfig I2C_SLAVE
+	bool
+	prompt "I2C Slave Drivers"
+	default n
+	help
+	  Enable I2C Slave Driver Configuration
+
+if I2C_SLAVE
+
+config I2C_SLAVE_INIT_PRIORITY
+	int
+	default 60
+	prompt "Init priority"
+	help
+	  I2C slave device driver initialization priority.
+
+config SYS_LOG_I2C_SLAVE_LEVEL
+	int
+	prompt "I2C slave log level"
+	depends on SYS_LOG
+	default 0
+	help
+	  Sets log level for I2C slave drivers.
+	  Levels are:
+	  - 0 OFF, do not write
+	  - 1 ERROR, only write SYS_LOG_ERR
+	  - 2 WARNING, write SYS_LOG_WRN in addition to previous level
+	  - 3 INFO, write SYS_LOG_INF in addition to previous levels
+	  - 4 DEBUG, write SYS_LOG_DBG in addition to previous levels
+
+config I2C_SLAVE_0
+	bool "Enable I2C Slave Port 0"
+	depends on !I2C_0
+	default n
+
+config I2C_SLAVE_0_NAME
+	string "Port 0 device name"
+	depends on I2C_SLAVE_0 && !HAS_DTS_I2C
+	default "I2C_SLAVE_0"
+
+config I2C_SLAVE_0_IRQ_PRI
+	int "Port 0 interrupt priority"
+	depends on I2C_SLAVE_0 && !HAS_DTS_I2C
+	default 0
+	help
+	  IRQ priority.
+
+config I2C_SLAVE_0_RX_BUF_SIZE
+	int "Port 0 RX buffer size"
+	depends on I2C_SLAVE_0 && !HAS_DTS_I2C
+	default 64
+	help
+	  RX buffer size.
+
+config I2C_SLAVE_0_TX_BUF_SIZE
+	int "Port 0 TX buffer size"
+	depends on I2C_SLAVE_0 && !HAS_DTS_I2C
+	default 64
+	help
+	  TX buffer size.
+
+config  I2C_SLAVE_0_SDA_PIN
+	int "i2c slave 0 sda pin"
+	depends on I2C_SLAVE_0 && !HAS_DTS_I2C
+	default 1
+	help
+	  i2c slave 0 sda pin number.
+
+config  I2C_SLAVE_0_SCL_PIN
+	int "i2c slave 0 scl pin"
+	default 0
+	depends on I2C_SLAVE_0 && !HAS_DTS_I2C
+	help
+	  i2c slave 0 scl pin number.
+
+
+
+
+
+config I2C_SLAVE_1
+	bool "Enable I2C Slave Port 1"
+	depends on !I2C_1
+	default n
+
+config I2C_SLAVE_1_NAME
+	string "Port 1 device name"
+	default "I2C_SLAVE_1"
+	depends on I2C_SLAVE_1 && !HAS_DTS_I2C
+
+config I2C_SLAVE_1_IRQ_PRI
+	int "Port 1 interrupt priority"
+	depends on I2C_SLAVE_1 && !HAS_DTS_I2C
+	default 0
+	help
+	  IRQ priority.
+
+config I2C_SLAVE_1_RX_BUF_SIZE
+	int "Port 1 RX buffer size"
+	depends on I2C_SLAVE_1 && !HAS_DTS_I2C
+	default 64
+	help
+	  RX buffer size.
+
+config I2C_SLAVE_1_TX_BUF_SIZE
+	int "Port 1 TX buffer size"
+	depends on I2C_SLAVE_1 && !HAS_DTS_I2C
+	default 64
+	help
+	  TX buffer size.
+
+config I2C_SLAVE_ACTS
+	bool "Actions SoC I2C support"
+	depends on I2C_SLAVE && SOC_FAMILY_ACTS
+	default n
+	help
+	  Enable Actions SoC I2C slave support on the selected board
+
+endif # I2C SLAVE

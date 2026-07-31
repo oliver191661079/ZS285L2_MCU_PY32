@@ -1,0 +1,15 @@
+#
+# * Copyright (c) 2024 Actions Semiconductor Co., Ltd
+# *
+# * SPDX-License-Identifier: Apache-2.0
+#
+
+config LEMUSIC_APP
+	bool
+	prompt "le audio Music App Support"
+	depends on  MEDIA_PLAYER
+	default n
+	help
+	This option enables or disable lcmusic app.
+
+

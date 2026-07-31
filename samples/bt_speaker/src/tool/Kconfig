@@ -1,0 +1,87 @@
+
+# Kconfig - ACTIONS primitive options for sdk version 2.0
+
+#
+# Copyright (c) 2023 Actions Semiconductor Co., Ltd
+# PDX-License-Identifier: Apache-2.0
+#
+
+menuconfig TOOL
+	bool "PC Tool Support"
+	depends on STUB_DEV_USB
+	default n
+	help
+	This option enables the PC TOOL
+
+config TOOL_STACK_SIZE
+	int "PC Tool thread stack size"
+	depends on TOOL
+	default 1536
+	help
+	This option configure PC Tool thread stack
+
+config TOOL_ASET
+	bool "PC TOOL ASET Support"
+	depends on TOOL && MEDIA_SERVICE
+	default n
+	help
+	This option enables the PC TOOL ASET
+
+config TOOL_ASET_PRINT_DEBUG
+	bool
+	prompt "Tool ASET print debug enable"
+	default n
+	depends on TOOL_ASET
+	help
+	This option enables Tool ASET print debug
+
+config TOOL_AUDIO_EFFECT_MUSIC_DRC
+	int
+	prompt "Audio effect DRC version"
+	default 2
+	help
+	This option config Audio effect DRC version
+
+config TOOL_ASQT
+	bool "PC TOOL ASQT Support"
+	depends on TOOL && MEDIA_SERVICE
+	default n
+	select STREAM
+	select ZERO_STREAM
+	help
+	This option enables the PC TOOL ASQT
+
+config TOOL_DUMP
+	bool "PC TOOL DUMP Support"
+	depends on TOOL && MEDIA_SERVICE
+	default n
+	select STREAM
+	help
+	This option enables the PC TOOL DUMP
+
+config TOOL_ECTT
+	bool "PC TOOL ECTT Support"
+	depends on TOOL && MEDIA_SERVICE
+	default n
+	help
+	This option enables the PC TOOL ECTT
+
+config TOOL_COMMON_DAE
+	bool "PC TOOL COMMON DEA Support"
+	default n
+	depends on TOOL
+	help
+	This option enables the PC TOOL COMMON DEA
+
+config TOOL_RETT
+	bool "PC TOOL RETT Support"
+	depends on TOOL && MEDIA_SERVICE
+	default n
+	help
+	This option enables the PC TOOL RETT
+
+config TOOL_PROTOCOL_VERSION
+	string "protocal version"
+	default "283L201"
+	help
+	This option config protocal version

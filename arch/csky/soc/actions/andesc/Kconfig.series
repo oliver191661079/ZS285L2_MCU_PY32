@@ -1,0 +1,13 @@
+# Kconfig - Actions Bluetooth SoC configuration options
+
+#
+# Copyright (c) 2018 Actions Semiconductor Co., Ltd
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+config  SOC_SERIES_ANDESC
+	bool "Actions Andesc Bluetooth Series SoC"
+	select SOC_FAMILY_ACTS
+	help
+	 Enable support for Actions Andesc Bluetooth Series SoC

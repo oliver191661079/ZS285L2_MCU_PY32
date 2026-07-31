@@ -1,0 +1,14 @@
+# Kconfig - Actions file system
+
+#
+# Copyright (c) 2016 Actions Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+config FM
+	bool
+	prompt "FM Manager"
+	default n
+	help
+	This option enables actions FM manager

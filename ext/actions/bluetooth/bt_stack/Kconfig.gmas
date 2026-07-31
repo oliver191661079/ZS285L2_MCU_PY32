@@ -1,0 +1,33 @@
+# Bluetooth Audio - Gaming Audio Service options
+#
+# Copyright (c) 2024 Actions Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+if BT_AUDIO
+
+config BT_GMAS
+	bool "Gaming Audio Service Support"
+	default y
+	help
+	  This option enables support for Gaming Audio Service.
+
+config BT_DEBUG_GMAS
+	bool
+	depends on BT_GMAS
+	default n
+
+config BT_GMAS_CLIENT
+	bool "Gaming Audio Profile Support"
+	select BT_GATT_CLIENT
+	default y
+	help
+	  This option enables support for Gaming Audio Profile.
+
+config BT_DEBUG_GMAS_CLIENT
+	bool
+	depends on BT_GMAS_CLIENT
+	default n
+
+endif # BT_AUDIO

@@ -1,0 +1,4 @@
+
+config BOARD_ATS2853P2_EVB
+	bool "ATS2853 Evaluate Board"
+	depends on SOC_ATS2853P2

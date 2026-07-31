@@ -1,0 +1,94 @@
+#!/bin/bash -e
+#
+# Copyright (c) 2017 Actions Semiconductor Co., Ltd
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+import os
+import re
+import argparse
+
+
+def get_section_info(f, section_name):
+    section_start_addr = 0
+    section_size = 0
+    re_res = re.search(r"(.*] " + section_name + ".*)", f, re.MULTILINE)
+    if re_res is not None:
+        # Replace multiple spaces with one space
+        # Skip first characters to avoid having 1 extra random space
+        res = ' '.join(re_res.group(1).split())[3:]
+        section_start_addr = int(res.split()[3], 16)
+        res = ' '.join(re_res.group(1).split())[5:]
+        section_size = int(res.split()[4], 16)
+        print("section %s \tstart:0x%x \tsize:0x%x" %(section_name, section_start_addr, section_size))
+    return section_start_addr,section_size
+
+def get_heap_info(f, section_name):
+    heap_start_addr = 0
+    heap_size = 0
+    re_res = re.search(r".*" + section_name + ".*", f, re.MULTILINE)
+    #print("%s" %(re_res.group(0).split()))
+    if re_res is not None:
+        # Replace multiple spaces with one space
+        # Skip first characters to avoid having 1 extra random space
+        res = ' '.join(re_res.group(0).split())
+        res = res.split()[5].split(',')[0]
+        heap_start_addr = int(res, 16)
+        res = ' '.join(re_res.group(0).split())
+        res = res.split()[8].split(',')[0]
+        heap_size = int(res, 16)
+        print("heap start:0x%x size:0x%x" %(heap_start_addr, heap_size))
+    return heap_start_addr,heap_size
+
+def analysis_footprint_from_statfile_and_linkerfile(stat_file, linker_file, total_flash, total_ram):
+    f = open(stat_file).read()
+
+    get_section_info(f, "BTCON_FIXBSS")
+    get_section_info(f, "BTCON_ROM")
+    get_section_info(f, "datas")
+    bss_start_addr, bss_size = get_section_info(f, "bss")
+    noinit_start_addr, noinit_size = get_section_info(f, "noinit")
+    ramf_start_addr, ramf_size = get_section_info(f, "RAM_FUNCTION")
+    get_section_info(f, "heap")
+
+    if(ramf_start_addr <= 0x9c000):
+        #print("Maybe not use PSRAM")
+        print("RAM free: %d(bytes))" % (ramf_start_addr - (noinit_start_addr + noinit_size)))
+    else:
+        print("Maybe use PSRAM")
+        #print("RAM free: %d(bytes)" % (0x60000 - (bss_start_addr + bss_size)))
+
+
+def main():
+
+    parser = argparse.ArgumentParser(
+        description=__doc__,
+        formatter_class=argparse.RawDescriptionHelpFormatter)
+
+    parser.add_argument("-o", "--outdir", dest="outdir", required=True,
+                      help="read files from directory OUT", metavar="OUT")
+
+    parser.add_argument("-r", "--ram",
+                      action="store_true", dest="ram", default=False,
+                      help="print RAM statistics")
+
+    parser.add_argument("-k", "--kernel-name", dest="binary", default="zephyr",
+                      help="kernel binary name")
+
+    args = parser.parse_args()
+
+    stat_file = os.path.join(args.outdir, args.binary + ".stat")
+    elf_file = os.path.join(args.outdir, args.binary + ".elf")
+    linker_file = os.path.join(args.outdir, "linker.cmd")
+
+    #print("%s" % (linker_file))
+    if not os.path.exists(elf_file):
+        print("%s does not exist." % (elf_file))
+        return
+
+    analysis_footprint_from_statfile_and_linkerfile(stat_file, linker_file, 0, 0)
+
+
+if __name__ == "__main__":
+    main()

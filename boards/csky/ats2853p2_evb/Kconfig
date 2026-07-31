@@ -1,0 +1,21 @@
+# Copyright (c) 2026 Actions Semiconductor Co., Ltd
+# SPDX-License-Identifier: Apache-2.0
+
+if BOARD_ATS2853P2_EVB
+
+config BOARD_UART1_TX_GPIO
+	int "UART1 TX GPIO pin number"
+	depends on UART_ACTS_PORT_1
+	default 21
+	help
+	  SoC GPIO index for UART1 TX.
+	  285L2 V2.1: GPIO21 (MFP=0xe, 表6.4)
+
+config BOARD_UART1_RX_GPIO
+	int "UART1 RX GPIO pin number"
+	depends on UART_ACTS_PORT_1
+	default 22
+	help
+	  SoC GPIO index for UART1 RX (mux 0xe). 285L2 PY32 link: GPIO22.
+
+endif

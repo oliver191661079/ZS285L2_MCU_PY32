@@ -1,0 +1,40 @@
+
+使用方法：
+
+
+1.编译的时候，在app下的prj.conf打开CONFIG_OTA_BACKEND_UART
+
+2.将小机的GPIO3作为串口TX， GPIO2作为串口RX连接
+
+3. 在小机串口中输入app uart0_switch, 该函数会将默认的uart0 打印关闭，并调用app_uart_ota_init对uart ota做初始化，此后小机会一直输出OK?OK?这样的握手字符串
+
+static int shell_uart0_switch(int argc, char *argv[])
+{
+	//disable uart0 tx dma print
+	trace_print_disable_set(true);
+
+#ifdef CONFIG_OTA_BACKEND_UART
+	ota_app_init_uart();
+#endif
+
+	return 0;
+}
+
+
+4.上位机在命令行输入python uart_ota.py，会输出如下字符串:
+
+0 COM12 - USB Serial Port (COM12)
+1 COM4 - Intel(R) Active Management Technology - SOL (COM4)
+2 COM34 - USB Serial Port (COM34)
+Please input serial to use [start from 0]:
+
+输入对应的数字选择串口端口
+
+选择后脚本就可以接收小机的握手信号，启动ota测试
+
+5.如果测试希望有测试日志可以输出，可以在上面的shell_uart0_switch的时候，屏蔽trace_print_disable_set这句话。然后在小机输出日志的时候，选择cdc输出，然后在cdc串口下输入uart0_switch, 启动uart0做ota测试即可
+
+6.在串口下输入app print enable/app print disable可动态开关打印
+
+
+

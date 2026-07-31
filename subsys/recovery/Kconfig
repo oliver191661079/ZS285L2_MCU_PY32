@@ -1,0 +1,44 @@
+# Kconfig - System recovery options
+#
+# Copyright (c) 2017 Actions Semiconductor Co.,Ltd
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+menu "Recovery Options"
+
+config SYSTEM_RECOVERY
+	bool
+	prompt "Support system recovery"
+	depends on NVRAM_CONFIG
+	default n
+	help
+	  This option enable system recovery support
+
+config SYSTEM_RECOVERY_INIT_PRIORITY
+	int "System recovery checking init priority"
+	depends on NVRAM_CONFIG
+	default 50
+	help
+	 This option controls the priority of system recovery checking
+	 initialization. Lower values ensures that the device
+	 is initialized earlier in the startup cycle. If unsure, leave
+	 at default value.
+
+config SYSTEM_RECOVERY_CHECK_OTA_FLAG
+	bool
+	prompt "Check OTA flag at boot stage"
+	depends on SYSTEM_RECOVERY
+	default y
+	help
+	  This option enable ota flag checking to avoid unsuccessful OTA upgrade
+
+config SYSTEM_RECOVERY_CHECK_BOOT_FLAG
+	bool
+	prompt "Check the times of boot failed flag at boot stage"
+	depends on SYSTEM_RECOVERY
+	default n
+	help
+	  This option enable boot flag checking to avoid unsuccessful boot
+
+endmenu

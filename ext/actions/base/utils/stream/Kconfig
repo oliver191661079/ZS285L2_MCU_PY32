@@ -1,0 +1,97 @@
+# Kconfig - Actions stream function
+
+#
+# Copyright (c) 2016 Actions Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+menuconfig STREAM
+	bool
+	depends on ACTIONS_UTILS
+	prompt "Actions Stream Support"
+	default n
+	help
+	This option enables actions stream .
+
+config FILE_STREAM
+	bool
+	prompt "file stream Support"
+	depends on STREAM
+	select FILE_SYSTEM
+	default n
+	help
+	This option enables actions file stream .
+
+config LOOP_FSTREAM
+	bool
+	prompt "loop fstream Support"
+	depends on STREAM
+	select FILE_SYSTEM
+	default n
+	help
+	This option enables actions loop fstream .
+
+config BUFFER_STREAM
+	bool
+	prompt "buffer stream Support"
+	depends on STREAM
+	default n
+	help
+	This option enables actions buffer stream .
+
+config RINGBUFF_STREAM
+	bool
+	prompt "buffer stream Support"
+	depends on STREAM
+	select ACTS_RING_BUFFER
+	default n
+	help
+	This option enables actions buffer stream .
+
+config PSRAM_STREAM
+	bool
+	prompt "Psram Stream Support"
+	depends on STREAM
+	default n
+	help
+	This option enables actions Psram stream .
+
+config CLONE_STREAM
+	bool
+	prompt "clone stream Support"
+	depends on STREAM
+	default n
+	help
+	This option enables actions clone stream .
+
+config ZERO_STREAM
+	bool
+	prompt "zero stream Support"
+	depends on STREAM
+	default n
+	help
+	This option enables actions zero stream .
+
+config UART_STREAM
+	bool
+	prompt "uart stream Support"
+	select UART_DMA_RX_DRIVEN
+	default n
+	help
+	This option enables actions uart stream .	
+
+config CDC_UART_STREAM
+	bool
+	prompt "cdc uart stream Support"
+	default n
+	help
+	This option enables actions cdc uart stream .
+
+config UART_AT_STREAM
+	bool
+	prompt "uart at stream Support"
+	select UART_DMA_RX_DRIVEN
+	default n
+	help
+	This option enables actions uart at stream .	

@@ -1,0 +1,56 @@
+#
+# * Copyright (c) 2024 Actions Semiconductor Co., Ltd
+# *
+# * SPDX-License-Identifier: Apache-2.0
+# 
+
+config LCMUSIC_APP
+	bool
+	prompt "Local Music App Support"
+	depends on  MEDIA_PLAYER
+	default n
+	select MUTIPLE_VOLUME_MANAGER
+	select ITERATOR
+	select FILE_ITERATOR
+	select FILE_STREAM
+	help
+	This option enables or disable lcmusic app.
+
+config DISK_MUSIC_APP
+	bool
+	prompt "Disk Music App Support"
+	default n
+	depends on LCMUSIC_APP
+	help
+	This option enables or disable the disk music app.
+
+config SOUNDBAR_LCMUSIC
+	bool
+	prompt "SOUNDBAR LCMUSIC SUPPORT"
+	depends on MEDIA_PLAYER
+	default n
+	select LCMUSIC_APP
+	help
+	This option enables or disable soundbar lcmusic
+
+config FORMAT_CHECK
+	bool
+	prompt "Format Check Support"
+	default n
+	depends on LCMUSIC_APP
+	help
+	This option enables or disable the format check.
+
+config BKG_SCAN_DISK
+	bool
+	prompt "Background scan disk support"
+	default n
+	depends on LCMUSIC_APP
+	help
+	This option enables or disable Background scan disk.
+
+config BMS_LCMUSIC_APP
+	bool
+	prompt "USOUND BMS App Support"
+	default n
+

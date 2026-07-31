@@ -1,0 +1,10 @@
+target remote localhost:1020
+set confirm off
+set pagination off
+
+set *(unsigned int*)0xe0000180 = 0xffffffff
+set *(unsigned int*)0xe0000184 = 0xffffffff
+set *(unsigned int*)0xc012003c = 0x42521000
+set *(unsigned int*)0xc012001c = 0x1f
+continue
+

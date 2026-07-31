@@ -1,0 +1,27 @@
+# Kconfig - DSP device configuration options
+#
+#
+# Copyright (c) 2018 Actions Semiconductor Co., Ltd
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+#
+# SPIDEV options
+#
+config SPIDEV_ACTS
+	bool
+	prompt "SPIDEV driver Configuration"
+	default n
+
+config SOC_PSRAM_DCACHE
+    bool "Enable PSRAM dcache"
+    default n
+    help
+      Enable PSRAM dcache for Andes SoC
+      
+config SOC_PSRAM_CPU
+    bool "Enable PSRAM cpu"
+    default n
+    help
+      Enable PSRAM dcache for Andes SoC      

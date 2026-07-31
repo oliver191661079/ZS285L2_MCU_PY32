@@ -1,0 +1,107 @@
+# Kconfig - Actions audio
+
+#
+# Copyright (c) 2016 Actions Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+menuconfig AUDIO_SYSTEM
+	bool
+	prompt "Audio"
+	select VOLUME_MANAGER
+	default n
+	help
+	This option enables actions audio
+
+config VOLUME_MANAGER
+	bool
+	prompt "actions volume manager"
+	default n
+	help
+	This option enables actions actions volume manager.
+
+config AUDIO_VOICE_HARDWARE_REFERENCE
+    bool
+    prompt "audio voice use hardware refernce signal"
+    default n
+    help
+    This option enables audio voice use hardware reference signal
+
+config AUDIO_DATA_DEBUG
+    bool
+    prompt "audio data and speed print"
+    default n
+
+config DSP_HFP_VERSION
+    int
+    prompt "Version of DSP HFP"
+    default 0
+    help
+    This option selects the vertion of DSP HFP
+
+config DSP_OUTPUT_24BIT_WIDTH_IN_BMS
+    bool
+    prompt "dsp output buffer is 24bit width for save buffer in bms sence"
+    default n
+
+config DSP_OUTPUT_1_CH_IN_BMS
+    bool
+    prompt "dsp output buffer is 1ch(1 speaker) for save buffer in bms sence"
+    default n
+
+config DSP_BYPASS_ADJUST_DA_VOLUME
+    int "add a ajust da volume(0.1 db unit) in bypass mode"
+    default 0
+
+config DSP_FADEIN_FILL_ZERO
+    bool
+    prompt "dsp memset half buffer fadein to zero"
+    default n
+
+config AUDIO_TRACK_LESS_DATA_FADE
+    bool
+    prompt "audio track fade out when less data"
+    default n
+
+config AUDIO_MULTICORE_SYNC_PLAY
+    bool
+    prompt "audio multicore sync play"
+    default n
+    help
+    This option enables audio multicore sync play
+
+config AUDIO_MULTICORE_SYNC_GPIO_NUM
+    int
+    prompt "audio multicore sync gpio pin num"
+    default 1
+    help
+    This option selects the audio multicore sync gpio pin num
+
+config AUDIO_TRACK_MAX_RELOAD_BUFFER_SIZE
+    int
+    prompt "audio track max reload buffer size"
+    default 1536
+    help
+    This option selects the audio track max reload buffer size
+
+config AUDIO_SUPPORT_DYNAMIC_PEQ
+    bool
+    prompt "audio support dynamic peq"
+    default n
+    help
+    This option selects the audio support dynamic peq or not"
+
+ config ENERGY_SAMPLE_SUPPORT
+    bool
+    prompt "support energy sample"
+    default n
+    help
+    This option enables energy sample
+
+config AUDIO_MULTI_CHANNEL_MODE
+    int
+    prompt "Audio multi-channel mode"
+    default 0
+    help
+    Set audio audio multi-channel mode. See definition of "MULTI_CH_MODE_*"

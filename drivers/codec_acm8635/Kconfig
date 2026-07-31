@@ -1,0 +1,125 @@
+menu "ACM8635 Codec Driver"
+
+config CODEC_ACM8635
+	bool "ACM8635 TWI/I2C codec/PA driver"
+	default n
+	depends on I2C && (I2C_0 || I2C_GPIO_1)
+	help
+	  Awinic ACM8635: I2C register config + I2S audio to chip.
+	  Registers as CONFIG_AMP_DEV_NAME (same AMP API as AW882XX).
+	  285L2 I2C: GPIO0(SCL)/GPIO19(SDA); PDN: GPIO5 (shutdown active-low).
+	  285L2 I2S: LRCLK=GPIO6, BCLK=GPIO39, SDIN=GPIO38 (SoC I2STX DOUT).
+
+config CODEC_ACM8635_I2C_BITBANG
+	bool "285L2: software GPIO I2C (bitbang GPIO0/19)"
+	default n
+	depends on CODEC_ACM8635 && I2C_GPIO_1
+	help
+	  Use GPIO bitbang TWI instead of hardware I2C_0 (MFP=6).
+	  prj.conf: I2C_GPIO_1=y, I2C_0=n, I2C_ACTS=n;
+	  I2C_GPIO_1_SCL_PIN=0, I2C_GPIO_1_SDA_PIN=19,
+	  I2C_GPIO_1_NAME="I2C_0".
+
+config CODEC_ACM8635_DEV_NAME
+	string "ACM8635 device name"
+	default "ACM8635"
+	depends on CODEC_ACM8635
+
+config CODEC_ACM8635_I2C_NAME
+	string "ACM8635 TWI bus device name"
+	default "I2C_0"
+	depends on CODEC_ACM8635
+	help
+	  285L2: GPIO bitbang TWI on GPIO0(SCL) / GPIO19(SDA), bus I2C_GPIO_1.
+
+config CODEC_ACM8635_I2C_ADDR
+	hex "7-bit I2C address for ACM8635"
+	default 0x1C
+	depends on CODEC_ACM8635
+	help
+	  285L2: use 0x1C (wire byte 0x38, Awinic 8-bit write address).
+	  Other ADDR pin options: 0x1D/0x1E/0x1F map to 0x3A/0x3C/0x3E wire.
+
+config CODEC_ACM8635_I2C_FORCE_WRITE
+	bool "Write init tables without checking ACK/NACK"
+	default y
+	depends on CODEC_ACM8635
+	help
+	  Always write register tables to CONFIG_CODEC_ACM8635_I2C_ADDR.
+
+config CODEC_ACM8635_INIT_VOLUME
+	int "ACM8635 init volume step (Awinic volumeControl 0-16)"
+	range 0 16
+	default 8
+	depends on CODEC_ACM8635
+	help
+	  Same as Awinic GUI volumeControl(): 16 = 0 dB (max),
+	  0 = mute. Default 8 is about -18.5 dB.
+
+config CODEC_ACM8635_DSP_INIT_DELAY_MS
+	int "Delay ms between init and main register tables"
+	default 10
+	range 10 100
+	depends on CODEC_ACM8635
+	help
+	  Vendor ACM86xx_init(): wait at least 10 ms after
+	  acm8635_reg_tab_init before loading acm8635_reg_tab_main.
+
+config CODEC_ACM8635_DSP_MAIN_DELAY_MS
+	int "Delay ms after main register table load"
+	default 0
+	range 0 100
+	depends on CODEC_ACM8635
+	help
+	  Extra DSP settle time after acm8635_reg_tab_main before volume
+	  and play control.
+
+config CODEC_ACM8635_POWER_EXT_PA
+	bool "Assert board external PA enable before I2C init"
+	default n
+	depends on CODEC_ACM8635 && BOARD_EXTERNAL_PA_ENABLE
+	help
+	  285L2 uses ACM8635 only (GPIO21 is TEST, not PA). Leave disabled.
+
+config CODEC_ACM8635_PDN_GPIO
+	int "ACM8635 PDNz GPIO pin (-1 = not used)"
+	default 5
+	depends on CODEC_ACM8635
+	help
+	  PDN/shutdown pin. 285L2 uses GPIO5. Board init drives shutdown
+	  at boot; driver releases (run) before I2C.
+
+config CODEC_ACM8635_PDN_ACTIVE_LOW
+	bool "PDN is active-low shutdown (drive HIGH to run)"
+	default y
+	depends on CODEC_ACM8635
+	help
+	  Board init: drive LOW (shutdown). Driver: drive HIGH before I2C.
+
+config CODEC_ACM8635_PDN_DELAY_MS
+	int "Delay after PDN release before I2C (ms)"
+	default 10
+	range 1 200
+	depends on CODEC_ACM8635
+	help
+	  Wait in driver after PDN HIGH before starting I2C transfer.
+
+choice CODEC_ACM8635_I2C_BUS_SPEED
+	prompt "ACM8635 I2C bus speed (chip maximum 400 kHz)"
+	default CODEC_ACM8635_I2C_BUS_400K
+	depends on CODEC_ACM8635
+	help
+	  ACM8635 I2C supports Standard (100 kHz) and Fast (400 kHz) only.
+	  Do not use speeds above 400 kHz.
+
+config CODEC_ACM8635_I2C_BUS_100K
+	bool "100 kHz (Standard mode)"
+	depends on CODEC_ACM8635
+
+config CODEC_ACM8635_I2C_BUS_400K
+	bool "400 kHz (Fast mode, chip maximum)"
+	depends on CODEC_ACM8635
+
+endchoice
+
+endmenu

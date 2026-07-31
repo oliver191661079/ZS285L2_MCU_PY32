@@ -1,0 +1,14 @@
+menu "PA_TAS2780 Drivers"
+
+config PA_TAS2780_DEV_NAME
+	string
+	prompt "PA TAS2780 DEV NAME"
+	default "PA TAS2780 DEV NAME"
+
+config PA_TAS2780
+	bool "PA TAS2780 driver"
+	default n
+	help
+		Enable/Disable PA TAS2780 amplifier
+
+endmenu

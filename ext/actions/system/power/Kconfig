@@ -1,0 +1,31 @@
+# Kconfig - Actions power manager
+
+#
+# Copyright (c) 2016 Actions Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+menuconfig POWER
+	bool
+	prompt "Power"
+	select POWER_MANAGER
+	default n
+	help
+	This option enables actions power 
+	
+config POWER_MANAGER
+	bool
+	prompt "power manager"
+	depends on POWER
+	default n
+	help
+	This option enables actions power manager.
+
+config POWER_SMART_CONTROL
+	bool
+	prompt "power smart control"
+	depends on POWER_MANAGER
+	default n
+	help
+	This option enables power smart control.

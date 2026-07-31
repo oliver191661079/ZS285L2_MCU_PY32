@@ -1,0 +1,34 @@
+config ACT_EVENT_APP_COMPILE_LEVEL
+	int "Default act_event app compile level"
+	default 3
+	range 0 4
+	help
+	  Sets log level for modules which don't specify it explicitly. When
+	  set to 0 it means log will not be activated for those modules.
+	  Levels are:
+
+	  - 0 OFF, do not write by default
+	  - 1 ERROR, default to only write LOG_LEVEL_ERR
+	  - 2 WARNING, default to write LOG_LEVEL_WRN
+	  - 3 INFO, default to write LOG_LEVEL_INFO
+	  - 4 DEBUG, default to write LOG_LEVEL_DBG	
+
+config ACT_EVENT_MEDIA_COMPILE_LEVEL
+	int "Default act_event media compile level"
+	default 3
+	range 0 4
+
+config ACT_EVENT_BR_COMPILE_LEVEL
+	int "Default act_event media compile level"
+	default 3
+	range 0 4
+
+config ACT_EVENT_BIS_COMPILE_LEVEL
+	int "Default act_event media compile level"
+	default 3
+	range 0 4  
+
+config ACT_EVENT_OS_COMPILE_LEVEL
+	int "Default act_event media compile level"
+	default 3
+	range 0 4      

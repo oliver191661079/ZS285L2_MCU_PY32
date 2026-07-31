@@ -1,0 +1,281 @@
+/*
+ * Copyright (c) 2022 Actions Semiconductor Co., Ltd
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @file app ui define
+ */
+
+#ifndef _APP_UI_EVENT_H_
+#define _APP_UI_EVENT_H_
+#include <sys_event.h>
+#include <msg_manager.h>
+#include "btservice_api.h"
+
+enum {
+	NEED_INIT_BT,
+	NO_NEED_INIT_BT,
+};
+
+enum APP_MESSAGE_TYPE
+{
+	/* application defined message */
+	MSG_BTMUSIC_APP_EVENT = MSG_APP_MESSAGE_START,
+	MSG_DEMO_APP_EVENT,
+	MSG_OTA_APP_EVENT,
+	MSG_USOUND_APP_EVENT,
+	MSG_AUDIO_INPUT_APP_EVENT,
+	MSG_SELFAPP_APP_EVENT,
+	MSG_LEMUSIC_APP_EVENT,
+	MSG_LCMUSIC_EVENT,
+	MSG_DISK_OTA_PRE_APP_EVENT,
+};
+
+enum SELFAPP_COMMANDS {
+	SELFAPP_CMD_CALLBACK,
+	SELFAPP_CMD_ROLE_UPDATE,
+};
+
+
+enum APP_INPUT_MESSAGE_CMD{
+	// msg cmd for main
+	MSG_INPUT_NULL = 0,
+	MSG_BT_PLAY_TWS_PAIR,
+	MSG_BT_PLAY_DISCONNECT_TWS_PAIR,
+	MSG_BT_PLAY_CLEAR_LIST,
+	MSG_BT_SIRI_START,
+	MSG_BT_SIRI_STOP,
+	MSG_BT_CALL_LAST_NO,
+	MSG_BT_HID_START,
+	MSG_KEY_POWER_OFF,
+	MSG_KEY_SWITCH_APP,
+	MSG_BT_TWS_SWITCH_MODE,
+	MSG_ENTER_PAIRING_MODE,
+	MSG_RECORDER_START_STOP,
+	MSG_GMA_RECORDER_START,
+	MSG_ALARM_ENTRY_EXIT,
+	MSG_AURACAST_ENTER,
+	MSG_AURACAST_EXIT,
+	MSG_ENTER_DEMO,
+	MSG_FACTORY_DEFAULT,
+	MSG_DEMO_SWITCH,
+	MSG_PAUSE_PLAYER,
+	MSG_RESUME_PLAYER,
+	MSG_PLAYER_RESET,
+	MSG_TWS_SWITCH,
+	MSG_TWS_MODE_SWITCH,
+	MSG_TWS_POWER_OFF_REPLY,
+	MSG_START_DISK_OTA,
+
+	MSG_APP_MESSAGE_MAX_INDEX,
+
+	MSG_APP_INPUT_MESSAGE_CMD_START = 200,
+};
+
+enum SYS_APP_BTMGR_MESSAGE_CMD{
+	// msg cmd for btmgr
+	MSG_BT_POWEROFF_RESULT,
+	MSG_BT_LEAUDIO_RESTART,
+	// msg cmd for gfp
+	MSG_BT_GFP_CONNECTED,
+	MSG_BT_GFP_DISCONNECTED,
+	MSG_BLE_ADV_CONTROL, // 0 - off, 1 - on
+};
+
+enum APP_UI_VIEW_ID {
+	MAIN_VIEW,
+	BTMUSIC_VIEW,
+	BTCALL_VIEW,
+	AUXTWS_VIEW,
+	LEA_RELAY_VIEW,
+	LEAUDIO_VIEW,
+	LEMUSIC_VIEW,
+	AUDIO_INPUT_VIEW,
+	OTA_VIEW,
+	SOUNBAR_VIEW,
+	USOUND_VIEW,
+	DEMO_VIEW,
+	BORADCAST_BR_VIEW,
+	BMS_UAC_VIEW,
+	BMS_SPDIF_VIEW,
+	BMR_VIEW,
+	CHARGER_VIEW,
+	LCMUSIC_VIEW,
+	DISK_OTA_PRE_VIEW,
+};
+
+enum APP_UI_EVENT_ID {
+	UI_EVENT_NONE = 0,
+	UI_EVENT_POWER_ON,
+	UI_EVENT_POWER_OFF,
+	UI_EVENT_STANDBY,
+	UI_EVENT_WAKE_UP,
+
+	UI_EVENT_LOW_POWER,
+	UI_EVENT_NO_POWER,
+	UI_EVENT_CHARGE,
+	UI_EVENT_CHARGE_OUT,
+	UI_EVENT_POWER_FULL,
+
+	UI_EVENT_ENTER_PAIRING,
+	UI_EVENT_CLEAR_PAIRED_LIST,
+	UI_EVENT_WAIT_CONNECTION,
+	UI_EVENT_CONNECT_SUCCESS,
+	UI_EVENT_SECOND_DEVICE_CONNECT_SUCCESS,
+	UI_EVENT_BT_DISCONNECT,
+	UI_EVENT_BT_UNLINKED,
+	UI_EVENT_TWS_START_TEAM,
+	UI_EVENT_TWS_STOP_TEAM,
+	UI_EVENT_TWS_TEAM_SUCCESS,
+	UI_EVENT_TWS_DISCONNECTED,
+	UI_EVENT_TWS_PAIR_FAILED,
+
+	UI_EVENT_VOLUME_CHANGED,
+	UI_EVENT_MIN_VOLUME,
+	UI_EVENT_MAX_VOLUME,
+
+	UI_EVENT_PLAY_START,
+	UI_EVENT_PLAY_PAUSE,
+	UI_EVENT_PLAY_PREVIOUS,
+	UI_EVENT_PLAY_NEXT,
+
+	UI_EVENT_BT_INCOMING,
+	UI_EVENT_BT_OUTGOING,
+	UI_EVENT_BT_START_CALL,
+	UI_EVENT_BT_ONGOING,
+	UI_EVENT_BT_HANG_UP,
+	UI_EVENT_START_SIRI,
+	UI_EVENT_STOP_SIRI,
+	UI_EVENT_BT_CALLRING,
+
+	UI_EVENT_MIC_MUTE,
+	UI_EVENT_MIC_MUTE_OFF,
+	UI_EVENT_TAKE_PICTURES,
+	UI_EVENT_FACTORY_DEFAULT,
+
+	UI_EVENT_ENTER_BTMUSIC,
+	UI_EVENT_ENTER_LINEIN,
+	UI_EVENT_ENTER_USOUND,
+	UI_EVENT_ENTER_SPDIF_IN,
+	UI_EVENT_ENTER_I2SRX_IN,
+	UI_EVENT_ENTER_SDMPLAYER,
+	UI_EVENT_ENTER_UMPLAYER,
+	UI_EVENT_ENTER_NORMPLAYER,
+	UI_EVENT_ENTER_SDPLAYBACK,
+	UI_EVENT_ENTER_UPLAYBACK,
+	UI_EVENT_ENTER_RECORD,
+	UI_EVENT_ENTER_MIC_IN,
+	UI_EVENT_ENTER_FM,
+	UI_EVENT_ENTER_AUXTWS,
+	UI_EVENT_ENTER_LEARELAY,
+	UI_EVENT_ENTER_LEAUDIO,
+	UI_EVENT_ENTER_LEMUSIC,
+	UI_EVENT_ENTER_OTA,
+	UI_EVENT_ENTER_DEMO,
+
+	UI_EVENT_PLAY_ENTER_AURACAST_TTS,
+	UI_EVENT_PLAY_EXIT_AURACAST_TTS,
+
+	UI_EVENT_OTA_FINISHED_REBOOT,
+};
+
+
+enum TWS_APP_EVENT_ID
+{
+    /***************************************************************************************
+	 * 下面消息是TWS短消息，通过  TWS_SHORT_MSG_EVENT发送.
+	 *
+	 * 例如：
+	 * bt_manager_tws_send_message(TWS_SHORT_MSG_EVENT, TWS_APP_EVENT_KEY_TONE_PLAY, NULL, 0)
+     *
+     **************************************************************************************/
+    TWS_EVENT_SYSTEM_KEY_CTRL = TWS_EVENT_APP_MSG_BEGIN_ID,      // 系统控制
+    TWS_EVENT_BT_MUSIC_KEY_CTRL,      // 蓝牙音乐控制
+    TWS_EVENT_BT_CALL_KEY_CTRL,       // 蓝牙通话控制
+	TWS_EVENT_KEY_CTRL_COMPLETE,	  // 按键控制完成
+
+    TWS_EVENT_KEY_TONE_PLAY,          // 播放按键音
+
+	TWS_EVENT_POWER_OFF,			  // 关机
+
+	TWS_EVENT_IN_CHARGER_BOX_STATE,   // 是否在充电盒中状态
+
+	TWS_EVENT_REMOTE_KEY_PROC_BEGIN,  // 对端按键处理开始
+	TWS_EVENT_REMOTE_KEY_PROC_END,	  // 对端按键处理结束
+	TWS_EVENT_AVDTP_FILTER, 		  // AVDTP 数据过滤
+	TWS_EVENT_BT_CALL_START_RING,	  // 开始来电响铃
+	TWS_EVENT_BT_CALL_RING_NUM_BEGIN, // 开始播放来电号码
+	TWS_EVENT_BT_CALL_RING_NUM_END,   // 结束播放来电号码
+
+    TWS_EVENT_DIAL_PHONE_NO,          // 拨打指定电话号码
+    TWS_EVENT_WAIT_DIAL,              // 等待拨打电话
+    TWS_EVENT_WAIT_VOICE_ASSIST,      // 等待启动 Siri 等语音助手
+
+    TWS_EVENT_SET_VOICE_LANG,         // 设置语音语言
+    TWS_EVENT_SYNC_LOW_LATENCY_MODE,  // 同步低延迟模式
+    TWS_EVENT_BT_MUSIC_PLAYER_ERR,    // 蓝牙音乐播放器错误
+    TWS_EVENT_OTA_CMD,                // TWS OTA命令
+    TWS_EVENT_SYNC_PRIVMA_STATUS,     // 同步SPP/BLE协议连接状态
+    TWS_EVENT_SYNC_CHG_BOX_STATUS,    // 同步充电盒状态
+
+    TWS_EVENT_SYNC_BT_MUSIC_DAE,      // 同步蓝牙音乐音效
+    TWS_EVENT_SYNC_TRANSPARENCY_MODE, // 同步通透模式状态
+
+    TWS_EVENT_AVDTP_UNFILTER_AFTER_BT_CALL,  // 蓝牙通话结束后取消 AVDTP 数据过滤
+
+    TWS_EVENT_BT_CALL_PRE_RING,       // 准备来电响铃
+	TWS_EVENT_SYNC_STATUS_INFO, 	  //同步应用状态信息
+
+
+    TWS_EVENT_AP_RECORD_STATUS,          //录音状态
+
+    TWS_EVENT_BT_MUSIC_START,          //音乐起始播放时间
+    TWS_EVENT_BT_CALL_STOP,           //通话停止播放时间
+    /***************************************************************************************
+	 * 下面消息是TWS短消息，通过  TWS_LONG_MSG_EVENT发送.
+	 *
+	 * 例如：
+	 * bt_manager_tws_send_message(TWS_LONG_MSG_EVENT, TWS_EVENT_TWS_OTA, data, len)
+     *
+     **************************************************************************************/
+    /* 长数据事件消息
+     */
+    TWS_EVENT_TWS_OTA = TWS_EVENT_APP_LONG_MSG_BEGIN_ID,  // TWS OTA大数据传输
+
+    TWS_EVENT_APOTA_SYNC,  // 类recovery ota接口数据传输
+
+	TWS_EVENT_SPP_TEST,  // SPP TEST
+
+	TWS_EVENT_APP_SETTING_KEY_MAP,  // 同步手机应用设置下来的按键映射表
+
+	TWS_EVENT_APP_ROLE_SWITCH,  // spp/ble role switch
+
+    TWS_EVENT_ASET,  // aset sync dae/aec param
+    TWS_EVENT_CONSUMER_EQ,  // sync consumer eq param
+    TWS_EVENT_TWS_MODE_SWITCH,
+    TWS_EVENT_MEDIA_VERSION_INFO,
+};
+
+struct event_strmap_s {
+	int8_t event;
+	const char *str;
+};
+
+struct event_ui_map {
+	uint8_t sys_event;
+	uint8_t ui_event;
+};
+
+#ifdef CONFIG_TWS_UI_EVENT_SYNC
+typedef struct
+{
+    u8_t  app_ver;
+    u8_t  bt_music_vol;
+    u8_t  bt_call_vol;
+    u8_t  auxtws_vol;
+} app_tws_sync_status_info_t;
+#endif
+
+#endif

@@ -1,0 +1,51 @@
+# Kconfig - ACTIONS primitive options for sdk version 2.0
+
+#
+# Copyright (c) 2015 Intel Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+config USB_APP_AUDIO_DEVICE_MANUFACTURER
+	string
+	prompt "USB audio(composite device) manufacturer name"
+	default "ZEPHYR"
+	help
+	  USB audio device manufacturer string. can be configured by vendor.
+
+config USB_APP_AUDIO_DEVICE_PRODUCT
+	string
+	prompt "USB AUDIO device product name"
+	default "USB-AUDIO-DEV"
+	help
+	  USB audio device product string. can be configured by vendor.
+
+config USB_APP_AUDIO_DEVICE_SN
+	string
+	prompt "USB audio device serial number"
+	default "0123456789AB"
+	help
+	  USB audio device serial number string. can be configured by vendor.
+
+config USB_APP_AUDIO_DEVICE_VID
+	hex
+	prompt "USB audio device vendor ID"
+	default 0x10d6
+	help
+	  USB audio device vendor ID. MUST be configured by vendor.
+
+config USB_APP_AUDIO_DEVICE_PID
+	hex
+	prompt "USB audio device product ID"
+	default 0xb00d
+	help
+	  USB audio device product ID. MUST be configured by vendor.

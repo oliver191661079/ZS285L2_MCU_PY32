@@ -1,0 +1,19 @@
+# Kconfig - Actions Bluetooth SoC platform configuration options
+
+#
+# Copyright (c) 2018 Actions Semiconductor Co., Ltd
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+if SOC_ATS2875H
+
+config SOC
+	string
+	default ats2875h
+
+config SOC_SERIES_ANDESC_P2
+	bool "actions andesc P2 series"
+	default y
+
+endif # SOC_ATS2875H

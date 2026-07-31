@@ -1,0 +1,1 @@
+obj-y += stub_hal.o

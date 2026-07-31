@@ -1,0 +1,88 @@
+# Kconfig - Actions system manager
+
+#
+# Copyright (c) 2016 Actions Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+menuconfig DISPLAY
+	bool
+	prompt "Display Support"
+	depends on ACTIONS_COMPONENT_FUNCTION
+	select UI_MANAGER
+	default n
+	help
+	This option enables actions system manager.
+
+config LED_MANAGER
+	bool
+	prompt "LED Manager Support"
+	depends on LED
+	default n
+	help
+	This option enables actions led manager.
+
+config SEG_LED_MANAGER
+	bool
+	prompt "SEG LED Manager Support"
+	depends on SEG_LED
+	default n
+	help
+	This option enables actions seg led  manager.
+
+config UI_MANAGER
+	bool
+	prompt "Ui Manager Support"
+	default n
+	help
+	This option enables actions app manager.
+
+config GUI
+       bool
+       prompt "Gui Support"
+	   depends on DISPLAY
+       default n
+       help
+       This option enables actions gui interface
+
+config UGUI
+       bool
+       prompt "Ugui 0.3 Support"
+       depends on GUI
+       default n
+       help
+       This option enables ugui 0.3 interface
+
+config UGUI_TINY_MODE 
+       bool
+       prompt "Ugui 0.3 tiny Support"
+       depends on UGUI
+       default n
+       help
+       This option enables ugui 0.3 support tiny function interface
+
+config UGUI_SIMPLE_MODE 
+       bool
+       prompt "Ugui 0.3 simple mode Support"
+       depends on UGUI
+       default n
+       help
+       This option enables ugui 0.3 support simple function interface
+
+config UGUI_FULL_MODE 
+       bool
+       prompt "Ugui 0.3 full mode Support"
+       depends on UGUI
+       default n
+       help
+       This option enables ugui 0.3 support full function interface
+
+config SUPPORT_GBK_DISPLAY
+       bool
+       prompt "GBK code display Support"
+       depends on UGUI
+       default n
+       help
+       This option enables ugui support GBK code display interface
+

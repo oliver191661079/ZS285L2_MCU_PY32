@@ -1,0 +1,249 @@
+# Kconfig - MMC configuration options
+
+#
+# Copyright (c) 2015 Intel Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+#
+# MMC options
+#
+menuconfig MMC
+	bool
+	prompt "MMC Drivers"
+	default n
+	help
+	Enable MMC Driver Configuration
+
+if MMC
+
+config MMC_0
+	bool "Enable MMC Port 0"
+	default n
+	help
+	  Enable MMC Port 0.
+
+config MMC_0_IO_WIDTH
+	int "MMC Port 0 io bus width"
+	depends on MMC_0
+	range 1 4
+	default 1
+	help
+	  Specify the io bus width(1, 4) for MMC Port 0.
+
+config MMC_0_DEVICE_NAME
+	string "MMC Port 0 device name"
+	default "MMC_0"
+	depends on MMC_0
+	help
+	  Specify the MMC Port 0 device name.
+
+config MMC_0_INIT_PRIORITY
+	int "MMC Port 0 init priority"
+	default 10
+	help
+	  Device driver initialization priority.
+
+config MMC_1
+	bool "Enable MMC Port 1"
+	default n
+	help
+	  Enable MMC Port 1.
+
+config MMC_1_IO_WIDTH
+	int "MMC Port 1 io bus width"
+	depends on MMC_1
+	range 1 4
+	default 1
+	help
+	  Specify the io bus width(1, 4) for MMC Port 1.
+
+config MMC_1_DEVICE_NAME
+	string "MMC Port 1 device name"
+	default "MMC_1"
+	depends on MMC_1
+	help
+	  Specify the MMC Port 1 device name.
+
+config MMC_1_INIT_PRIORITY
+	int "MMC Port 1 init priority"
+	default 10
+	help
+	  Device driver initialization priority.
+
+config MMC_SDCARD
+	bool "Support SD Card"
+	depends on FLASH
+	default n
+	help
+	  Enable support for SD Card.
+
+config MMC_SDCARD_MMC_DEV_NAME
+	string "SD Card MMC device name"
+	default "MMC_0"
+	depends on MMC_SDCARD
+	help
+	  Specify the MMC device name which SD Card device is
+	  connected.
+
+config MMC_SDCARD_DEV_NAME
+	string "SD Card device name"
+	default "sd-storage"
+	depends on MMC_SDCARD
+	help
+	  Specify the device name of SD Card device.
+
+config MMC_SDCARD_LOW_POWER
+	bool "Support SD Card/EMMC standby mode"
+	depends on MMC_SDCARD
+	default n
+	help
+	  Enable support for SD Card/EMMC standby mode, enter standby mode
+	  after read/write.
+
+config MMC_SDCARD_RETRY_TIMES
+	int "SD Card retry times when initialzation failure"
+	default 2
+	depends on MMC_SDCARD
+	help
+	  Specify the initialzation retry times of SD Card device.
+
+config MMC_SDCARD_LOW_POWER_SLEEP
+	bool "Support EMMC sleep mode"
+	depends on MMC_SDCARD_LOW_POWER
+	default n
+	help
+	  Enable support for EMMC sleep mode, enter sleep mode
+	  after read/write.
+
+config MMC_SDIO
+	bool "SDIO driver"
+	depends on MMC
+	default n
+	help
+	  Enable support for SDIO.
+
+config MMC_SDIO_MMC_DEV_NAME
+	string "SD Card MMC device name"
+	default "MMC_1"
+	depends on MMC_SDIO
+	help
+	  Specify the MMC device name which SDIO device is
+	  connected.
+
+config MMC_SDIO_ISR_THREAD
+	bool "Use irq thread to handle SDIO irq"
+	depends on MMC_SDIO
+	default y
+	help
+	  Use irq thread to handle SDIO irq to avoid doing too mutch work
+	  in irq context.
+
+config MMC_SDIO_GPIO_IRQ
+	bool "Use GPIO irq for SDIO irq"
+	depends on MMC_SDIO && GPIO
+	default n
+	help
+	  Use GPIO irq for SDIO irq. Normally used for 1-bit width MMC IO bus.
+
+config MMC_ACTS
+	bool "Actions SoC MMC driver"
+	depends on MMC
+	default n
+	help
+	  Enable MMC Controller of Actions SoC
+
+config MMC_0_DATA_REG_WIDTH
+	int "MMC Port 1 data register width (n * byte)"
+	depends on MMC_0 && MMC_ACTS
+	range 1 4
+	default 4
+	help
+	  Specify the data register width(1 or 4) for MMC Port 1.
+
+config MMC_1_DATA_REG_WIDTH
+	int "MMC Port 1 data register width (n * byte)"
+	depends on MMC_1 && MMC_ACTS
+	range 1 4
+	default 4
+	help
+	  Specify the data register width(1 or 4) for MMC Port 1.
+
+config MMC_ACTS_DMA
+	bool "Enable DMA transfer for MMC driver"
+	depends on MMC_ACTS
+	default y
+	help
+	  Enable DMA transfer for MMC controller of Actions SoC.
+
+config SOC_SD_USE_COREPLL
+    bool "enable SD/MMC use corepll clock source"
+	default n
+    help
+      enable SD/MMC use corepll clock source
+
+config SD0_FREQ_MHZ
+	int "SD0 clock frequence (MHz)"
+	depends on SOC_SD_USE_COREPLL
+	range 1 100
+	default 48
+	help
+	  Specify the clock frequence (MHz) for SD0 driver.
+
+config SD1_FREQ_MHZ
+	int "XSPI1 clock frequence (MHz)"
+	depends on SOC_SD_USE_COREPLL
+	range 1 100
+	default 48
+	help
+	  Specify the clock frequence (MHz) for SD1 driver.
+
+config MMC_SDCARD_ERR_RETRY_NUM
+	int "The retry number of sd card when error"
+	depends on MMC_ACTS
+	range 1 10
+	default 2
+	help
+	  Specify the retry number of sd card read/write when error happened.
+
+config MMC_SDCARD_SHOW_PERF
+	bool "Show the transfer performance information"
+	depends on MMC_ACTS
+	default n
+	help
+	  If you say Y here, you will get the performance information such as bindwidth.
+
+config MMC_ACTS_ERROR_DETAIL
+	bool "Enable show error detail infomation"
+	depends on MMC_ACTS
+	default n
+	help
+	  Enable show detail error infomation when an error occurs.
+
+config SYS_LOG_MMC_LEVEL
+	int
+	prompt "MMC log level"
+	depends on MMC && SYS_LOG
+	default 3
+	help
+	  Sets log level for MMC
+
+	  Levels are:
+
+	  - 0 OFF, do not write
+	  - 1 ERROR, only write SYS_LOG_ERR
+	  - 2 WARNING, write SYS_LOG_WRN in adition to previous level
+	  - 3 INFO, write SYS_LOG_INF in adition to previous levels
+	  - 4 DEBUG, write SYS_LOG_DBG in adition to previous levels
+endif

@@ -1,0 +1,14 @@
+
+# Kconfig - ACTIONS primitive options for sdk version 2.0
+
+#
+# Copyright (c) 2023 Actions Semiconductor Co., Ltd
+# SPDX-License-Identifier: Apache-2.0
+#
+
+config DEMO_APP
+	bool
+	prompt "Demo(USOUND) App Support"
+	default n
+	help
+	This option enables or disable the demo(usb audio) app.

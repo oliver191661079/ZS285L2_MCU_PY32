@@ -1,0 +1,56 @@
+# Kconfig - Shell configuration options
+
+#
+# Copyright (c) 2016 Intel Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+config KERNEL_SHELL
+	bool "Enable kernel shell"
+	default n
+	help
+	  This shell provides access to basic kernel data like version, uptime
+	  and other useful information.
+
+config CMD_MEMORY
+	bool "Enable memory commands"
+	default y
+	help
+	  Memeory commands.
+	    mdw - memory display by word
+	    mdh - memory display by half-word
+	    mdb - memory display by byte
+	    mww - memory write (fill) by word
+	    mwh - memory write (fill) by half-word
+	    mwb - memory write (fill) by byte
+
+config CMD_FLASH
+	bool "Enable flash operation command"
+	default y
+	help
+	  Flash commands.
+	    flash erase - erase flash
+	    flash read - read flash
+	    flash write - write flash
+	    flash info - dump flash information
+
+config CMD_REBOOT
+	bool "Enable reboot command"
+	default y
+	help
+	  enable reboot command.
+
+config CMD_POWEROFF
+	bool "Power off system command"
+	default y
+	help
+	  Power off system command.
+
+config CMD_JTAG
+	bool "enable JTAG command"
+	default y
+	help
+	  Enable JTAG command.
+
+source "subsys/shell/modules/extnetshell/Kconfig"

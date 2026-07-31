@@ -1,0 +1,202 @@
+# Kconfig - Display drivers
+
+#
+# Copyright (c) 2017 Intel Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+config MICROBIT_DISPLAY
+	bool "BBC micro:bit 5x5 LED Display support"
+	depends on BOARD_BBC_MICROBIT
+	depends on PRINTK
+	depends on GPIO
+	help
+	  Enable this to be able to display images and text on the 5x5
+	  LED matrix display on the BBC micro:bit.
+
+if MICROBIT_DISPLAY
+
+config MICROBIT_DISPLAY_PIN_GRANULARITY
+	bool "Access the GPIO on a per-pin instead of per-port basis"
+	help
+	  By default, the micro:bit display driver will update the GPIO
+	  pins of the display (pins 4 through 15) by accessing the entire
+	  GPIO port. This is done for efficiency, however it may interfere
+	  with other peripherals connected to the same GPIO port. Select
+	  this option if other peripherals are connected to the same GPIO
+	  port.
+
+config MICROBIT_DISPLAY_STR_MAX
+	int "Maximum length of strings that can be shown on the display"
+	range 3 255
+	default 40
+	help
+	  This value specifies the maximum length of strings that can
+	  be displayed using the mb_display_string() and mb_display_print()
+	  APIs.
+
+endif # MICROBIT_DISPLAY
+
+config SEG_LED_DISPLAY
+	bool "actions seg led Display support"
+	depends on GPIO
+	help
+	  Enable this to be able to display images and text on the actions seg
+	  LED matrix display .
+
+config SEG_LED_DEVICE_NAME
+	string "SEG LED device name"
+	default "seg_led_0"
+	depends on SEG_LED_DISPLAY
+	help
+	  Specify the SED LED device name.
+
+choice
+	prompt "LED type selection"
+	depends on SEG_LED_DISPLAY
+	default LED_MATRIX_TYPE
+	help
+		This option will select the LED by digital or matrix type.
+		
+config LED_DIGIT_TYPE
+	bool "Digital led type"
+	help
+		Enable the digital led type.
+
+config LED_MATRIX_TYPE
+	bool "Matrix led type"
+	help
+		Enable the matrix led type. 
+
+config SEG_LCD_TYPE
+	bool "actions led Display support"
+	help
+	  Enable this on the actions seg lcd display .
+endchoice
+
+choice
+	prompt "LED work mode selection"
+	depends on SEG_LED_DISPLAY
+	default LED_COMMON_CATHODE
+	help
+		This option will select the work mode of Digit-LED or Matrix-LED.
+
+config LED_COMMON_CATHODE
+	bool "Common cathode mode"
+	help
+		Enable the common cathode mode for Digit-LED or Matrix-LED.
+		
+config LED_COMMON_ANODE
+	bool "Common anode mode"
+	help
+		Enable the common anode mode for Digit-LED or Matrix-LED.
+endchoice
+
+config LED_COM_NUM
+	int "LED COM number selection"
+	depends on SEG_LED_DISPLAY
+	default 7
+	range 4 8
+	help
+		This option specifies the number of LED COM. 
+
+config LED_BIAS_CURRENT
+	int "LED BIAS current setting"
+	depends on SEG_LED_DISPLAY
+	default 1
+	range 0 7
+	help
+		This option specifies the current value of LED BIAS.
+
+config LED_DZ_VAL
+	int "LED dead zone value setting"
+	depends on SEG_LED_DISPLAY
+	default 0
+	range 0 7
+	help
+		This option specifies the dead zone of SEG LED timing sequence and if 0 will disable dead zone function.
+		
+config LED_NUMBER_ITEMS
+	int "LED digital number of items setting"
+	depends on SEG_LED_DISPLAY
+	default 4
+	range 1 16
+	help
+		This option assigns the number of digital items.
+
+config LED_NUMBER_ICONS
+	int "LED digital number of itons setting"
+	depends on SEG_LED_DISPLAY
+	default 8
+	range 1 16
+	help
+		This option assigns the number of digital icons.
+
+config LED_USE_DEFAULT_MAP
+	bool "LED use default mapping table"
+	depends on SEG_LED_DISPLAY
+	default y
+	help
+		If you say Y here, you will get support the default mapping table which worked on 7 segments led.
+
+config LED_USE_1P2INCH_MAP
+	bool "LED use 1.2 inch mapping table"
+	depends on SEG_LED_DISPLAY
+	default n
+	help
+		If you say Y here, you will get support the 1.2 inch mapping table which worked on 7 segments led.
+
+config ACTS_LCD_DISPLAY
+	bool "actions lcd Display support"
+	default n
+	help
+	  Enable this to be able to display images and text on the actions lcd display .
+
+config ACTS_SPI_DISPLAY
+	bool "actions SPI Display support"
+	default n
+	help
+	  Enable this to be able to display images and text on the actions spi display .
+
+config PANEL_GC9306
+	bool "actions lcd panel gc9306 support"
+	depends on ACTS_LCD_DISPLAY
+	default n
+	help
+	  Enable this to be able used panel gc9306.
+
+config PANEL_ST7789V
+	bool "actions lcd panel st7789v support"
+	depends on ACTS_SPI_DISPLAY || ACTS_LCD_DISPLAY
+	default n
+	help
+	  Enable this to be able to used panel st7789v.
+
+config PANEL_SSD1306
+	bool "actions oled panel ssd1306 support"
+	default n
+	help
+	  Enable this to be able to used panel st7789v.
+
+config SSD1306_DEV_NAME
+	string "ssd1306 device name"
+	depends on PANEL_SSD1306
+	default "ssd1306"
+	help
+	  Enable this to be able to used panel st7789v.
+
+config SSD1306_DEV_TYPE_SPI
+	bool "actions oled panel ssd1306 support"
+	depends on PANEL_SSD1306
+	default n
+	help
+	  Enable this to be able to used panel st7789v.
+
+config ACTS_LED_DISPLAY
+	bool "actions led Display support"
+	default n
+	help
+	  Enable this on the actions led display .
+
+

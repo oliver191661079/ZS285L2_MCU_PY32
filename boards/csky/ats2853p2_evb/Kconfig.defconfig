@@ -1,0 +1,14 @@
+
+if BOARD_ATS2853P2_EVB
+
+config BOARD
+	default ats2853p2_evb
+
+config RUN_IN_SPI0_EXT_NOR
+	bool
+    prompt "config code in spi0 external nor flash or not"
+    default n
+    help
+    This option config code in spi0 external nor flash or not
+
+endif

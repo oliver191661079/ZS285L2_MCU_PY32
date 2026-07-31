@@ -1,0 +1,1 @@
+obj-$(CONFIG_SD_FS) += sdfs.o

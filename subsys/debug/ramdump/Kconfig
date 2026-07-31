@@ -1,0 +1,27 @@
+# Copyright (c) 2020 Intel Corporation.
+# SPDX-License-Identifier: Apache-2.0
+
+config DEBUG_RAMDUMP
+	bool
+	prompt "Dump ram to flash"
+	default n
+	help
+	  This option enable ram dump support.
+
+choice
+	prompt "ramdump compress function"
+	default DEBUG_RAMDUMP_COMPRESS_USE_FASTLZ
+
+config DEBUG_RAMDUMP_COMPRESS_USE_LZ4
+	bool "ramdump compress use lz4"
+	depends on DEBUG_RAMDUMP
+	help
+	  This option enable ram dump use lz4.
+
+config DEBUG_RAMDUMP_COMPRESS_USE_FASTLZ
+	bool "ramdump compress use fastlz"
+	depends on DEBUG_RAMDUMP
+	help
+	  This option enable ram dump use fastlz.
+
+endchoice

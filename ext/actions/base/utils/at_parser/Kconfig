@@ -1,0 +1,62 @@
+# Kconfig - Actions iterarator
+
+#
+# Copyright (c) 2016 Actions Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+menuconfig AT_PARSER
+	bool
+	prompt "Actions at parser Support"
+	depends on ACTIONS_UTILS
+	default n
+	help
+	  This option enables actions at parser.
+
+config AT_PARSER_MAX_CMD_LEN
+	int
+	prompt "at parser max command length"
+	depends on AT_PARSER
+	default 256
+	help
+	  This option config at parser max command length
+
+config AT_PARSER_ON_DEV_NAME
+	string "Device Name for at parser"
+	default "UART_0"
+	help
+	This option specifies the name of AT device to be used for
+	at parser.
+
+config AT_PARSER_SUPPORT_URC
+	bool
+	prompt "Actions at parser urc support"
+	depends on AT_PARSER
+	default n
+	help
+	This option enables actions at parser urc support.	
+
+config AT_PARSER_ENABLE_ZEPHYR_HAL
+	bool
+	prompt "Actions at parser zephyr hal support"
+	depends on AT_PARSER
+	default n
+	help
+	This option enables actions at parser zephyr hal.		
+
+config AT_PARSER_ENABLE_FREERTOS_HAL
+	bool
+	prompt "Actions at parser freertos hal support"
+	depends on AT_PARSER
+	default n
+	help
+	This option enables actions at parser freertos hal.	
+	
+config AT_PARSER_TEST
+	bool
+	prompt "Actions at parser test support"
+	depends on AT_PARSER
+	default n
+	help
+	This option enables actions at parser test.		

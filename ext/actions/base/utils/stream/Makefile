@@ -1,0 +1,12 @@
+obj-$(CONFIG_STREAM) += stream.o
+obj-$(CONFIG_FILE_STREAM) += fstream.o
+obj-$(CONFIG_LOOP_FSTREAM) += loop_fstream.o
+obj-$(CONFIG_NET_STREAM)  += netstream.o
+obj-$(CONFIG_BUFFER_STREAM) += bufferstream.o
+obj-$(CONFIG_CACHE_STREAM) += psramstream.o
+obj-$(CONFIG_CLONE_STREAM)  += clonestream.o
+obj-$(CONFIG_RINGBUFF_STREAM)  += ringbuff_stream.o
+obj-$(CONFIG_ZERO_STREAM)  += zero_stream.o
+obj-$(CONFIG_UART_STREAM) += uart_stream.o
+obj-$(CONFIG_CDC_UART_STREAM) += cdc_uart_stream.o
+obj-$(CONFIG_UART_AT_STREAM) += uart_at_stream.o

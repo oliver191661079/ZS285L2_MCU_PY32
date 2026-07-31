@@ -1,0 +1,140 @@
+# Kconfig - Actions system manager
+
+#
+# Copyright (c) 2016 Actions Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+menuconfig SYSTEM
+	bool
+	prompt "System"
+	default n
+	help
+	This option enables actions system manager.
+
+config ESD_MANAGER
+	bool
+	prompt "Esd Manager Support"
+	depends on SYSTEM
+	default n
+	help
+	This option enables actions esd manager.
+
+config SYS_STANDBY
+	bool
+	prompt "System Standby Support"
+	depends on SYSTEM
+	select SYS_WAKELOCK
+	select PM_CPU_IDLE_LOW_POWER
+	default n
+	help
+	This option enables actions system standby.
+
+config SYS_STANDBY_CONTROL_LEADV
+	bool
+	prompt "Control Leadv When System Standby"
+	depends on SYSTEM
+	default n
+	help
+	This option control leadv when system standby.
+
+config SYS_WAKELOCK
+	bool
+	prompt "System Wake Lock Support"
+	depends on SYSTEM
+	default n
+	help
+	This option enables actions system wake lock.
+
+config AUTO_STANDBY_TIME_SEC
+    int "delay how long (second) to enter standby"
+    depends on SYS_STANDBY
+	default 0
+    help
+    This option set the time to enter standby when system idle
+
+config AUTO_POWEDOWN_TIME_SEC
+    int "delay how long (second) to auto power down"
+    depends on SYS_STANDBY
+	default 1800
+    help
+    This option set the time to enter auto power down
+
+config AUTO_POWEDOWN_UNCONNECTED
+    bool 
+    prompt "Poweroff When No Device Connected Support"
+	depends on SYSTEM
+    help
+        allow poweroff when no device connected
+
+config AUTO_POWEDOWN_CONNECTED
+    bool
+    prompt "Poweroff When Device Connected Support"
+	depends on SYSTEM
+	default n
+    help
+        allow poweroff when device connected
+
+config AUTO_POWEDOWN_NOPLAYING
+    bool
+    prompt "Poweroff When Not Playing Support"
+	depends on SYSTEM
+    help
+        allow poweroff when not playing   
+
+config MONITOR_PERIOD
+    int "delay how long (second) to monitor running"
+	depends on SYSTEM
+	default 100
+    help
+    This option set the time to monitor running
+
+config SYSTEM_SHELL
+	bool "System Shell Support"
+	depends on SYSTEM
+	default n
+	select CONSOLE_SHELL
+	help
+	  This shell provides to  modify system config.
+
+config BTSRV_PRIORITY
+    int
+    prompt "Bt Service Thread Priority"
+    default 4
+    depends on BT_SERVICE
+    help
+    This option set audio thread priority  
+
+config BTSRV_STACKSIZE
+    int
+    prompt "Bt Service Thread Stack Size"
+    depends on BT_SERVICE
+    default 2048
+    help
+    This option set stack size for bt service thread 
+
+config SYS_APP_NAME
+	string
+	default system
+
+config FRONT_APP_NAME
+	string
+	default main
+
+config SYS_SOC_UUID
+	bool
+	prompt "System soc uuid Support"
+	depends on SYSTEM
+	default n
+	help
+	This option enables actions system soc uuid.	
+    
+source "ext/actions/system/power/Kconfig"
+source "ext/actions/system/hotplug/Kconfig"
+source "ext/actions/system/input/Kconfig"
+source "ext/actions/system/tts/Kconfig"
+source "ext/actions/system/fs_manager/Kconfig"
+source "ext/actions/system/fm/Kconfig"
+source "ext/actions/system/act_event/Kconfig"
+source "ext/actions/system/serial_flasher/Kconfig"

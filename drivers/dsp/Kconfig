@@ -1,0 +1,34 @@
+# Kconfig - DSP device configuration options
+#
+#
+# Copyright (c) 2018 Actions Semiconductor Co., Ltd
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+#
+# DSP options
+#
+menuconfig DSP
+	bool
+	prompt "DSP driver Configuration"
+	default y
+
+if DSP
+config DSP_ACTS_ANDES
+	bool
+	prompt "DSP driver for andes"
+    default n
+    
+config DSP_ACTS_ATS282X
+    bool
+    prompt "DSP driver for ats282x"
+    default n          
+
+config DSP_LIB_IN_SDFS
+    bool "DSP library is located in SDFS"
+    default y
+    depends on SD_FS
+endif # DSP
+
+source "drivers/dsp/*/Kconfig"

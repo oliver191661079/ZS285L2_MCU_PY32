@@ -1,0 +1,71 @@
+# Kconfig - Actions Bluetooth SoC platform configuration options
+
+#
+# Copyright (c) 2018 Actions Semiconductor Co., Ltd
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+if SOC_SERIES_ANDESC
+
+config ROM_TABLE_ENTRY_ADDR
+    int
+    default 656
+
+config USE_ROM_HRTIMER
+    bool
+    default n
+
+config USE_ROM_THREAD_TIMER
+    bool
+    default y
+
+config USE_ROM_VDMA
+    bool
+    default y
+
+config USE_ROM_TIMER
+    bool
+    default y
+
+config USE_ROM_TRACING
+    bool
+    default n
+
+config USE_ROM_LIBC
+    bool
+    default y
+
+config USE_ROM_CSB
+    bool
+    default y
+
+config USE_ROM_SBC_CODEC
+    bool
+    default y
+
+config USE_ROM_CSB_CODEC
+    bool
+    default y
+
+config USE_ROM_CRC
+    bool
+    default y
+
+config USE_ROM_LOG
+    bool
+    default y
+
+config USE_ROM_CBUF
+    bool
+    default y
+
+config USE_ROM_ACTS_RINGBUF
+    bool
+    default y
+
+config USE_ROM_MALLOC
+    bool
+    default y
+
+endif

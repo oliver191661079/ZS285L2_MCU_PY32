@@ -1,0 +1,21 @@
+obj-y += app_switcher.o
+obj-$(CONFIG_ESD_MANAGER) += esd_manager.o
+obj-$(CONFIG_SYSTEM_SHELL) += sys_shell.o
+obj-y += sys_monitor.o
+obj-y += sys_event.o
+obj-y += sys_manager.o
+obj-y += sys_power_off.o
+obj-y += sys_wakelock.o
+obj-y += sys_standby.o
+obj-y += system_init.o
+obj-y += sys_le_cleanup_nvram.o
+obj-$(CONFIG_SYS_SOC_UUID) += sys_soc_uuid.o
+
+obj-$(CONFIG_MUTIPLE_VOLUME_MANAGER) += fs_manager/
+obj-$(CONFIG_HOTPLUG) += hotplug/
+obj-$(CONFIG_INPUT) += input/
+obj-$(CONFIG_FM) += fm/
+obj-$(CONFIG_PLAYTTS) += tts/
+obj-$(CONFIG_POWER) += power/
+obj-$(CONFIG_ACT_EVENT) += act_event/ 
+obj-$(CONFIG_SERIAL_FLASHER) += serial_flasher/

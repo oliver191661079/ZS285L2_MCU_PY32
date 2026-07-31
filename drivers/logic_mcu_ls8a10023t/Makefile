@@ -1,0 +1,1 @@
+obj-$(CONFIG_LOGIC_MCU_LS8A10023T) += logic_mcu_ls8a10023t.o

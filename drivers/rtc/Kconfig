@@ -1,0 +1,67 @@
+# Kconfig - RTC configuration options
+#
+#
+# Copyright (c) 2015 Intel Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+#
+# Real-Time Clock (RTC) options
+#
+menuconfig RTC
+	bool "Real-Time Clock"
+	default n
+	help
+	Enable options for Real-Time Clock drivers.
+
+if RTC
+
+
+config RTC_QMSI
+	bool "QMSI RTC Driver"
+	depends on QMSI
+	default n
+	help
+	Build QMSI RTC driver.
+
+config RTC_0_NAME
+	string "Driver instance name"
+	default "RTC_0"
+	depends on RTC
+	help
+	RTC driver instance name
+
+config RTC_0_IRQ_PRI
+	int "RTC Driver Interrupt priority"
+	depends on RTC
+	default 0
+	help
+	RTC interrupt priority.
+
+config RTC_QMSI_API_REENTRANCY
+	bool
+	prompt "RTC shim driver API reentrancy"
+	default n
+	help
+	Enable support for RTC shim driver API reentrancy.
+
+config RTC_PCF8563
+	bool "PCF8563 RTC Driver"
+	default n
+	help
+	Build PCF8563 RTC driver.
+
+config RTC_PCF8563_I2C_NAME
+	string "I2C device name"
+	depends on RTC_PCF8563
+	default "I2C_0"
+
+config RTC_ACTS
+	bool "Actions SoC RTC Driver"
+	depends on SOC_FAMILY_ACTS
+	default n
+	help
+	Build Actions SoC RTC driver.
+
+endif # RTC

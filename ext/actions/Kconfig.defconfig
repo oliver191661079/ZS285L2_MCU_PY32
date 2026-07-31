@@ -1,0 +1,259 @@
+#
+# Copyright (c) 2016 Intel Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+if ACTIONS_SDK
+
+config SYS_CLOCK_TICKS_PER_SEC
+	default 500
+
+config SOC_WKEN_ONOFF_LONG_PRESS_TIMER
+	default 1000
+
+config HEAP_MEM_POOL_SIZE
+	default 0
+
+config NUM_MBOX_ASYNC_MSGS
+	default 20
+
+config MESSAGE_DEBUG
+	default y
+
+config NUM_PIPE_ASYNC_MSGS
+	default 0
+
+config CONTROLLER_HIGH_PRIORITY
+	default -15
+
+config SYSTEM_WORKQUEUE_PRIORITY
+	default -1
+
+config MEDIASRV_PRIORITY
+	default 3
+
+config BTSRV_PRIORITY
+	default 5
+
+config MAIN_THREAD_PRIORITY
+	default 6
+
+config APP_PRIORITY
+	default 10
+
+config CONTROLLER_HIGH_STACKSIZE
+	default 1768
+
+config SYSTEM_WORKQUEUE_STACK_SIZE
+	default 1280
+
+config IDLE_STACK_SIZE
+	default 512
+
+config MEDIASRV_STACKSIZE
+	default 1792
+
+config MAIN_STACK_SIZE
+	default 1536
+
+config APP_STACKSIZE
+	default 1792
+
+config BTSRV_STACKSIZE
+	default 1536
+
+config CONSOLE_SHELL_STACKSIZE
+	default 1024
+
+config ISR_STACK_SIZE
+	default 2048
+
+config BT_ATT_PREPARE_COUNT
+	default 2
+
+config BT_RX_BUF_LEN
+	default 680
+
+config BT_L2CAP_RX_MTU
+	default 672
+
+config BT_L2CAP_TX_BUF_COUNT
+	default 10
+
+config BT_L2CAP_TX_MTU
+	default 672
+
+config BT_RX_STACK_SIZE
+	default 1536
+
+config BT_HCI_TX_STACK_SIZE
+	default 1024
+
+config BT_HCI_ACL_FLOW_CONTROL
+	default n
+
+config BT_ATT_ENFORCE_FLOW
+	default n
+
+config BT_TWS_US281B
+	default n
+
+
+# USB device stack
+# USB device general config
+if USB_DEVICE
+config USB_COMPOSITE_DEVICE_CLASS_NUM
+	default 2
+
+config USB_REQUEST_BUFFER_SIZE
+	default 64
+
+config SYS_LOG_USB_DEVICE_LEVEL
+	default 4
+
+config SYS_LOG_USB_DRIVER_LEVEL
+	int
+	default 4
+
+config USB_DEVICE_STRING_DESC_MAX_LEN
+	default 30
+
+# USB device class: Composite Device(UAC & HID)
+if USB_AUDIO_CLASS && USB_DEVICE_HID
+config USB_APP_AUDIO_DEVICE_VID
+	default 0x10d6
+
+config USB_APP_AUDIO_DEVICE_PID
+	default 0xb011
+
+config USB_APP_AUDIO_DEVICE_MANUFACTURER
+	default "Actions"
+
+config USB_APP_AUDIO_DEVICE_PRODUCT
+	default "USB Audio & HID"
+
+config USB_APP_AUDIO_DEVICE_SN
+	default "0123456789AB"
+
+config SYS_LOG_USB_HID_LEVEL
+	default 4
+
+config SYS_LOG_USB_SOURCESINK_LEVEL
+	default 4
+
+config USB_HID_DEVICE_IF_NUM
+	default 0
+
+config USB_AUDIO_DEVICE_IF_NUM
+	default 1
+
+config HID_INTERRUPT_IN_EP_ADDR
+	default 0x82
+
+config HID_INTERRUPT_OUT_EP_ADDR
+	default 0x03
+
+config USB_AUDIO_CONTROL_UNIT
+	default y
+
+config USB_AUDIO_DOWNLOAD_CHANNEL_NUM
+	default 2
+
+config USB_AUDIO_UPLOAD_CHANNEL_NUM
+	default 1
+
+config USB_AUDIO_DEVICE_SOURCE_IN_EP_ADDR
+	default 0x81
+
+config USB_AUDIO_DEVICE_SINK_OUT_EP_ADDR
+	default 0x02
+
+config USB_AUDIO_DEVICE_SINK_MAINCH_CONFIG
+	default 0x01
+
+config USB_AUDIO_DEVICE_SINK_LOGICALCH01_CONFIG
+	default 0x03
+
+config USB_AUDIO_DEVICE_SINK_LOGICALCH02_CONFIG
+	default 0x03
+
+config USB_AUDIO_DEVICE_SOURCE_SAM_FREQ_UPLOAD
+	default 16000
+
+endif # USB_AUDIO_CLASS && USB_DEVICE_HID
+
+# USB device class: stub
+if USB_DEVICE_STUB
+
+endif # USB_DEVICE_STUB
+
+# USB device class: hid
+if USB_DEVICE_HID
+
+endif # USB_DEVICE_HID
+
+# USB device class: cdc
+if USB_CDC_ACM
+
+endif # USB_CDC_ACM
+
+# USB device class: audio
+if USB_AUDIO_CLASS
+
+endif # USB_AUDIO_CLASS
+
+# USB device class: msc
+if USB_MASS_STORAGE
+
+config MASS_STORAGE_PRIORITY
+	default -5
+
+config MASS_STORAGE_DISK_PDRV
+	default 4
+
+config MASS_STORAGE_DISK_NAME
+	default "SD"
+
+config SYS_LOG_USB_MASS_STORAGE_LEVEL
+	default 2
+
+config MASS_STORAGE_MANUFACTURER
+	default "Actions"
+
+config MASS_STORAGE_PRODUCT
+	default "MSC-Sample"
+
+config MASS_STORAGE_SN
+	default "0123456798AB"
+
+config MASS_STORAGE_STACK_SIZE
+	default 1024
+
+config MASS_STORAGE_BUF_SIZE
+	default 8192
+
+config MASS_STORAGE_IN_EP_ADDR
+	default 0x81
+
+config MASS_STORAGE_OUT_EP_ADDR
+	default 0x02
+
+endif # USB_MASS_STORAGE
+endif # USB_DEVICE
+
+# USB host stack configs
+if USB_HOST
+
+endif # USB_HOST
+
+# USB host storage diskio
+config DISK_ACCESS_USB
+	default n
+
+if LEFT_CHANNEL_MUTE || RIGHT_CHANNEL_MUTE
+config MEDIA_EFFECT_OUTMODE
+	default 2
+endif
+
+endif

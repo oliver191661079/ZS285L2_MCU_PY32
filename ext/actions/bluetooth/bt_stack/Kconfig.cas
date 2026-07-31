@@ -1,0 +1,35 @@
+# Bluetooth Audio - Coordinated Set Identification Service options
+#
+# Copyright (c) 2021 Actions Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+if BT_AUDIO
+
+config BT_CAS
+	bool "Common Audio Service Support"
+	select BT_CSIS
+	default n
+	help
+	  This option enables support for Common Audio Service.
+
+config BT_CAS_CLIENT
+	bool "Common Audio Profile Support"
+	select BT_CSIS_CLIENT
+	default n
+	help
+	  This option enables support for Common Audio Profile.
+
+if BT_CAS_CLIENT
+
+config BT_DEBUG_CAS_CLIENT
+	bool "Common Audio Service client debug"
+	depends on BT_AUDIO_DEBUG
+	help
+	  Use this option to enable Common Audio Service client
+	  debug logs for the Bluetooth Audio functionality.
+
+endif # BT_CAS_CLIENT
+
+endif # BT_AUDIO

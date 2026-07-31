@@ -1,0 +1,210 @@
+#
+# Copyright (c) 2015 Wind River Systems, Inc.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+config CPU_CSKYV2L
+	bool
+	default y
+	select ARCH_HAS_CUSTOM_SWAP_TO_MAIN
+	select ATOMIC_OPERATIONS_C
+	select HAS_FLASH_LOAD_OFFSET
+	select HAS_CSKY_CSI
+#	select CSKY_CORETIM
+    select ARCH_SUPPORTS_COREDUMP
+
+config CPU_CK802
+	bool
+	default y
+
+config CPU_CK803S
+	bool
+	default n
+
+config CSKY_CORETIM
+	default y
+
+config CSKY_CORETIM_IRQNUM
+	int "coretim irq number"
+	depends on CSKY_CORETIM
+
+config CPU_HAS_SYSTICK
+	bool
+	# Omit prompt to signify "hidden" option
+	default n
+	help
+	This option is enabled when the CPU has systick timer implemented.
+
+config CPU_HAS_FPU
+	# Hidden config selected by CPU family
+	bool
+	default n
+	help
+	This option is enabled when the CPU has a hardware floating point
+	unit.
+
+config IRQ_OFFLOAD
+	bool "Enable IRQ offload"
+	default n
+	help
+	Enable irq_offload() API which allows functions to be synchronously
+	run in interrupt context. Adds some overhead to context switching.
+	Mainly useful for test cases.
+
+config IRQ_STAT
+	bool "Collect IRQ statistics"
+	depends on GEN_SW_ISR_TABLE
+	default n
+	help
+	 Collect IRQ statistics, such as IRQ count, the maximum running cycles of IRQ.
+
+config DISABLE_IRQ_STAT
+    bool "monitor IRQ disable time"
+    default y
+    help
+     monitor IRQ disable time
+
+config IRQ_LATENCY_STAT
+    bool "monitor IRQ latency time"
+    default n
+    help
+     monitor IRQ latency time
+
+config IRQ_LATENCY_STAT_TIME_US
+    int "monitor IRQ latency time value"
+    default 24000
+	depends on IRQ_LATENCY_STAT
+    help
+     monitor IRQ latency time value
+
+config DISABLE_IRQ_US
+    int "max IRQ disable time"
+    default 1000
+    help
+     monitor IRQ disable time
+
+config MONITOR_IRQ_STACKSIZE
+    bool "monitor irq stack overflow"
+    default y
+    help
+     monitor IRQ stack overflow or not
+
+config MONITOR_IRQ_MIN_FREESIZE
+    int "min irq stack freesize"
+    default 64
+    help
+     min irq stack freesize
+
+config XIP
+	default n if CPU_CSKYV2L
+
+config STACK_BACKTRACE
+	bool "Enable stack backtrace"
+	depends on CPU_CSKYV2L
+	default n
+	select THREAD_STACK_INFO
+	help
+	  Support dump stack backtrace by kallsyms.
+
+	  If you say Y here the resulting kernel image will be slightly larger
+	  but not slower, and it will give very useful debugging information.
+	  If you don't debug the kernel, you can say N, but we may not be able
+	  to solve problems without frame unwind information
+
+config STACK_BACKTRACE_SYMNAME
+	bool "Enable stack backtrace symbol name"
+	depends on CPU_CSKYV2L
+	default n
+	select THREAD_STACK_INFO
+	help
+	  Support dump stack backtrace symbol name by kallsyms.
+
+config ENABLE_TRACE_EVTTOSTR
+    bool "backtrace enable event to string"
+    default n
+    help
+        Backtrace enable event to string or not.
+
+config SWAP_TSPEND
+    bool "Enable thread switch use tspend IRQ"
+    depends on CPU_CSKYV2L
+    default y
+    help
+       Support thread switch use tspend IRQ
+
+config SWAP_TSPEND_CHECK
+    bool "Check tspend status in thread swap"
+    depends on SWAP_TSPEND
+    default y
+    help
+       Check tspend status after thread swap to ensure tspend IRQ is processed.
+
+config GEN_ISR_TABLES
+    default y
+
+config IRQ_PRIO_HIGHEST
+    int
+    depends on CPU_CSKYV2L
+    default 0
+    help
+       IRQ priority highest
+
+config IRQ_PRIO_HIGH
+    int
+    depends on CPU_CSKYV2L
+    default 1
+    help
+       IRQ priority high
+
+config IRQ_PRIO_NORMAL
+    int
+    depends on CPU_CSKYV2L
+    default 2
+    help
+       IRQ priority normal
+
+config IRQ_PRIO_LOW
+    int
+    depends on CPU_CSKYV2L
+    default 3
+    help
+       IRQ priority low
+
+config SEPARATE_IRQ_SP
+    bool
+    depends on CPU_CSKYV2L
+    default n
+    help
+        set hardware separate interrupt sp
+
+config SYS_IRQ_LOCK
+    bool "Lock irq by VIC interface"
+    depends on CPU_CSKYV2L
+    default n
+    help
+      Lock irq by VIC interface. Some special IRQ (e.g. bluetooth controller)
+      still can be proccessed when using sys irq lock.
+
+config SYS_IRQ_LOCK_EXCEPT_BT_CON
+    bool "Lock irq except bluetooth controller IRQ"
+    depends on SYS_IRQ_LOCK
+    default n
+    help
+      Lock irq except bluetooth controller IRQ.
+
+menu "Floating Point Options"
+depends on CPU_HAS_FPU
+
+config	FLOAT
+	bool
+	prompt "Floating point registers"
+	default n
+	help
+	This option allows tasks and fibers to use the floating point registers.
+	By default, only a single task or fiber may use the registers.
+
+	Disabling this option means that any task or fiber that uses a
+	floating point register will get a fatal exception.
+
+endmenu

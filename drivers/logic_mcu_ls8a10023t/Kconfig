@@ -1,0 +1,14 @@
+menu "Logic mcu : LS8A10023T Drivers"
+
+config LOGIC_MCU_LS8A10023T_DEV_NAME
+	string
+	prompt "LOGIC MCU LS8A10023T DEV NAME"
+	default "LOGIC MCU LS8A10023T DEV NAME"
+
+config LOGIC_MCU_LS8A10023T
+	bool "LOGIC MCU LS8A10023T driver"
+	default n
+	help
+		Enable/Disable LOGIC MCU LS8A10023T
+
+endmenu

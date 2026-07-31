@@ -1,0 +1,45 @@
+# Bluetooth Audio - Telephone Bearer Service options
+#
+# Copyright (c) 2021 Actions Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+if BT_AUDIO
+
+config BT_TBS
+	bool "Telephone Bearer Service Support"
+	default n
+	help
+	  This option enables support for Telephone Bearer Service.
+
+if BT_TBS
+
+config BT_DEBUG_TBS
+	bool "Telephone Bearer Service debug"
+	depends on BT_AUDIO_DEBUG
+	help
+	  Use this option to enable Telephone Bearer Service debug logs for the
+	  Bluetooth Audio functionality.
+
+endif # BT_TBS
+
+config BT_TBS_CLIENT
+	bool "Telephone Bearer Profile Support"
+	select BT_GATT_CLIENT
+	default n
+	help
+	  This option enables support for Telephone Bearer Profile.
+
+if BT_TBS_CLIENT
+
+config BT_DEBUG_TBS_CLIENT
+	bool "Telephone Bearer Profile debug"
+	depends on BT_AUDIO_DEBUG
+	help
+	  Use this option to enable Telephone Bearer Profile debug logs for the
+	  Bluetooth Audio functionality.
+
+endif # BT_TBS_CLIENT
+
+endif # BT_AUDIO

@@ -1,0 +1,171 @@
+menuconfig OTA_APP
+	bool
+	prompt "OTA App Support"
+	select OTA_UPGRADE
+	default n
+	help
+	This option enable or disable ota app
+
+config OTA_FOREGROUND
+	bool "OTA Foreground Support"
+	depends on OTA_APP
+	default n
+	help
+	  This option enable OTA foreground upgrade.
+
+config OTA_BACKGROUND
+	bool "OTA background Support"
+	depends on OTA_APP
+	default n
+	help
+	  This option enable OTA background upgrade.
+
+config SYSTEM_RECOVERY_APP_SUPPORT
+	bool
+	prompt "System Recovery App Support"
+	depends on OTA_APP
+	default n
+	depends on SYSTEM_RECOVERY
+	help
+	This option enable or disable system recovery app
+
+config OTA_UPGRADE
+	bool "OTA Upgrade Support"
+	default n
+	select PARTITION
+	select FIRMWARE_VERSION
+	help
+	  This option enable OTA upgrade.
+
+if OTA_UPGRADE
+config OTA_RECOVERY
+	bool "OTA recovery firmware Support"
+	default n
+	depends on OTA_UPGRADE
+	help
+	  This option enable OTA recovery firmware.
+
+config OTA_RECOVERY_APP
+	bool "OTA recovery application Support"
+	default n
+	depends on OTA_RECOVERY
+	help
+	  This option enable OTA recovery application.
+
+config OTA_UNLOAD
+	bool "OTA recovery firmware unload"
+	default n
+	depends on OTA_UPGRADE
+	help
+	  This option enable OTA unload firmware.
+
+config OTA_DOWNLOAD_EXTERNAL_FLASH
+	bool "OTA data download external flash or internal flash"
+	default n
+	depends on OTA_UPGRADE
+	help
+	  This option enable OTA data download external flash.
+
+config OTA_TEMP_PART_DEV_NAME
+	string "OTA temp partition device name"
+	depends on OTA_RECOVERY
+	default "xspi_nor"
+	help
+	  Specify the device name for temp partition.
+
+config XSPI1_NOR_ACTS_DEV_NAME
+	string "SPI1 NOR flash device name"
+	depends on XSPI_NOR_ACTS
+	default "spi1_nor"
+	help
+	  Specify the device name for SPI1 NOR flash driver.
+
+config OTA_BACKEND_DISK
+    bool "OTA upgrade by disk"
+    default n
+    help
+      This option enables OTA upgrade by disk, like sdcard or uhost.
+
+config OTA_BACKEND_SDCARD
+    bool "OTA upgrade by SDCARD Support"
+	depends on OTA_BACKEND_DISK
+    select MMC
+	select MUTIPLE_VOLUME_MANAGER
+	select FILE_STREAM
+	select STREAM
+	select MMC_SDCARD
+    default n
+    help
+      This option enables OTA upgrade by SDCARD.
+
+config OTA_BACKEND_UHOST
+    bool "OTA upgrade by UHOST Support"
+    depends on OTA_BACKEND_DISK
+	select USB_HOST
+	select USB_HOST_STACK
+	select USB_HOST_STORAGE
+	select MUTIPLE_VOLUME_MANAGER
+	select FILE_STREAM
+	select STREAM
+    default n
+    help
+      This option enables OTA upgrade by UHOST.
+
+config OTA_BACKEND_BLUETOOTH
+    bool "OTA upgrade by Bluetooth Support "
+	depends on BT_MANAGER
+	select STREAM
+    select BT_SPPBLE_STREAM
+    default n
+    help
+      This option enables OTA upgrade by Bluetooth SPP/BLE.
+
+config OTA_BACKEND_TEMP_PART
+    bool "OTA upgrade by spinor Support"
+    select FLASH
+    default n
+    help
+      This option enables OTA upgrade by spinor.
+
+config OTA_BACKEND_LETWS_STREAM
+	bool "Support OTA upgrade by letws stream"
+	depends on BT_LETWS
+	default n
+	help
+	  This option enables OTA upgrade by letws stream.
+
+config OTA_FILE_PATCH
+    bool "OTA file patch Support"
+    depends on !OTA_RECOVERY
+    default y
+    help
+      This option enables OTA file patch.
+
+config OTA_BACKEND_UART
+	bool "Support OTA upgrade by uart"
+	depends on UART_ACTS
+	select UART_STREAM
+	default n
+	help
+	  This option enables OTA upgrade by uart.
+
+config OTA_BACKEND_UART_CDC
+	bool "enable cdc uart"
+	depends on OTA_BACKEND_UART
+	select CDC_UART_STREAM
+	default n
+	help
+	  This option enable/disable CDC UART.
+
+config OTA_APP_AUTO_SWITCH
+	bool "OTA app is switched to active automatically."
+	default n
+	help
+	  This option enables automatically ota app switching.
+
+config OTA_TEMP_BIN_NOT_ENCRYPT
+	bool "OTA temp.bin not encrypt, only encrypt recovery.bin"
+	default n
+	help
+	  This option enables ota temp.bin not encrypt
+endif

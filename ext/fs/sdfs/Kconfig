@@ -1,0 +1,13 @@
+
+config SD_FS
+	bool "SD File System"
+	default n
+	select PARTITION
+	help
+	Use the SD File system implementation.
+
+config SD_FS_VADDR_START
+	hex "SD File System start mapping addr "
+	depends on SD_FS
+	help
+	Use SD File System start mapping addr.

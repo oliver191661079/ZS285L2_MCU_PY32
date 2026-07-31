@@ -1,0 +1,49 @@
+# Kconfig - Watchdog configuration options for Actions SoC Watchdog
+#
+#
+# Copyright (c) 2017 Actions Semiconductor Co., Ltd
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+if SOC_FAMILY_ACTS
+
+menuconfig WDOG_ACTS
+	bool "Actions SoC Watchdog (WDT) Driver"
+	depends on SOC_FAMILY_ACTS
+	default n
+	help
+	  Enable watchdog driver for Actions SoC.
+
+config WDT_ACTS_START_AT_BOOT
+	bool "Start Watchdog during boot"
+	depends on WDOG_ACTS
+	default n
+	help
+	  Enable this setting to allow WDOG to be automatically started
+	  during device initialization. Note that once WDOG is started
+	  it must be reloaded before the counter reaches 0, otherwise
+	  the MCU will be reset.
+
+config WDT_ACTS_DEVICE_NAME
+	string "Device name for Watchdog (WDT)"
+	depends on WDOG_ACTS
+	default "WATCHDOG_0"
+	help
+	  Set the name used by WDT device during registration.
+
+config WDT_ACTS_OVERFLOW_TIME
+	int "actions watchdog overflow time"
+	depends on WDOG_ACTS
+	default 5000
+	help
+	  Set the name used by WDT device during registration.
+
+config WDT_MODE_RESET
+	bool "actions watchdog overflow reset or not"
+	depends on WDOG_ACTS
+	default y
+	help
+	  Set watchdog overflow reset or interrupt
+
+endif # SOC_FAMILY_ACTS

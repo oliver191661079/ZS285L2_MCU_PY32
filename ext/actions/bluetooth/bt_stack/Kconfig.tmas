@@ -1,0 +1,23 @@
+# Bluetooth Audio - Telephony and Media Audio Service options
+#
+# Copyright (c) 2021 Actions Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+if BT_AUDIO
+
+config BT_TMAS
+	bool "Telephony and Media Audio Service Support"
+	default n
+	help
+	  This option enables support for Telephony and Media Audio Service.
+
+config BT_TMAS_CLIENT
+	bool "Telephony and Media Audio Profile Support"
+	select BT_GATT_CLIENT
+	default n
+	help
+	  This option enables support for Telephony and Media Audio Profile.
+
+endif # BT_AUDIO

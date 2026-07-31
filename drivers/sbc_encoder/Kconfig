@@ -1,0 +1,22 @@
+# Kconfig - RTC configuration options
+#
+#
+# Copyright (c) 2015 Intel Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+#
+# SBC encoder driver options
+#
+config SBC_ENCODER
+	bool "sbc encoder driver"
+	default n
+	help
+	Enable options for sbc encoder driver
+
+config SBC_ENCODER_USE_GLOBAL_MEM
+    bool "sbc encoder use global memory"
+    default n
+    help
+    Enable options for sbc encoder driver use global memory

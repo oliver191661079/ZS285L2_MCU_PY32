@@ -1,0 +1,22 @@
+# Kconfig - APM driver configuration options
+
+#
+# Copyright (c) 2023 Actions Semiconductor Co., Ltd
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+menu "AMP Drivers"
+
+config AMP_DEV_NAME
+	string
+	prompt "AMP device name"
+	default "AMP"
+
+config AMP_AW882XX
+	bool "AW882XX driver"
+	default n
+	help
+	  Enable/Disable AW88298 amplifier
+
+endmenu

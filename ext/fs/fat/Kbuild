@@ -1,0 +1,6 @@
+obj-$(CONFIG_FAT_FILESYSTEM_ELM) += ff.o
+#obj-$(CONFIG_FAT_FILESYSTEM_ELM) += zfs_diskio.o
+obj-$(CONFIG_FAT_FILESYSTEM_ELM) += diskio.o
+obj-$(CONFIG_DISKIO_CACHE) += diskio_cache.o
+obj-$(CONFIG_FAT_FILESYSTEM_ELM) += option/syscall.o
+obj-$(CONFIG_FAT_FILESYSTEM_ELM) += option/unicode.o

@@ -1,0 +1,370 @@
+# Kconfig - ACTIONS primitive options for sdk version 2.0
+#
+# Copyright (c) 2023 Actions Semiconductor Co., Ltd
+# SPDX-License-Identifier: Apache-2.0
+#
+
+menu "bt_speaker App"
+
+config APP_PRIORITY
+	int
+	prompt "App Thread Priority"
+	default 10
+	help
+	This option set app thread priority
+
+config APP_STACKSIZE
+	int
+	prompt "App Thread Stack Size"
+	default 2048
+	help
+	This option set stack size for app thread
+
+config BT_MUSIC_APP
+	bool
+	prompt "BT MUSIC App Support"
+	default n
+
+config AURACAST
+	bool
+	prompt "Auracast Support"
+	default n
+
+config BMS_UAC_APP
+	bool
+	depends on AURACAST
+	prompt "USOUND BMS App Support"
+	default n
+
+config BTMUSIC_BMS_APP
+	bool
+	depends on AURACAST
+	prompt "BT MUSIC BMS App Support"
+	default y
+
+config LEMUSIC_BMS_APP
+	bool
+	depends on AURACAST
+	prompt "LE MUSIC BMS App Support"
+	default y
+
+config AUDIO_INPUT_BMS_APP
+	bool
+	depends on AURACAST
+	prompt "AUDIO INPUT BMS App Support"
+	default n
+
+config BT_DISABLE_PAIR_MODE
+	bool
+	prompt "disable pair mode"
+	default n
+
+config DSP_COMPUTE_COMPLEXITY
+	int
+	prompt "DSP compute complexity"
+	default 2
+	help
+	  Set the compute compexity level of DSP, the bigger the higer complexity.
+	  0 - Empty(thirdpart DSP), 1-low, 2-normal, 3-high
+
+config AUARCAST_FILTER_POLICY_H
+	bool
+	prompt "auarcast filter policy H"
+	default n
+
+config BT_LE_AUDIO
+	bool
+	prompt "enable leaudio"
+	default n
+
+config BT_LE_AUDIO_CALL
+	bool
+	prompt "enable leaudio call"
+	default n
+
+config EXTERNAL_DSP_DELAY
+	int
+	prompt "external DSP delay"
+	default 0
+	help
+
+config TWS
+	bool
+	prompt "TWS Support"
+	default n
+
+config APP_TWS
+	bool
+	prompt "app TWS Support"
+	default n
+
+config APP_TWS_SNOOP
+	bool
+	depends on APP_TWS
+	depends on TWS
+	prompt "app TWS snoop Support"
+	default n
+
+config BT_LETWS
+    bool
+    prompt "enable letws"
+    default n
+
+config BT_LETWS_ROLE_SWITCH
+    bool
+    prompt "role switch"
+    default n
+
+config SRRC_TEST
+	bool
+	prompt "enable srrc test"
+	default n
+
+config SRRC_TEST_BMR
+	bool
+	depends on SRRC_TEST
+	prompt "enable srrc test bmr app"
+	default n
+
+config AUDIO_OUTPUT_SAMPLE_RATE
+	int
+	prompt "audio output sample rate (kps)"
+	default 48
+
+config SYSTEM_APP_SPP_CMD_ACK
+	bool "SPP 命令执行后回包 (D2 80)"
+	depends on BT_SPP
+	default n
+	help
+	  手机/PC 经 SPP 发 D2+子命令后，音箱经同一 SPP 通道回 ACK。
+	  裸命令回包 4 字节：D2 80 | 原子命令 | 状态(0=成功,非0=错误码)。
+	  A5 5A 帧命令回包带相同帧头。默认关闭，需要时在 prj.conf 置 y。
+
+config SYSTEM_APP_BLE_REMOTE_CMD
+	bool "BLE GATT 远程控制 (0xFFE0 Write+Notify, D2 协议)"
+	depends on BT_BLE
+	default n
+	help
+	  注册自定义 GATT 服务 0xFFE0：0xFFE1 Write 收 D2 命令，
+	  0xFFE2 Notify 回状态。与 SPP/UART 共用 bt_manager_remote_cmd_dispatch。
+
+config SYSTEM_APP_BLE_CMD_ACK
+	bool "BLE GATT 命令执行后 Notify 回 ACK (D2 80)"
+	depends on SYSTEM_APP_BLE_REMOTE_CMD
+	default n
+	help
+	  手机订阅 0xFFE2 Notify 后，每条 Write 命令回 4 字节 ACK。
+
+config SYSTEM_APP_BLE_NAME_SUFFIX
+	string "BLE 广播名后缀（经典名未单独配置 BLE 名时追加）"
+	depends on BT_BLE
+	default "-BLE"
+	help
+	  首次写入 BT_LE_NAME 时在经典蓝牙名后追加此后缀，便于手机分别搜索
+	  Classic（BT_NAME）与 BLE 扫描（BT_LE_NAME）。
+
+config SYSTEM_APP_PY32_UART
+	bool "PY32 主控 UART 协议 (CMD+LEN+DATA+CRC16)"
+	depends on SERIAL
+	depends on UART_INTERRUPT_DRIVEN
+	depends on UART_DMA_DRIVEN
+	depends on UART_DMA_RX_DRIVEN
+	default y
+	help
+	  PY32 主控下发 CMD 0x01，ATS2853 执行后回 CMD 0x80 状态。
+	  UART_1（285L2：GPIO7 TX / GPIO22 RX）RX 走 DMA，TX 走 CPU poll。
+
+config SYSTEM_APP_PY32_UART_INIT_DELAY_MS
+	int "PY32 UART init delay after BT ready (ms)"
+	depends on SYSTEM_APP_PY32_UART
+	default 1500
+	help
+	  延后 PY32 UART 初始化，等待 UART0 调试串口就绪后再打印 init 日志。
+
+config SYSTEM_APP_PY32_UART_DMA_RX_CHAN
+	int "PY32 UART1 RX DMA channel (255=auto)"
+	depends on SYSTEM_APP_PY32_UART
+	default 255
+	help
+	  UART1 RX DMA 通道，255 表示自动分配（同 uart_at_stream）。
+
+config SYSTEM_APP_PY32_UART_DMA_RX_TIMEOUT_US
+	int "PY32 UART1 RX DMA idle timeout (us)"
+	depends on SYSTEM_APP_PY32_UART
+	depends on UART_DMA_RX_TIMEOUT_DRIVEN
+	default 500
+	help
+	  帧间空闲超时，用于 DMA 半包/尾字节上报（同 uart_at_stream）。
+
+config SYSTEM_APP_PY32_UART_DEV_NAME
+	string "PY32 UART 设备名"
+	depends on SYSTEM_APP_PY32_UART
+	default "UART_1"
+
+config SYSTEM_APP_PY32_UART_STACK_SIZE
+	int "PY32 UART 线程栈"
+	depends on SYSTEM_APP_PY32_UART
+	default 2048
+
+config SYSTEM_APP_PY32_UART_PRIO
+	int "PY32 UART 线程优先级"
+	depends on SYSTEM_APP_PY32_UART
+	default 14
+
+config SYSTEM_APP_PY32_UART_RX_DEBUG
+	bool "PY32 UART RX debug logs (raw bytes + idle heartbeat)"
+	depends on SYSTEM_APP_PY32_UART
+	default n
+	help
+	  在 UART0 打印 PY32 RX 原始字节、ISR 计数与空闲心跳，用于对照 LA
+	  确认主芯片是否真正收到 GPIO22 上的 UART 数据。
+
+config SYSTEM_APP_PY32_UART_TX_DEBUG
+	bool "PY32 UART TX debug logs (status frame hex dump)"
+	depends on SYSTEM_APP_PY32_UART
+	default n
+	help
+	  每次经 GPIO7 发送协议帧前在 UART0 打印十六进制，便于 LA 对照 TX。
+
+config SYSTEM_APP_PY32_UART_HW_TX_TEST
+	bool "PY32 UART1 HW TX wire test (GPIO7)"
+	depends on SYSTEM_APP_PY32_UART
+	default n
+	help
+	  周期性经 UART1 硬件在 GPIO7 发送测试字节流（115200 8N1），便于 LA 核对波形。
+	  测完请关闭。
+
+config SYSTEM_APP_PY32_UART_HW_TX_TEST_MS
+	int "PY32 HW TX test period (ms)"
+	depends on SYSTEM_APP_PY32_UART_HW_TX_TEST
+	default 3000
+
+config SYSTEM_APP_PY32_UART_GPIO7_BB_TEST
+	bool "GPIO7 bitbang wire test (before UART TX)"
+	depends on SYSTEM_APP_PY32_UART
+	default n
+	help
+	  启动时将 GPIO7 切为 GPIO 输出并翻转 40 次（约 1kHz 方波）。
+	  LA 仍全高 → 探针/走线/GPIO7 脚位问题；有方波 → MFP/UART 路由问题。
+
+config SYSTEM_APP_PY32_UART_LB_TEST
+	bool "UART1 internal loopback self-test"
+	depends on SYSTEM_APP_PY32_UART
+	default n
+	help
+	  开启 LB_EN 发 0x55 并读 rxdat。OK 表示 UART 内部 TX 通路正常。
+
+config BT_MUSIC_LED_STRIP
+	bool "WS2812 RGB LED strip on GPIO8 (ambient light)"
+	default n
+	help
+	  800kHz 单线 WS2812 灯带（GPIO8），作为氛围灯，整带同色。
+
+config BT_MUSIC_LED_STRIP_AMBIENT
+	bool "Strip1 WS2812 as ambient light (solid color)"
+	depends on BT_MUSIC_LED_STRIP
+	default y
+	help
+	  GPIO8 WS2812 由 btmusic_ws2812_ambient_set() 控制，不随音乐律动。
+
+config BT_MUSIC_LED_DRIVER
+	bool
+	default y if BT_MUSIC_LED_STRIP || BT_MUSIC_LED_STRIP2
+
+config BT_MUSIC_LED_STRIP_GPIO
+	int "LED strip DIO GPIO pin"
+	depends on BT_MUSIC_LED_STRIP
+	default 8
+
+config BT_MUSIC_LED_STRIP_COUNT
+	int "LED count on strip"
+	depends on BT_MUSIC_LED_STRIP
+	default 25
+
+config BT_MUSIC_LED_STRIP_DEBUG_LOG
+	bool "LED strip rhythm debug log"
+	depends on BT_MUSIC_LED_DRIVER
+	default y
+	help
+	  周期性打印律动 bass/mid/high 及首末像素 GRB，便于串口调试。
+
+config BT_MUSIC_LED_STRIP_SELFTEST
+	bool "WS2812 R/G/B selftest on init"
+	depends on BT_MUSIC_LED_STRIP
+	default n
+	help
+	  首次 init 时依次显示红/绿/蓝/灭，用于验证时序与接线。
+
+config BT_MUSIC_LED_STRIP2
+	bool "AMBIC1010 matrix on GPIO14 (music rhythm)"
+	depends on BT_MUSIC_APP
+	default n
+	help
+	  GPIO14 驱动 4×44 矩阵（176 颗），GBR 像素序，随 A2DP 频谱律动。
+
+config BT_MUSIC_LED_RHYTHM
+	bool "Drive AMBIC1010 (strip2) from music spectrum"
+	depends on BT_MUSIC_LED_STRIP2
+	default y
+	help
+	  根据 A2DP 频段能量驱动 GPIO14 矩阵柱形律动。
+	  关闭后 strip2 不随音乐刷新（strip1 氛围灯不受影响）。
+
+config BT_MUSIC_LED_STRIP2_GPIO
+	int "Second LED strip DIO GPIO pin"
+	depends on BT_MUSIC_LED_STRIP2
+	default 14
+
+config BT_MUSIC_LED_STRIP2_COUNT
+	int "Second strip LED count (groups × group size)"
+	depends on BT_MUSIC_LED_STRIP2
+	default 176
+
+config BT_MUSIC_LED_STRIP2_GROUP_SIZE
+	int "LEDs per matrix column (same color, 0~N lit by rhythm)"
+	depends on BT_MUSIC_LED_STRIP2
+	default 4
+
+config BT_MUSIC_LED_STRIP2_RGB_ORDER_TEST
+	bool "Strip2 RGB order test (bottom row red, 44 px)"
+	depends on BT_MUSIC_LED_STRIP2
+	default n
+	help
+	  标定：仅最下一排 44 颗显示红色，只发 44 像素。
+	  确认链序/颜色后关闭此项恢复律动。
+
+config BT_MUSIC_LED_STRIP2_ROW_DEMO
+	bool "Strip2 four-row color demo (R/G/B/Y, hold)"
+	depends on BT_MUSIC_LED_STRIP2
+	default n
+	help
+	  四排固定色：最下红、第2绿、第3蓝、最上黄，不随律动刷新。
+	  用于验证 176 颗长链时序与行映射；确认后关闭并恢复律动。
+
+config BT_MUSIC_LED_STRIP2_SPI_DMA
+	bool "Use SPI1+DMA for strip2 (no irq_lock)"
+	depends on BT_MUSIC_LED_STRIP2
+	default n
+	help
+	  使用 SPI1+DMA 直接发送 WS2812 数据，无需关中断，避免音频爆音。
+	  不依赖 SPI 驱动框架，直接操作 SPI1 寄存器。
+
+menu "App Configuration"
+source "samples/bt_speaker/src/main/Kconfig"
+source "samples/bt_speaker/src/tool/Kconfig"
+source "samples/bt_speaker/src/ota/Kconfig"
+source "samples/bt_speaker/src/usound/Kconfig"
+source "samples/bt_speaker/src/demo/Kconfig"
+source "samples/bt_speaker/src/audio_input/Kconfig"
+source "samples/bt_speaker/src/charger/Kconfig"
+source "samples/bt_speaker/src/selfapp/Kconfig"
+source "samples/bt_speaker/src/data_analy/Kconfig"
+source "samples/bt_speaker/src/lcmusic/Kconfig"
+source "samples/bt_speaker/src/lemusic/Kconfig"
+#source "samples/bt_speaker/src/local_player/Kconfig"
+source "samples/bt_speaker/src/disk_ota_pre/Kconfig"
+endmenu
+
+endmenu
+
+

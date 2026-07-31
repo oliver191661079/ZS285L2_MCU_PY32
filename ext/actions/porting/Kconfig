@@ -1,0 +1,98 @@
+# Kconfig - Actions SDK Porting
+
+#
+# Copyright (c) 2016 Actions Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+menuconfig ACTIONS_SDK_PORTING
+	bool
+	prompt "ACTIONS Porting Funcion Support"
+	depends on ACTIONS_SDK
+	default n
+	select OS_WRAPPER
+	select ACTIONS_GLOBEL_MEM
+	help
+	This option enables actions sdk porting function support .
+
+config OS_WRAPPER
+	bool
+	prompt "os wrapper"
+	depends on ACTIONS_SDK_PORTING
+	default n
+	help
+	This option enables actions os wrapper.
+
+config OS_LOW_LATENCY_MODE
+	bool
+	prompt "os low latency mode"
+	depends on OS_WRAPPER
+	default n
+	help
+	This option enables actions os low latency mode.
+
+config MESSAGE_DEBUG
+	bool
+	prompt "debug os massage"
+	depends on OS_WRAPPER
+	default n
+	help
+	This option enables actions debug os massage.
+
+config USER_WORK_Q
+	bool
+	prompt "support user work queue , low priporty then system work queue"
+	depends on OS_WRAPPER
+	default n
+	help
+	This option enables actions user work queue.
+
+config USER_WORK_Q_STACK_SIZE
+	int
+	prompt "user work queue stack size"
+	depends on USER_WORK_Q
+	default 1152
+	help
+	This option set user work queue stack size.
+
+config USER_WORK_Q_PRIORITY
+	int
+	prompt "user work queue thread priority"
+	depends on USER_WORK_Q
+	default 1
+	help
+	This option set user work queue thread priority.
+
+config MSG_SEND_TIME_STAT
+	bool
+	prompt "Message Manager Send time statistics"
+	depends on OS_WRAPPER
+	default n
+	help
+	This option enables actions message manager send time statistics.
+
+config MSG_SEND_TIME_LATENCY_MS
+    int "max msg send latency time"
+    default 100
+	depends on OS_WRAPPER
+    help
+     monitor msg send time latency
+
+config MSG_RECV_TIME_STAT
+	bool
+	prompt "Message Manager recv time statistics"
+	depends on OS_WRAPPER
+	default n
+	help
+	This option enables actions message manager recv time statistics.
+
+config MSG_RECV_TIME_LATENCY_MS
+    int "max msg recv latency time"
+    default 100
+	depends on OS_WRAPPER
+    help
+     monitor msg recv time latency
+
+source "ext/actions/porting/hal/Kconfig"
+

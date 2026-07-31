@@ -1,0 +1,142 @@
+#
+# Copyright (c) 2016 Intel Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+menu "Disk"
+
+config DISK_ACCESS
+	bool
+	default n
+	prompt "Enable Disk Interface"
+	help
+	Enable disk access over a supported media backend like FLASH or RAM
+
+if DISK_ACCESS
+
+config DISK_ACCESS_USB
+	bool "usb disk"
+	depends on USB_HOST_STORAGE
+	default n
+	help
+	usb disk is used for the file system.
+
+config DISK_ACCESS_SD
+	bool "sdcard disk"
+	depends on MMC
+	default n
+	help
+	sdcard disk is used for the file system.
+
+config DISK_ACCESS_RAM
+	bool "RAM Disk"
+	default n
+	help
+	RAM buffer used to emulate storage disk.
+	This option can used to test the file
+	system.
+
+config DISK_ACCESS_FLASH
+	bool "Flash"
+	select FLASH
+	default n
+	help
+	Flash device is used for the file system.
+
+config DISK_ACCESS_NOR
+	bool "Nor DISK"
+	select FLASH
+	default n
+	help
+	Nor disk device is used for the file system.
+
+config DISK_ACCESS_PSRAM
+	bool "PSRAM Disk"
+	depends on SPI_PSRAM
+	default n
+	help
+	PSRAM disk device is used for the file system.
+
+if DISK_ACCESS_NOR
+
+config DISK_NOR_DEV_NAME
+	string
+	prompt "Flash device name to be used as storage backend"
+
+config DISK_NOR_START
+	hex "Start offset in the NOR"
+	default 0xffffffff
+	help
+	This is start address of the flash to be used as storage backend.
+
+config DISK_NOR_VOLUME_SIZE
+	hex "NOR disk Volume size"
+	default 0x0
+	help
+	This is the file system volume size in bytes.
+
+endif # DISK_ACCESS_NOR
+
+if DISK_ACCESS_PSRAM
+
+config DISK_PSRAM_START
+	hex "Start offset in the PSRAM"
+	default 0x0
+	help
+	This is start address of the psram to be used as storage backend.
+
+config DISK_PSRAM_VOLUME_SIZE
+	hex "PSRAM disk Volume size"
+	default 0x200000
+	help
+	This is the file system volume size in bytes.
+
+endif # DISK_ACCESS_PSRAM
+
+if DISK_ACCESS_FLASH
+
+config DISK_FLASH_DEV_NAME
+	string
+	prompt "Flash device name to be used as storage backend"
+
+config DISK_FLASH_START
+	hex
+	prompt "Flash address start to be used as storage backend"
+	default 0xffffffff
+	help
+	This is start address of the flash to be used as storage backend.
+
+config DISK_FLASH_MAX_RW_SIZE
+	hex
+	prompt "FLASH maximum number of bytes to flash_write per invocation"
+	help
+	This is the maximum number of bytes that the
+	flash_write API can do per invocation.
+	API.
+
+config DISK_FLASH_ERASE_ALIGNMENT
+	hex
+	prompt "Flash erase start address alignment"
+	help
+	This is the start address alignment required by
+	the flash component.
+
+config DISK_ERASE_BLOCK_SIZE
+	hex
+	prompt "FLASH minimum block size to be erased"
+	help
+	This is typically the minimum block size that
+	is erased at one time in flash storage.
+
+config DISK_VOLUME_SIZE
+	hex
+	prompt "FLASH file system volume size in bytes"
+	default 0x0
+	help
+	This is the file system volume size in bytes.
+
+endif # DISK_ACCESS_FLASH
+
+endif # DISK_ACCESS
+endmenu

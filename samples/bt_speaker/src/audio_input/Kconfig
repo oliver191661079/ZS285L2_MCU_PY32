@@ -1,0 +1,66 @@
+# 
+# Copyright (c) 2022 Actions Semiconductor Co., Ltd
+# 
+# SPDX-License-Identifier: Apache-2.0
+#
+
+config AUDIO_INPUT_APP
+	bool
+	prompt "Audio Input App Support"
+	depends on MEDIA_PLAYER
+	select STREAM
+	select RINGBUFF_STREAM
+	default n
+	help
+	This option enables or disable the audio input app.
+
+config SPDIF_IN_APP
+	bool
+	prompt "Spdif In App Support"
+	default n
+	depends on AUDIO_INPUT_APP
+	#select OUTPUT_RESAMPLE
+	help
+	This option enables or disable the spdif in app.
+
+config I2SRX_IN_APP
+	bool
+	prompt "i2srx In App Support"
+	default n
+	depends on AUDIO_INPUT_APP
+	#select OUTPUT_RESAMPLE
+	help
+	This option enables or disable the i2srx in app.
+
+config LINE_IN_APP
+	bool
+	prompt "Line In App Support"
+	default n
+	depends on AUDIO_INPUT_APP
+	help
+	This option enables or disable the line in app.
+
+
+config MIC_IN_APP
+	bool
+	prompt "MIC In App Support"
+	default n
+	depends on AUDIO_INPUT_APP
+	#select OUTPUT_RESAMPLE
+	help
+	This option enables or disable the mic in app.
+
+#soundbar audioin config
+config AUDIOIN_STAY
+	bool
+	prompt "Audio Input App Would Not Exit Even No Data"
+	default y
+	depends on AUDIO_INPUT_APP
+	help
+	This option enables or disable audioin app stays to wait for data
+
+config AUDIOIN_SRD
+	bool
+	prompt "Enable sample rate detect for i2s or spdif audio signal input"
+	default n
+	depends on AUDIO_INPUT_APP

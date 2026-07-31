@@ -1,0 +1,28 @@
+# Kconfig - Actions file system
+
+#
+# Copyright (c) 2016 Actions Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+menuconfig MUTIPLE_VOLUME_MANAGER
+	bool
+	prompt "Mutiple Volume Manager"
+	select FS_MANAGER
+	default n
+	help
+	This option enables actions filesystem
+
+
+config FS_MANAGER
+	bool
+	prompt "FS Manager"
+	depends on MUTIPLE_VOLUME_MANAGER
+	select FILE_SYSTEM
+	select FILE_SYSTEM_FAT
+	default n
+	help
+	This option enables actions mutiple volume manager
+
+

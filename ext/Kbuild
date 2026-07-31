@@ -1,0 +1,5 @@
+obj-y += hal/
+obj-y += lib/
+obj-$(CONFIG_FILE_SYSTEM) += fs/
+obj-y += debug/
+obj-$(CONFIG_ACTIONS_SDK) += actions/

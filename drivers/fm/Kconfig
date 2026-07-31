@@ -1,0 +1,63 @@
+# Kconfig - fm drivers
+
+#
+# Copyright (c) 2017 Intel Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+config FM
+	bool "actions fm module support"
+	depends on I2C
+	default n
+	help
+	  enanle actions fm module
+
+config FM_DEV_NAME
+	string
+	prompt "FM device name"
+	depends on FM
+	default "FM"
+
+config FM_TRANSMITTER
+	bool "actions fm transmitter support"
+	depends on FM
+	default n
+	help
+	 enable actions fm transmitter
+
+config FM_QN8027
+	bool "fm qn8027 module support"
+	depends on FM_TRANSMITTER
+	default n
+	help
+	  enable actions fm qn8027
+
+config FM_EXT_24M
+	bool "fm used ext clock"
+	depends on FM_TRANSMITTER
+	default n
+	help
+	  enable used ext clock
+
+config FM_RECEIVER
+	bool "actions fm receiver support"
+	depends on FM
+	default n
+	help
+	  enable actions fm receiver
+
+config FM_QN8035
+	bool "fm qn8035 module support"
+	depends on FM_RECEIVER
+	default n
+	help
+	  enable actions fm qn8035
+
+config FM_RDA5820
+	bool "fm rda5820 module support"
+	depends on FM
+	default n
+	help
+	  enable actions fm rda5820
+

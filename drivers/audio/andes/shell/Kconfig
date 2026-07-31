@@ -1,0 +1,12 @@
+config AUDIODRV_SHELL
+    bool "Enable audio driver shell support"
+    default y
+    help
+      enable audio driver shell support
+
+config AUDIODRV_TEST
+    bool "Enable audio driver in and out test"
+    default n
+    depends on AUDIODRV_SHELL
+    help
+      If you say yes here, you will get suppport audio driver in and out test functions.

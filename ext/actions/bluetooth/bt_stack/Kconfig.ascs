@@ -1,0 +1,65 @@
+# Bluetooth Audio - Audio Stream Control Service options
+#
+# Copyright (c) 2021 Actions Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+if BT_AUDIO
+
+config BT_ASCS
+	bool "Audio Stream Control Service Support"
+	default n
+	help
+	  This option enables support for Audio Stream Control Service.
+
+if BT_ASCS
+
+config BT_ASCS_BUF_SIZE
+	int "Buffer size of each ASCS instance"
+	default 256
+	help
+	  Sets the buffer size of Audio Stream Control Service (ASCS)
+	  instance.
+
+config BT_ASCS_RSP_SIZE
+	int "Buffer size of each ASCS instance for response"
+	default 32
+	help
+	  Sets the buffer size of Audio Stream Control Service (ASCS)
+	  instance for response.
+
+config BT_DEBUG_ASCS
+	bool "Audio Stream Control Service debug"
+	depends on BT_AUDIO_DEBUG
+	help
+	  Use this option to enable Audio Stream Control Service
+	  debug logs for the Bluetooth Audio functionality.
+
+endif # BT_ASCS
+
+config BT_ASCS_CLIENT
+	bool "Audio Stream Control Profile Support"
+	select BT_GATT_CLIENT
+	default n
+	help
+	  This option enables support for Audio Stream Control Profile.
+
+if BT_ASCS_CLIENT
+
+config BT_ASCS_CLIENT_BUF_SIZE
+	int "Buffer size of each ASCS Client"
+	default 256
+	help
+	  Sets the buffer size of Audio Stream (ASCS) Client.
+
+config BT_DEBUG_ASCS_CLIENT
+	bool "Audio Stream Control Service client debug"
+	depends on BT_AUDIO_DEBUG
+	help
+	  Use this option to enable Audio Stream Control Service client
+	  debug logs for the Bluetooth Audio functionality.
+
+endif # BT_ASCS_CLIENT
+
+endif # BT_AUDIO

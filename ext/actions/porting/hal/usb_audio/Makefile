@@ -1,0 +1,1 @@
+obj-y += usb_hid.o usb_audio_upload_stream.o usb_audio.o

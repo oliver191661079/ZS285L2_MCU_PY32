@@ -1,0 +1,10 @@
+# Kconfig - CSKY Core Peripheral Access Layer config
+#
+# Copyright (C) 2017 C-SKY Microsystems Co., Ltd. All rights reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+config HAS_CSKY_CSI
+    bool
+    depends on CSKY

@@ -1,0 +1,54 @@
+# Kconfig - Actions library
+
+#
+# Copyright (c) 2016 Actions Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+menuconfig ACTIONS_LIBRARY
+	bool
+	prompt "Actions Library Support"
+	depends on ACTIONS_SDK
+	default n
+	help
+	  This option enables the Actions library .
+
+
+menuconfig AUDIO_SYSTEM
+	bool
+	prompt "audio system Support"
+	depends on ACTIONS_LIBRARY
+	default n
+	select AUDIO
+	select AUDIO_IN
+	select AUDIO_OUT
+	help
+	This option enables actions media service. 	
+	
+menuconfig MEDIA_SERVICE
+	bool
+	prompt "Media Service Support"
+	depends on ACTIONS_LIBRARY
+	default n
+	select AUDIO_SYSTEM
+	select ACTIONS_ALGORITHMS_LIBRARY
+	help
+	This option enables actions media service.
+
+config MEDIASRV_PRIORITY
+    int
+    prompt "Media Service Thread Priority"
+    default 4
+    depends on MEDIA_SERVICE
+    help
+    This option set audio thread priority  
+
+config MEDIASRV_STACKSIZE
+    int
+    prompt "Media Service Thread Stack Size"
+    default 2048
+    depends on MEDIA_SERVICE
+    help
+    This option set stack size for audio service thread	    
+source "ext/actions/media/libal/csky/Kconfig"

@@ -1,0 +1,175 @@
+# Kconfig - SPI NOR controller driver configuration options
+#
+# Copyright (c) 2017 Actions Semiconductor Co., Ltd
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+if FLASH && SOC_FAMILY_ACTS
+
+menuconfig XSPI_NOR_ACTS
+	bool "XIP SPI NOR flash driver for Actions SoC"
+	depends on SOC_FAMILY_ACTS && FLASH
+	default n
+	help
+	 Enable Actions SoC XIP SPI NOR flash driver.
+
+config XSPI_NOR_ACTS
+	bool "SPI NOR ram driver for Actions SoC"
+	depends on SOC_FAMILY_ACTS && FLASH
+	default n
+	help
+	  Enable Actions SoC XSPI NOR flash driver.
+
+config XSPI_MEM_ACTS
+	bool "XSPI memory driver for Actions SoC"
+	depends on SOC_FAMILY_ACTS
+	default y
+	help
+	  Enable Actions SoC XSPI memory driver.
+
+config XSPI_PSRAM_ACTS
+	bool "SPI PSRAM driver for Actions SoC"
+	depends on SOC_FAMILY_ACTS && FLASH && !SPI_PSRAM_GENERAL_SPI
+	default n
+	help
+	  Enable Actions SoC XSPI PSRAM flash driver.
+
+if XSPI_NOR_ACTS
+
+config XSPI_NOR_ACTS_DEV_NAME
+	string "XSPI NOR flash device name"
+	depends on XSPI_NOR_ACTS
+	default "xspi_nor"
+	help
+	  Specify the device name for XSPI NOR flash driver.
+
+config XSPI_NOR_ACTS_IO_BUS_WIDTH
+	int "XSPI NOR flash io bus width"
+	depends on XSPI_NOR_ACTS
+	range 1 4
+	default 1
+	help
+	  Specify the io bus width(1, 2, 4) for XSPI NOR flash driver.
+
+config XSPI_NOR_ACTS_DELAY_CHAIN
+	int "XSPI delaychain config"
+	depends on XSPI_NOR_ACTS
+	default 8
+	help
+	  XSPI delaychain config.
+
+config XSPI_NOR_ACTS_DEV_INIT_PRIORITY
+	int "XSPI NOR flash device init priority"
+	depends on XSPI_NOR_ACTS
+	default 45
+	help
+	  This option controls the priority of XIP SPI NOR flash device
+	  initialization. Lower values ensures that the device
+	  is initialized earlier in the startup cycle. If unsure, leave
+	  at default value.
+
+config XSPI1_NOR_ACTS_DEV_INIT_PRIORITY
+	int "XSPI1 NOR flash device init priority"
+	depends on XSPI_NOR_ACTS
+	default 46
+	help
+	  This option controls the priority of XIP SPI1 NOR flash device
+	  initialization. Lower values ensures that the device
+	  is initialized earlier in the startup cycle. If unsure, leave
+	  at default value.
+
+config XSPI_NOR_ACTS_DUMP_INFO
+	bool "Dump SPINOR information at init stage"
+	depends on XSPI_NOR_ACTS
+	default n
+	help
+	  Dump SPINOR information at init stage.
+
+config XSPI_NOR_ROM_ACTS
+	bool "SPI NOR ROM driver for Actions SoC"
+	depends on XSPI_NOR_ACTS
+	default n
+	help
+	  Enable SPI NOR driver embedded in Actions SoC ROM.
+
+config XSPI_NOR_AUTO_CHECK_RB
+	bool "Auto check SPINOR ready/busy status by SPI controller"
+	depends on XSPI_NOR_ACTS
+	default n
+	help
+	  Enable auto check SPINOR ready/busy status by SPI controller.
+
+config XSPI_NOR_SUSPEND_RESUME
+	bool "enable suspend/resume by SPI controller"
+	depends on XSPI_NOR_ACTS
+	default n
+	help
+	  Enable suspend/resume by SPI controller.
+
+config NOR_ACTS_DATA_PROTECTION_ENABLE
+	bool "write protection"
+	default n
+	help
+	  Enables write protection.
+
+config XSPI1_NOR_ACTS
+	bool "SPI1 NOR driver for Actions SoC"
+	depends on XSPI_NOR_ACTS
+	default n
+	help
+	  Enable SPI NOR driver embedded in Actions SoC ROM.
+
+config XSPI1_NOR_ACTS_DEV_NAME
+	string "SPI1 NOR flash device name"
+	depends on XSPI_NOR_ACTS
+	default "spi1_nor"
+	help
+	  Specify the device name for SPI1 NOR flash driver.
+endif
+
+config XSPI_ACTS_FREQ_MHZ
+	int "XSPI0 clock frequence (MHz)"
+	depends on XSPI_NOR_ACTS
+	range 1 100
+	default 50
+	help
+	  Specify the clock frequence (MHz) for XSPI0 driver.
+
+config XSPI1_ACTS_FREQ_MHZ
+	int "XSPI1 clock frequence (MHz)"
+	depends on XSPI1_NOR_ACTS
+	range 1 100
+	default 50
+	help
+	  Specify the clock frequence (MHz) for XSPI1 driver.
+
+config XSPI0_USE_COREPLL
+    bool "XSPI0 use corepll"
+    default n
+    help
+      XSPI0 use corepll
+
+config XSPI1_USE_COREPLL
+    bool "XSPI1 use corepll"
+    default n
+    help
+      XSPI0 use corepll
+
+config XSPI2_USE_COREPLL
+    bool "XSPI2 use corepll"
+    default n
+    help
+      XSPI2 use corepll
+
+if XSPI_PSRAM_ACTS
+
+config XSPI_PSRAM_ROM_ACTS
+	bool "Use SPI ROM driver for Actions SoC"
+	depends on XSPI_PSRAM_ACTS && XSPI_NOR_ROM_ACTS
+	default y
+	help
+	  PSRAM device name for Actions SoC.
+endif
+
+endif

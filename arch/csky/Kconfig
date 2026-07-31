@@ -1,0 +1,32 @@
+#
+# Copyright (c) 2014-2015 Wind River Systems, Inc.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+choice
+	prompt "CSKY SoC Selection"
+	depends on CSKY
+
+	source "arch/csky/soc/*/Kconfig.soc"
+endchoice
+
+menu "CSKY Options"
+	depends on CSKY
+
+config ARCH
+	default "csky"
+
+config ARCH_DEFCONFIG
+	string
+	default "arch/csky/defconfig"
+
+
+source "arch/csky/core/Kconfig"
+
+menu "Board Configuration"
+
+source "arch/csky/soc/*/Kconfig"
+
+endmenu
+endmenu

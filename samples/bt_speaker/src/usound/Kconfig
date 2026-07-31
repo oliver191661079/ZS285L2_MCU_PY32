@@ -1,0 +1,35 @@
+
+# Kconfig - ACTIONS primitive options for sdk version 2.0
+
+#
+# Copyright (c) 2023 Actions Semiconductor Co., Ltd
+# SPDX-License-Identifier: Apache-2.0
+#
+
+config USOUND_APP
+	bool
+	prompt "USOUND App Support"
+	depends on USB_AUDIO_SOURCESINK && USB_DEVICE_HID
+	depends on  MEDIA_PLAYER
+	select STREAM
+	select RINGBUFF_STREAM
+	default n
+	help
+	This option enables or disable the usb audio app.
+
+config USOUND_SPEAKER
+	bool
+	prompt "USOUND IN"
+	depends on USOUND_APP
+	default n
+	help
+	This option enables or disable the usb audio in.
+
+config USOUND_MIC
+	bool
+	prompt "USOUND OUT"
+	depends on USOUND_APP
+	select SUPPORT_USB_AUDIO_SOURCE
+	default n
+	help
+	This option enables or disable the usb audio out.

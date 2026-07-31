@@ -1,0 +1,15 @@
+# Copyright (c) 2018 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+
+
+if BT_DRV
+
+config BT_ACTIONS
+	bool "Actions Virtual HCI"
+	depends on BT_DRV
+	help
+	  Supports Actions ACTIONS bluetooth controller.
+	  In which, Host and Controller are all residing in SOC,
+	  they share messages using a virtual HCI.
+
+ endif # BT_DRV

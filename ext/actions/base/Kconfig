@@ -1,0 +1,21 @@
+#
+# Copyright (c) 2020 Actions Semiconductor
+#
+# SPDX-License-Identifier: LicenseRef-BSD-5-Clause-Actions
+#
+
+menu "Actions framework"
+
+config ACTIONS_FRAMEWORK
+	bool
+	prompt "actions framework"
+	default n
+	select LEGACY_TIMEOUT_API
+	help
+	This option enable or disable actions framework
+
+source "ext/actions/base/core/Kconfig"
+source "ext/actions/base/utils/Kconfig"
+source "ext/actions/base/property/Kconfig"
+source "ext/actions/base/memory/Kconfig"
+endmenu

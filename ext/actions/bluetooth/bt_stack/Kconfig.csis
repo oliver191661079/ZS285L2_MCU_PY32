@@ -1,0 +1,62 @@
+# Bluetooth Audio - Coordinated Set Identification Service options
+#
+# Copyright (c) 2021 Actions Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+if BT_AUDIO
+
+config BT_CSIS
+	bool "Coordinated Set Identification Service Support"
+	default n
+	help
+	  This option enables support for Coordinated Set Identification Service.
+
+if BT_CSIS
+
+config BT_CSIS_TEST_SAMPLE_DATA
+	bool "Coordinated Set Identification Service Test Sample Data"
+	help
+	  Enable the use of the sample data defined by the CSIS spec SIRK.
+	  This will use the sample SIRK, prand and LTK.
+
+	  WARNING: This option enables anyone to track and decrypt the SIRK
+	  (if encrypted) using public sample data.
+	  Should not be used for production builds.
+
+config BT_DEBUG_CSIS
+	bool "Coordinated Set Identification Service debug"
+	depends on BT_AUDIO_DEBUG
+	help
+	  Use this option to enable Coordinated Set Identification Service debug
+	  logs for the Bluetooth Audio functionality.
+
+endif # BT_CSIS
+
+config BT_CSIS_CLIENT
+	bool "Coordinated Set Identification Profile Support"
+	select BT_GATT_CLIENT
+	default n
+	help
+	  This option enables support for Coordinated Set Identification Profile.
+
+if BT_CSIS_CLIENT
+
+config BT_DEBUG_CSIS_CLIENT
+	bool "Coordinated Set Identification Service client debug"
+	depends on BT_AUDIO_DEBUG
+	help
+	  Use this option to enable Coordinated Set Identification Service client
+	  debug logs for the Bluetooth Audio functionality.
+
+endif # BT_CSIS_CLIENT
+
+config BT_DEBUG_CSIS_CRYPTO
+	bool "Coordinated Set Identification Service crypto functions debug"
+	depends on BT_CSIS_CLIENT || BT_CSIS
+	help
+	  Use this option to enable Coordinated Set Identification Service
+	  crypto functions debug logs for the Bluetooth Audio functionality.
+
+endif # BT_AUDIO

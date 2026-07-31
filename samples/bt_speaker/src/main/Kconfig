@@ -1,0 +1,167 @@
+# Kconfig - ACTIONS primitive options for sdk version 2.0
+
+#
+# Copyright (c) 2023 Actions Semiconductor Co., Ltd
+# PDX-License-Identifier: Apache-2.0
+#
+
+config BT_MAIN_APP
+	bool
+	prompt "Bt speaker Main App Support"
+	default n
+	help
+	This option enable or disable bt speaker main app
+
+choice
+	prompt "audio policy for output channel"
+	default AUDIO_OUTPUT_DAC
+	depends on BT_MAIN_APP
+	help
+	  Select audio policy for output channel
+
+config AUDIO_OUTPUT_I2S
+	bool
+	prompt "output to i2s channel"
+	select AUDIO_OUT_I2STX0_SUPPORT
+	#select OUTPUT_RESAMPLE
+	help
+	This option select audio output to i2s
+
+config AUDIO_OUTPUT_SPDIF
+	bool
+	prompt "output to spdif channel"
+	select AUDIO_OUT_SPDIFTX_SUPPORT
+	#select OUTPUT_RESAMPLE
+	help
+	This option select audio output to spidf tx
+
+config AUDIO_OUTPUT_DAC_AND_I2S
+	bool
+	prompt "output to spdif channel"
+	select AUDIO_OUT_I2STX0_SUPPORT
+	#select OUTPUT_RESAMPLE
+	help
+	This option select audio output to dac and i2s
+
+config AUDIO_OUTPUT_DAC_AND_SPDIF
+	bool
+	prompt "output to dac and spdif channel"
+	select AUDIO_OUT_SPDIFTX_SUPPORT
+	#select OUTPUT_RESAMPLE
+	help
+	This option select audio output to dac and spdif
+
+config AUDIO_OUTPUT_DAC_I2S_SPDIF
+	bool
+	prompt "output to dac, i2s and spdif channel"
+	select AUDIO_OUT_SPDIFTX_SUPPORT
+	select AUDIO_OUT_I2STX0_SUPPORT
+	#select OUTPUT_RESAMPLE
+	help
+	This option select audio output to dac and spdif
+
+config AUDIO_OUTPUT_DAC
+	bool
+	prompt "output to dac channel"
+	depends on BT_MAIN_APP
+	help
+	This option select audio output to dac
+endchoice
+
+config AUDIO_OUT_STEREO_ENABLE
+	bool
+	prompt "output to stereo dac channel"
+	depends on BT_MAIN_APP
+	help
+	This option select audio output to dac
+
+config AUDIO_OUT_LEFT_ONLY
+	bool
+	prompt "output to left dac channel"
+	select RIGHT_CHANNEL_MUTE
+	depends on BT_MAIN_APP
+	help
+	This option select audio output to dac
+
+config AUDIO_OUT_RIGHT_ONLY
+	bool
+	prompt "output to right dac channel"
+	select LEFT_CHANNEL_MUTE
+	depends on BT_MAIN_APP
+	help
+	This option select audio output to dac
+
+config OUTPUT_RESAMPLE
+	bool
+	prompt "allow resample out put rate"
+	select RESAMPLE
+	depends on MEDIA
+	help
+	This option select audio output to dac
+
+config AUDIO_OUT_LEFT_RIGHT_SWAP
+	bool
+	prompt "output swap left/right dac channel"
+	depends on AUDIO_OUT_STEREO_ENABLE
+	default n
+	help
+	This option select audio output swap left/right dac
+
+config TWS_AUDIO_OUT_MODE
+	int
+	prompt "tws audio output mode"
+	default 0
+	help
+	This option select tws audio output mode
+
+if AUDIO_OUT_LEFT_RIGHT_SWAP
+config MEDIA_EFFECT_OUTMODE
+	default 1
+endif
+
+config CONTROL_TTS_ENABLE
+	bool
+	prompt "control tts enable"
+	default n
+	help
+	This option select "control tts enable"
+
+
+config LOW_LATENCY_MODE
+	bool
+	prompt "low latency mode"
+	depends on BT_MAIN_APP
+	select OS_LOW_LATENCY_MODE
+	default n
+	help
+	This option enable low latency mode
+
+config GFP_PROFILE
+	bool
+	prompt "GFP Support"
+	default n
+	help
+	This option enable or disable gfp
+
+config TWS_UI_EVENT_SYNC
+	bool
+	prompt "tws ui event sync"
+	default n
+	help
+	This option enable or disable sync of tws ui event.
+
+config BT_ADV_MANAGER
+	bool
+	prompt "BT_ADV_MANAGER"
+	default n
+	help
+	This option enable or ble adv manager
+	
+config BT_CONTROLER_BQB_SYS
+	bool
+	prompt "Actions Bluetooth Controller BQB test when running system"
+	depends on BT_CONTROLER_BQB
+	default n
+	help
+	This option enables Actions Bluetooth Controller BQB test when running system
+

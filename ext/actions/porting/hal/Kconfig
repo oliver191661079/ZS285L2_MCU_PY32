@@ -1,0 +1,165 @@
+# Kconfig - ACTIONS primitive options for sdk version 2.0
+
+#
+# Copyright (c) 2015 Intel Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+config AUDIO_IN
+	bool
+	prompt "Audio In Hal Support"
+	depends on ACTIONS_SDK_PORTING
+	select AUDIO
+	select AUDIO_IN_ACTS
+	default n
+	help
+	This option enables actions audio in hal.
+
+config AUDIO_IN_STEREO
+	bool
+	prompt "stereo support "
+	depends on AUDIO_IN
+	default n
+	help
+	This option enables actions audio stereo
+
+config STEREOPHONIC_MONO
+	bool
+	prompt "stereo phonic mono support "
+	depends on AUDIO_IN
+	default n
+	help
+	This option enables actions audio stereo phonic mono
+
+config AUDIO_OUT
+	bool
+	prompt "Audio Out Hal Support"
+	depends on ACTIONS_SDK_PORTING
+	select AUDIO
+	select AUDIO_OUT_ACTS
+	default n
+	help
+	This option enables actions audio out hal.
+
+config DISPLAY
+	bool
+	prompt "Display Hal Support"
+	depends on ACTIONS_SDK_PORTING
+	default n
+	help
+	This option enables actions display hal
+
+config LED
+	bool
+	prompt "Led Hal Support"
+	depends on ACTIONS_SDK_PORTING
+	select ACTS_LED_DISPLAY
+	select LED_MANAGER
+	default n
+	help
+	This option enables actions led hal
+
+config SEG_LED
+	bool
+	prompt "Led Hal Support"
+	depends on ACTIONS_SDK_PORTING
+	select SEG_LED_DISPLAY
+	select SEG_LED_MANAGER
+	default n
+	help
+	This option enables actions led hal
+
+config KEY
+	bool
+	prompt "Key Hal Support"
+	depends on ACTIONS_SDK_PORTING
+	default n
+	help
+	This option enables actions key hal
+
+config DSP
+	bool
+	prompt "Dsp Hal Support"
+	depends on ACTIONS_SDK_PORTING
+	default n
+	select ACTS_RING_BUFFER
+	help
+	This option enables actions dsp hal
+
+config ALARM_CLOCK
+	bool
+	prompt "Alarm Hal Support"
+	depends on ACTIONS_SDK_PORTING
+	default n
+	help
+	This option enables actions alarm clock hal support.
+
+config PSRAM
+	bool
+	prompt "psram as block device support"
+	depends on ACTIONS_SDK_PORTING && SPI_PSRAM
+	default n
+	help
+	This option enables actions psram as block device.
+
+config CACHE
+	bool
+	prompt "Cache Hal support"
+	depends on ACTIONS_SDK_PORTING
+	default n
+	help
+	This option enables actions cache support.
+
+config FILE_CACHE
+	bool
+	prompt "File Cache Hal support"
+	depends on CACHE
+	default n
+	help
+	This option enables actions file cache support.
+
+config RAM_CACHE
+	bool
+	prompt "Ram Cache Hal support"
+	depends on CACHE
+	default n
+	help
+	This option enables actions ram cache support.
+
+config PSRAM_CACHE
+	bool
+	prompt "Psram Cache Hal support"
+	depends on CACHE && PSRAM
+	default n
+	help
+	This option enables actions psram cache support.
+
+config STUB
+	bool
+	prompt "STUB Hal support"
+	depends on ACTIONS_SDK_PORTING
+	default y
+	help
+	This option enables actions stub hal.
+    
+config AUDIO_USOUND
+	bool
+	prompt "Usound Hal Support"
+	depends on ACTIONS_SDK_PORTING
+	default n
+	help
+	This option enables actions audio usound hal. 
+  
+source "ext/actions/porting/hal/bluetooth/Kconfig"
+
+source "ext/actions/porting/hal/usb_audio/Kconfig"

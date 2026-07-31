@@ -1,0 +1,16 @@
+
+# Kconfig - ACTIONS primitive options for sdk version 2.0
+
+#
+# Copyright (c) 2023 Actions Semiconductor Co., Ltd
+# SPDX-License-Identifier: Apache-2.0
+#
+
+config DISK_OTA_PRE
+	bool
+	prompt "disk ota prepare support"
+	depends on OTA_BACKEND_DISK
+	default y
+	help
+	This option enables or disable the disk ota prepare.
+

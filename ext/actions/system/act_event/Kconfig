@@ -1,0 +1,90 @@
+# Kconfig - Actions system manager
+
+#
+# Copyright (c) 2016 Actions Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+menuconfig ACT_EVENT
+	bool
+	prompt "ActEvent"
+	default n
+	help
+	This option enables actions event system
+
+
+config ACT_EVENT_COMPILE_LEVEL
+	int "Default act_event compile level"
+	default 3
+	range 0 4
+	depends on ACT_EVENT
+	help
+	  Sets log level for modules which don't specify it explicitly. When
+	  set to 0 it means log will not be activated for those modules.
+	  Levels are:
+
+	  - 0 OFF, do not write by default
+	  - 1 ERROR, default to only write LOG_LEVEL_ERR
+	  - 2 WARNING, default to write LOG_LEVEL_WRN
+	  - 3 INFO, default to write LOG_LEVEL_INFO
+	  - 4 DEBUG, default to write LOG_LEVEL_DBG	
+
+config ACT_EVENT_COMPILE_MODUL_LEVEL
+	bool "Enable act_event compile by module level"
+	default n
+	depends on ACT_EVENT
+	help
+	  Enable act_event compile by module level or not  
+
+config ACT_EVENT_OUTPUT_USER
+	bool "Enable act_event output to user-defined flow"
+	default n
+	depends on ACT_EVENT
+	help
+	  Enable act_event output to user-defined flow
+
+
+config DEBUG_ACT_EVENT_SHELL  
+	bool "Enable act_event shell to dump act_event"
+	default n
+	depends on ACT_EVENT
+	help
+	  Enable act_event shell to dump act_event
+
+config ACT_EVENT_FLASH_CACHE_SIZE
+	int "Default act_event flash cache size"
+	default 256
+	depends on ACT_EVENT
+	help
+		Default act_event flash cache size
+
+config ACT_EVENT_LINEBUF_SIZE
+	int "Default act_event line buf size"
+	default 256
+	depends on ACT_EVENT
+	help
+		Default act_event line buf size				
+
+config ACT_EVENT_PRINT_DROP_COUNT
+	bool "Enable act_event output drop count"
+	default n
+	depends on ACT_EVENT
+	help
+	  Enable act_event output drop count	 
+
+config ACT_EVENT_DATA_CLEAR
+	bool "Enable act_event data clear when poweron/poweroff"
+	default n
+	depends on ACT_EVENT
+	help
+	  Enable act_event data clear when poweron/poweroff
+
+config ACT_EVENT_DATA_FULL_MERGE
+	bool "Enable act_event data merge when full"
+	default n
+	depends on ACT_EVENT
+	help
+	  Enable act_event data full merge  
+
+source "ext/actions/system/act_event/Kconfig.module"

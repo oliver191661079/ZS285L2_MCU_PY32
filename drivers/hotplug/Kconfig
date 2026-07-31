@@ -1,0 +1,37 @@
+
+# Kconfig - Input device configuration options
+#
+#
+# Copyright (c) 2017 Actions Semiconductor Co., Ltd
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+menuconfig HOTPLUG
+	bool
+	prompt "Hot plug detect supply drivers"
+	default n
+	help
+	  Enable Hot plug detect drivers configuration
+
+if HOTPLUG
+
+config HOTPLUG_LINEIN_DETECT
+	bool "Actions SoC linein detect driver"
+	depends on SOC_FAMILY_ACTS
+	default n
+	help
+	  Enable support for Actions SoC linein detect driver.
+
+config HOTPLUG_LINEIN_DETECT_ADC_NAME
+	string "ADC device name for linein detect"
+	default "ADC_0"
+	help
+	  This option specifies the ADC device name for linein detect.
+
+config HOTPLUG_LINEIN_DETECT_ADC_CHAN
+	int "ADC channel number for linein detect"
+	help
+	  This option specifies the ADC channel number for linein detect.
+
+endif # HOTPLUG

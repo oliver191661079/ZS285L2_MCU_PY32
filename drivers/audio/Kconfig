@@ -1,0 +1,474 @@
+# Kconfig - Audio configuration options
+#
+#
+# Copyright (c) 2017 Actions Semiconductor Co.,Ltd
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+menuconfig AUDIO
+	bool
+	prompt "audio Drivers"
+	default n
+	help
+	Enable options for audio drivers.
+
+if AUDIO
+
+config AUDIO_OUT_ACTS
+	bool
+	prompt "Actions SoC audio output driver"
+	default n
+	help
+	Device driver for Actions SoC audio output
+
+config AUDIO_OUT_ACTS_ROCKY
+	bool
+	prompt "Actions SoC audio output driver for rocky"
+	default n
+	depends on SOC_SERIES_ROCKY
+	help
+	Device driver for Actions SoC audio output
+
+config AUDIO_OUT_ACTS_ANDES
+	bool
+	prompt "Actions SoC audio output driver for andes"
+	default y
+	help
+	Device driver for Actions SoC audio output
+
+config AUDIO_OUT_ACTS_DEV_NAME
+	string "Device Name for Actions SoC audio output"
+	default "audio_out"
+	depends on AUDIO_OUT_ACTS
+	help
+	  This is the device name for audio output, and is included in the
+	  device struct.
+
+config AUDIO_OUT_ACTS_DMA_CHAN
+	int "DMA channel number for Actions SoC audio output"
+	depends on AUDIO_OUT_ACTS
+	help
+	  This is the DMA channel number for audio output, and is included in
+	  the device struct.
+
+config AUDIO_OUT_ACTS_STEREO_ENABLE
+	bool
+	prompt "channel output stereo enable"
+	default y
+	depends on AUDIO_OUT_ACTS
+	help
+	audio output mono or stereo.
+
+config AUDIO_OUT_I2STX0_SUPPORT
+	bool
+	prompt "enable i2s tx0 out or not"
+	default y
+	depends on AUDIO_OUT_ACTS
+	help
+	audio enable i2stx0 out or not.
+
+config AUDIO_OUT_I2STX_ALWAYS_ON
+	bool
+	prompt "always on i2s tx0 out or not"
+	default n
+	depends on AUDIO_OUT_I2STX0_SUPPORT
+	help
+	audio always on i2stx0 out or not.
+
+config I2STX_SLAVE_MCLKSRC_INTERNAL
+	bool
+	prompt "Enable the I2STX MCLK from internal in Slave Mode"
+	default n
+	help
+		If you say Y here, you will enable the I2STX MCLK clock source from internal used in the slave mode.
+		If unsure, it is safe to say Y.
+
+config I2STX_FORMAT
+	int "I2STX format Selection"
+	default 0
+	depends on AUDIO_OUT_I2STX0_SUPPORT
+	range 0 2
+	help
+		This option specifies the I2STX transfer format as shown below
+		- 0: I2S Format
+		- 1: Left Justified Format
+		- 2: Right Justified Format
+
+config I2STX_MODE
+	int "I2STX Mode Selection"
+	default 0
+	depends on AUDIO_OUT_I2STX0_SUPPORT
+	range 0 1
+	help
+		This option specifies the I2STX master or slaver mode as shown below
+		- 0: master mode
+		- 1: slaver mode
+
+config I2STX_SRD
+	bool
+	prompt "Enable the I2STX Sample Rate Detect Function"
+	default n
+	help
+		If you say Y here, you will get support the I2STX sample rate detect function which only works in case of slave mode.
+		If unsure, it is safe to say Y.
+
+config I2S0_PSEUDO_5WIRE
+	bool
+	prompt "Enable the I2STX and I2SRX0 work in pseudo 5 Wires Mode"
+	default n
+	help
+		If you say Y here, you will enable the I2STX and I2SRX0 work in pseudo 5 wires mode and in this case I2SRX shall worked in slave mode.
+		If unsure, it is safe to say N.
+
+config I2SRX0_SLAVE_MCLKSRC_INTERNAL
+	bool
+	prompt "Enable the I2SRX0 MCLK from internal in Slave Mode"
+	default n
+	help
+		If you say Y here, you will enable the I2SRX0 MCLK clock source from internal used in the slave mode.
+		If unsure, it is safe to say Y.
+
+config I2S1_PSEUDO_5WIRE
+	bool
+	prompt "Enable the I2STX and I2SRX1 work in pseudo 5 Wires Mode"
+	default n
+	help
+		If you say Y here, you will enable the I2STX and I2SRX1 work in pseudo 5 wires mode and in this case I2SRX shall worked in slave mode.
+		If unsure, it is safe to say N.
+
+config I2SRX1_SLAVE_MCLKSRC_INTERNAL
+	bool
+	prompt "Enable the I2SRX1 MCLK from internal in Slave Mode"
+	default n
+	help
+		If you say Y here, you will enable the I2SRX1 MCLK clock source from internal used in the slave mode.
+		If unsure, it is safe to say Y.
+
+config AUDIO_OUT_SPDIFTX_SUPPORT
+	bool
+	prompt "enable spdif tx out or not"
+	default y
+	depends on AUDIO_OUT_ACTS
+	help
+	audio enable spdif out or not.
+
+config AUDIO_IN_ACTS
+	bool
+	prompt "Actions SoC audio input driver"
+	default n
+	help
+	Device driver for Actions SoC audio input
+
+config AUDIO_IN_ACTS_ROCKY
+	bool
+	prompt "Actions SoC audio input driver for rocky"
+	default n
+	depends on SOC_SERIES_ROCKY
+	help
+	Device driver for Actions SoC audio input
+
+config AUDIO_IN_ACTS_ANDES
+	bool
+	prompt "Actions SoC audio input driver for andes"
+	default y
+	help
+	Device driver for Actions SoC audio input
+
+config AUDIO_IN_ACTS_DEV_NAME
+	string "Device Name for Actions SoC audio input"
+	default "audio_in"
+	depends on AUDIO_IN_ACTS
+	help
+	  This is the device name for audio input, and is included in the
+	  device struct.
+
+config AUDIO_IN_ACTS_DMA_CHAN
+	int "DMA channel number for Actions SoC audio input"
+	depends on AUDIO_IN_ACTS
+	default -1
+	help
+	  This is the DMA channel number for audio input, and is included in
+	  the device struct.
+
+config AUDIO_IN_ACTS_DMIC
+	bool
+	prompt "Audio capture throught the digital mic"
+	depends on AUDIO_IN_ACTS
+	default n
+	help
+	  This is the indicator that whether the function of the audio capture throuth the digital mic or not.
+
+config DMIC_LR_CHANNEL_EXCHANGE
+	bool
+	prompt "Exchange the left and right channel within DMIC"
+	depends on AUDIO_IN_ACTS_DMIC
+	default n
+	help
+	  This is the DMIC ability that exchange the left and right channel.
+
+config LINEIN_HW_MAPPING
+	int "the aux op used by line in"
+	depends on AUDIO_IN_ACTS
+	default 0
+	help
+	  This is the aux op used by line-in, 0 means aux0, 1 means aux1, 2 means aux2,
+	  3 means aux0/1 fully differential, other value is invalid.
+
+config MIC0_HW_MAPPING
+	int "the mic mode for mic0"
+	depends on AUDIO_IN_ACTS
+	default 0
+	help
+	  This is the mic mode for mic0, 0 means single ended mic, 1 means fully differential mic,
+	  other value is invalid.
+
+config MIC1_HW_MAPPING
+	int "the mic mode for mic1"
+	depends on AUDIO_IN_ACTS
+	default 0
+	help
+	  This is the mic mode for mic1, 0 means single ended mic, 1 means fully differential mic,
+	  other value is invalid.
+
+config FM_HW_MAPPING
+	int "the aux op used by fm"
+	depends on AUDIO_IN_ACTS
+	default 0
+	help
+	  This is the aux op used by fm, 0 means aux0, 1 means aux1, 2 means aux2,
+	  3 means aux0/1 fully differential, other value is invalid.
+
+config AUDIO_VOICE_HARDWARE_REFERENCE_INNER
+	bool
+	prompt "audio voice AEC use internal reference signal"
+	depends on AUDIO_IN_ACTS
+	default n
+	help
+	  If say Y here to get support the voice AEC to use internal signal.
+
+config AUDIO_ADC_MIC_BIAS
+	hex "audio ADC MIC BIAS setting"
+	depends on AUDIO_IN_ACTS
+	default 0
+	help
+	    This is MIC bias setting for power prefered or capability prefered,
+		which configured by user.
+		Note that 0 is a invalid value and driver will ignore this setting.
+
+config AUDIO_ADC_AUX_BIAS
+	hex "audio ADC AUX BIAS setting"
+	depends on AUDIO_IN_ACTS
+	default 0
+	help
+	    This is AUX BIAS setting for power prefered or capability prefered,
+		which configured by user.
+		Note that 0 is a invalid value and driver will ignore this setting.
+
+config AUDIO_IN_I2SRX0_SUPPORT
+	bool
+	prompt "enable i2s rx0 in or not"
+	default y
+	depends on AUDIO_IN_ACTS
+	help
+	audio enable i2srx0 in or not.
+
+config I2SRX0_FORMAT
+	int "I2SRX0 format Selection"
+	default 0
+	depends on AUDIO_IN_I2SRX0_SUPPORT
+	range 0 2
+	help
+		This option specifies the I2SRX0 transfer format as shown below
+		- 0: I2S Format
+		- 1: Left Justified Format
+		- 2: Right Justified Format
+
+config I2SRX0_MODE
+	int "I2SRX0 Mode Selection"
+	default 1
+	depends on AUDIO_IN_I2SRX0_SUPPORT
+	range 0 1
+	help
+		This option specifies the I2SRX0 master or slaver mode as shown below
+		- 0: master mode
+		- 1: slaver mode
+
+config I2SRX_SRD
+	bool
+	prompt "Enable the I2SRX0 Sample Rate Detect Function"
+	default n
+	help
+		If you say Y here, you will get support the I2SRX0 sample rate detect function which only works in case of slave mode.
+		If unsure, it is safe to say Y.
+
+config AUDIO_IN_I2SRX1_SUPPORT
+	bool
+	prompt "enable i2s rx1 in or not"
+	default y
+	depends on AUDIO_IN_ACTS
+	help
+	audio enable i2srx1 in or not.
+
+config I2SRX1_SRD
+	bool
+	prompt "Enable the I2SRX1 Sample Rate Detect Function"
+	default n
+	help
+		If you say Y here, you will get support the I2SRX1 sample rate detect function which only works in case of slave mode.
+		If unsure, it is safe to say Y.
+
+config I2SRX1_FORMAT
+	int "I2SRX1 format Selection"
+	default 0
+	depends on AUDIO_IN_I2SRX1_SUPPORT
+	range 0 2
+	help
+		This option specifies the I2SRX1 transfer format as shown below
+		- 0: I2S Format
+		- 1: Left Justified Format
+		- 2: Right Justified Format
+
+config I2SRX1_MODE
+	int "I2SRX0 Mode Selection"
+	default 1
+	depends on AUDIO_IN_I2SRX1_SUPPORT
+	range 0 1
+	help
+		This option specifies the I2SRX1 master or slaver mode as shown below
+		- 0: master mode
+		- 1: slaver mode
+
+config AUDIO_IN_SPDIFRX_SUPPORT
+	bool
+	prompt "enable spdif rx in or not"
+	default y
+	depends on AUDIO_IN_ACTS
+	help
+	audio enable spdif in or not.
+
+config AUDIO_PA_ACTS
+	bool
+	prompt "Actions SoC audio pa driver"
+	default n
+	help
+	Device driver for Actions SoC audio pa
+
+config AUDIO_PA_ACTS_DEV_NAME
+	string "Device Name for Actions SoC audio pa"
+	default "audio_pa"
+	depends on AUDIO_PA_ACTS
+	help
+	  This is the device name for audio pa, and is included in the
+	  device struct.
+
+config AUDIO_OUT_ACTS_L_MUTE
+	bool
+	prompt "Mute left channel output"
+	default n
+	depends on AUDIO_PA_ACTS
+	help
+	Mute left channel for Actions SoC audio out or not.
+
+config AUDIO_OUT_ACTS_R_MUTE
+	bool
+	prompt "Mute right channel output"
+	default n
+	depends on AUDIO_PA_ACTS
+	help
+	Mute right channel for Actions SoC audio out or not.
+
+config AUDIO_OUT_AA_SOURCE_SEL
+	int "Audio A-A channel source selection"
+	default 1
+	range 1 6
+	depends on AUDIO_OUT_ACTS
+	help
+	Select the audio out Analog to Analog channel source as belown:
+		- 1: AA_SOURCE_AUX0
+		- 2: AA_SOURCE_AUX1
+		- 3: AA_SOURCE_AUX2
+		- 4: AA_SOURCE_AUXFD
+		- 5: AA_SOURCE_ASEMIC
+		- 6: AA_SOURCE_AFDMIC
+
+config AUDIO_PA_SWING
+	int "Set audio pa swing"
+	depends on AUDIO_PA_ACTS
+	help
+	Set audio pa swing.
+
+config AUDIO_OUT_DD_MODE
+	int "Set audio out direct mode"
+	depends on AUDIO_PA_ACTS
+	help
+	Set audio out direct mode.
+
+config AUDIO_OUT_SE_DF
+	int "Set audio out single end or differential mode"
+	depends on AUDIO_PA_ACTS
+	help
+	Set audio out single end or differential mode.
+
+config AUDIO_OUT_BIAS_MODE
+	int "Set audio out dac bias mode"
+	depends on AUDIO_PA_ACTS
+	help
+	Set audio out dac bias mode for performance or power.
+
+config AUDIO_POWERON_OPEN_PA
+	bool
+	prompt "open PA when power on"
+	default y
+	depends on AUDIO_PA_ACTS
+	help
+	Open PA when power on or not.
+
+config BOARD_EXTERNAL_PA_ENABLE
+	bool
+	prompt "enable external pa or not"
+	default y
+	depends on AUDIO_PA_ACTS
+	help
+	Enable external pa or not.
+
+config EXTERN_PA_CLASS
+	int "Set external pa class mode"
+	depends on BOARD_EXTERNAL_PA_ENABLE
+	default 0
+	help
+	Set extern pa class mode, 0 for classAB, other value for classD.
+
+config AUDIO_SOFT_ANTIPOP_ENABLE
+	bool
+	prompt "enable soft antipop or not"
+	default n
+	depends on AUDIO_PA_ACTS
+	help
+	Enable soft antipop or not.
+
+config AUDIO_ASRC_ENABLE
+	bool
+	prompt "enable asrc or not"
+	default n
+	help
+	Enable asrc or not.
+
+config AUDIO_ASRC_ACTS_DEV_NAME
+	string "Device Name for Actions SoC audio asrc"
+	default "audio_asrc"
+	help
+	  This is the device name for audio asrc, and is included in the
+	  device struct.
+
+config AUDIO_VOLUME_PA
+	bool
+	prompt "Use PA value as the Volume UNIT"
+	default n
+	depends on AUDIO_PA_ACTS
+	help
+		Use PA value as the Volume UNIT
+
+source "drivers/audio/andes/shell/Kconfig"
+
+endif # AUDIO

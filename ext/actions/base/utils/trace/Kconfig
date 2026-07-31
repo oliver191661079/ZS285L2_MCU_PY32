@@ -1,0 +1,59 @@
+config ACTIONS_TRACE
+    bool
+    prompt "actions trace Support"
+    default y
+    help
+    This option enables the actions trace service.
+
+config TRACE_UART
+    bool
+    prompt "actions trace uart Support"
+    depends on ACTIONS_TRACE
+    default y
+
+config TRACE_FILE
+    bool
+    prompt "actions trace file Support"
+    depends on ACTIONS_TRACE
+    default n
+
+config TRACE_CONTEXT_SHELLTASK
+    bool
+    prompt "trace output context by shell thread or not"
+    depends on ACTIONS_TRACE
+    default n
+
+config TRACE_SYNC_SHELL_THREAD
+    bool
+    prompt "trace shell thread use sync mode or not"
+    depends on ACTIONS_TRACE
+    default n
+
+config TRACE_BUFFER_SIZE
+    int
+    prompt "trace buffer size"
+    default 4096
+
+config TRACE_PERF_ENABLE
+    bool
+    prompt "trace performance enable"
+    depends on ACTIONS_TRACE
+    default n
+
+config TRACE_USE_ROM_CODE
+    bool
+    prompt "trace use rom vsnprintf"
+    depends on ACTIONS_TRACE
+    default n
+
+config TRACE_TIME_FREFIX
+    bool
+    prompt "trace use timestamp prefix"
+    depends on ACTIONS_TRACE
+    default n
+
+config CONSOLE_ACTIONS_INIT_PRIORITY
+    int
+    prompt "actions trace init priority"
+    depends on ACTIONS_TRACE
+    default 61

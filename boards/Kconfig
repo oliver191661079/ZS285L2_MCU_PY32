@@ -1,0 +1,30 @@
+
+config BOARD_DEPRECATED
+	string
+	help
+	This hidden option is set in the board configuration and indicates
+	the Zephyr release that the board configuration will be removed.
+	When set, any build for that board will generate a clearly visible
+	deprecation warning.
+
+config QEMU_TARGET
+	bool
+	default n
+	help
+	  Mark all QEMU targets with this variable for checking whether we are
+	  running in an emulated environment.
+
+config CHIP_RC_FILTER_CIRCUIT_BYPASS
+	bool
+	prompt "csky RF rc circuit filter bypass or not"
+	default y
+
+choice
+prompt "Board Selection"
+source "boards/*/*/Kconfig.board"
+endchoice
+
+
+menu "Board Options"
+source "boards/*/*/Kconfig"
+endmenu

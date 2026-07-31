@@ -1,0 +1,34 @@
+config SERIAL_FLASHER
+	bool
+	prompt "serial flasher Support"
+	default n
+	help
+	This option enable or disable serial flasher module
+
+config SERIAL_FLASHER_COMMAND_LETWS_STREAM
+	bool "serial flasher command use letws stream or not"
+	depends on SERIAL_FLASHER
+	default n
+	help
+	  This option enable or disable letws stream command used in serial flasher
+
+config SERIAL_FLASHER_ON_DEV_NAME
+	string "serial flasher device name"
+	depends on SERIAL_FLASHER
+	default "UART_0"
+	help
+	  Specify the device name for serial flasher
+
+config SERIAL_FLASHER_BINARY_FILE_PATH
+	string "serial flasher path name"
+	depends on SERIAL_FLASHER
+	default "OTA.bin"
+	help
+	  Specify the path name for serial flasher
+	  
+config SERIAL_FLASHER_COMMAND_TIMEOUT
+	int "serial flasher command timeout for read"
+	depends on SERIAL_FLASHER
+	default 3000
+	help
+	  This option config letws stream command read timeout

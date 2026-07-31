@@ -1,0 +1,193 @@
+# Kconfig - Actions Bluetooth SoC platform configuration options
+
+#
+# Copyright (c) 2018 Actions Semiconductor Co., Ltd
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+if SOC_SERIES_ANDESC
+
+config SOC_SERIES
+	default andesc
+
+config GEN_ISR_TABLES
+	default y
+
+config GEN_IRQ_VECTOR_TABLE
+	default n
+
+config ISR_STACK_SIZE
+	default 1024
+
+config IDLE_STACK_SIZE
+	default 512
+
+config EXTRA_EXCEPTION_INFO
+	bool
+	default y
+
+config SRAM_BASE_ADDRESS
+	hex
+	default 0x40000
+
+config SRAM_SIZE
+	int
+	default 368
+config SRAM_END_ADDRESS
+	hex
+	default 0x9c000
+
+config DSP_SRAM_BASE_ADDRESS
+	hex
+	default 0x40000
+
+config DSP_SRAM_END_ADDRESS
+	hex
+	default 0x9c000
+
+config FLASH_BASE_ADDRESS
+	hex
+	default 0x01000000
+
+config FLASH_SIZE
+	int "rom flash size (KB)"
+	default 1200
+	help
+		config SOC rom flash size
+
+config TEXT_SECTION_OFFSET
+	default 0x400
+
+config BOOTLOADER_SRAM_SIZE
+	default 0
+
+config XIP
+	default y
+
+config NUM_IRQS
+	int
+	default 42
+
+config NUM_IRQ_PRIO_BITS
+	int
+	default 3
+
+config SYS_CLOCK_TICKS_PER_SEC
+	int
+	default 100
+
+config SYS_CLOCK_HW_CYCLES_PER_SEC
+	int
+	default 24000000
+
+config SOC_CPU_CLK_FREQ
+	default 140000
+
+config SOC_DSP_CLK_FREQ
+	default 180000
+
+config SOC_VDD_VOLTAGE
+	default 1100
+
+config BUSY_WAIT_USES_ALTERNATE_CLOCK
+	default y
+
+config ROM_XSPI_WRITE_DATA_PATCH
+	bool
+	default y
+
+config SOC_SECURE_BOOT
+	bool
+	prompt "sob secure boot Support"
+	default n
+	help
+	Enable soc secure boot or not.
+
+config CSKY_CORETIM
+	default n
+
+config ACTS_TIMER
+	default y
+
+if SOC_MAPPING_PSRAM
+config SOC_MAPPING_PSRAM_ADDR
+	default 0x02000000
+
+config SOC_MAPPING_PSRAM_SIZE
+	default 0x200000
+
+endif #SOC_MAPPING_PSRAM
+
+if ADC
+
+config ADC_ACTS
+	def_bool y
+
+endif # ADC
+
+if GPIO
+
+config GPIO_ACTS
+	def_bool y
+
+endif # GPIO
+
+if I2C
+
+config I2C_ACTS
+	def_bool y
+
+endif # I2C
+
+if PWM
+
+config PWM_ACTS
+	def_bool y
+
+endif # PWM
+
+config SPI
+	def_bool n
+
+if SPI
+
+config SPI_ACTS
+	def_bool y
+
+config SPI_1_ACTS_DELAY_CHAIN
+	default 6
+
+endif # SPI
+
+if XSPI_NOR_ACTS
+
+config XSPI_NOR_ACTS_DELAY_CHAIN
+	default 6
+
+endif # XSPI_NOR_ACTS
+
+if SERIAL
+
+config UART_ACTS
+	def_bool y
+
+endif # SERIAL
+
+if MMC_0
+
+config MMC_0_DATA_REG_WIDTH
+	default 4
+
+endif # MMC_0
+
+if MMC_1
+
+config MMC_1_DATA_REG_WIDTH
+	default 4
+
+endif # MMC_1
+
+source "arch/csky/soc/actions/andesc/Kconfig.defconfig.ats*"
+
+endif # SOC_SERIES_ANDESC

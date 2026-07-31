@@ -1,0 +1,193 @@
+# Kconfig - DSP device configuration options
+#
+#
+# Copyright (c) 2018 Actions Semiconductor Co., Ltd
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+#
+# MPU options
+#
+
+config MPU_ACTS
+	bool "Memory protect unit for Actions SoC"
+	default n
+	help
+	enable actions mpu
+	
+choice
+    prompt "mpu driven select"
+    default MPU_EXCEPTION_DRIVEN
+    help
+      Select mpu driven 
+	
+config MPU_MPU_IRQ_DRIVEN
+    bool    
+    prompt "use mpu interrupt driven"
+    depends on MPU_ACTS
+    help
+    This option select mpu driven type
+    
+config MPU_EXCEPTION_DRIVEN
+    bool    
+    prompt "use mpu exception driven"
+    depends on MPU_ACTS
+    help
+    This option select mpu driven type    	
+endchoice
+
+
+choice
+    prompt "mpu index 0 select"
+    default MPU_MONITOR_RAMFUNC_WRITE
+    help
+      Select mpu index0 use 
+      	
+config MPU_MONITOR_BTC_MEMORY
+    bool    
+    prompt "use mpu monitor bt controller memory"
+    depends on MPU_ACTS
+    help
+    This option enables mpu monitor bt controller memory 	
+
+
+config MPU_MONITOR_CACHECODE_WRITE
+    bool    
+    prompt "use mpu monitor cache code write"
+    depends on MPU_ACTS
+    help
+    This option enables mpu monitor cache code write  
+    
+config MPU_MONITOR_RAMFUNC_WRITE
+    bool    
+    prompt "use mpu monitor ramfunc write"
+    depends on MPU_ACTS
+    help
+    This option enables mpu monitor ramfunc write     
+endchoice
+
+choice
+    prompt "mpu index 1 select"
+    default MPU_MONITOR_USER_DATA
+    help
+      Select mpu index1 use 
+    
+config MPU_MONITOR_DSP_WRITE_MCU_MEMORY
+    bool    
+    prompt "use mpu monitor dsp write mcu memory"
+    depends on MPU_ACTS
+    help
+    This option enables mpu monitor dsp write mcu memory  
+
+config MPU_MONITOR_USER_DATA
+    bool    
+    prompt "use mpu monitor user data"
+    depends on MPU_ACTS
+    help
+    This option enables mpu monitor dsp write mcu memory 
+endchoice
+           
+config MPU_MONITOR_ROMFUNC_WRITE
+    bool    
+    prompt "use mpu monitor rom func write"
+    depends on MPU_ACTS
+    default y
+    help
+    This option enables mpu monitor rom func write 
+    
+config MPU_MONITOR_STACK_OVERFLOW
+    bool    
+    prompt "use mpu monitor stack overflow"
+    depends on MPU_ACTS
+    default y
+    help
+    This option enables mpu monitor rom func write
+    
+config MPU_ACTS_MAX_INDEX
+    int    
+    prompt "mpu max entry index"
+    depends on MPU_ACTS
+    default 4
+    help
+    This option select mpu monitor bt controller memory index     
+    
+config MPU_MONITOR_BTC_MEMORY_INDEX
+    int    
+    prompt "use mpu monitor bt controller memory index"
+    depends on MPU_MONITOR_BTC_MEMORY
+    default 0
+    help
+    This option select mpu monitor bt controller memory index    
+
+config MPU_MONITOR_CACHECODE_WRITE_INDEX
+    int    
+    prompt "use mpu monitor cache code write index"
+    depends on MPU_MONITOR_CACHECODE_WRITE
+    default 0
+    help
+    This option select mpu monitor cache code write index 
+    
+config MPU_MONITOR_RAMFUNC_WRITE_INDEX
+    int    
+    prompt "use mpu monitor ramfunc write"
+    depends on MPU_MONITOR_RAMFUNC_WRITE
+    default 0
+    help
+    This option select mpu monitor ramfunc write index
+    
+config MPU_MONITOR_DSP_WRITE_MCU_MEMORY_INDEX
+    int    
+    prompt "use mpu monitor dsp write mcu memory index"
+    depends on MPU_ACTS
+    default 1
+    help
+    This option select mpu monitor dsp write mcu memory index  
+    
+config MPU_MONITOR_USER_DATA_INDEX
+    int    
+    prompt "use mpu monitor user data memory index"
+    depends on MPU_ACTS
+    default 1
+    help
+    This option select mpu monitor user data memory index    
+    
+config MPU_MONITOR_ROMFUNC_WRITE_INDEX
+    int    
+    prompt "use mpu monitor rom func write index"
+    depends on MPU_MONITOR_ROMFUNC_WRITE
+    default 2
+    help
+    This option select mpu monitor rom func write index
+       
+config MPU_MONITOR_STACK_OVERFLOW_INDEX
+    int    
+    prompt "use mpu monitor stack overflow index"
+    depends on MPU_MONITOR_STACK_OVERFLOW
+    default 3
+    help
+    This option select mpu monitor rom func write  
+    
+config MPU_CSKY
+    bool
+    default n
+    help
+    enable csky mpu 
+    
+config MPU_CSKY_MONITOR_ROMFUNC_WRITE
+    bool    
+    prompt "use csky mpu monitor rom func write"
+    depends on MPU_CSKY
+    default n
+    help
+    This option enables mpu monitor rom func write 
+       
+    
+config MPU_CSKY_MONITOR_CACHEREGION_WRITE
+    bool    
+    prompt "use csky mpu monitor cache region write"
+    depends on MPU_CSKY
+    default n
+    help
+    This option enables mpu monitor rom func write
+                                              

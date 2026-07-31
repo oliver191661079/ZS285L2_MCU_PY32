@@ -1,0 +1,6 @@
+target remote localhost:1020
+set confirm off
+set pagination off
+set *(unsigned int*)0xc012001c = 0x01
+x/1xw 0xc012001c
+continue

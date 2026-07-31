@@ -1,0 +1,30 @@
+# Kconfig - DSP device configuration options
+#
+#
+# Copyright (c) 2018 Actions Semiconductor Co., Ltd
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+#
+# DSP options
+#
+menuconfig DSP
+	bool
+	prompt "DSP driver Configuration"
+	default n
+
+if DSP
+config DSP_0_DEV_NAME
+	string "Device name for DSP Controller 0"
+	default "DSP_0"
+	help
+	Device name for DSP Controller 0.
+
+config DSP_0_IRQ_PRI
+	int "IRQ Priority for DSP Controller 0"
+	default 0
+	help
+	IRQ Priority for the DSP Controller.
+
+endif # DSP

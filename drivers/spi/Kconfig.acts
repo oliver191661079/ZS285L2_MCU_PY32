@@ -1,0 +1,70 @@
+# Kconfig - SPI configuration options
+#
+# Copyright (c) 2017 Actions Semiconductor Co., Ltd
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+menuconfig SPI_ACTS
+	bool "Enable DMA driver for Actions SoC"
+	depends on SPI && SOC_FAMILY_ACTS
+	default n
+	help
+	  Enable support for Actions SoC SPI driver.
+
+if SPI_ACTS
+
+config SPI_ACTS_DMA
+	bool "Support DMA transfer for SPI driver"
+	depends on SPI_ACTS
+	default n
+	help
+	  Support DMA transfer for SPI driver.
+
+config SPI_1_ACTS_DMA
+	bool "DMA transfer channel for SPI1 full duplex transfer"
+	depends on SPI_ACTS_DMA && SPI_1
+	default n
+	help
+	  Support DMA transfer for SPI1 full duplex transfer, need use
+	  two dma channel.
+
+config SPI_1_ACTS_DMA_DUPLEX
+	bool "DMA transfer channel for SPI1 full duplex transfer"
+	depends on SPI_1_ACTS_DMA && SPI_1
+	default n
+	help
+	  Support DMA transfer for SPI1 full duplex transfer, need use
+	  two dma channel.
+
+config SPI_1_ACTS_DELAY_CHAIN
+	int "SPI delaychain config for SPI1 transfer"
+	depends on SPI_ACTS && SPI_1
+	default 8
+	help
+	  SPI delaychain config for SPI1 transfer.
+
+config SPI_2_ACTS_DMA
+	bool "DMA transfer channel for SPI1 full duplex transfer"
+	depends on SPI_ACTS_DMA && SPI_2
+	default n
+	help
+	  Support DMA transfer for SPI2 full duplex transfer, need use
+	  two dma channel.
+
+config SPI_2_ACTS_DMA_DUPLEX
+	bool "DMA transfer channel for SPI1 full duplex transfer"
+	depends on SPI_2_ACTS_DMA && SPI_2
+	default n
+	help
+	  Support DMA transfer for SPI2 full duplex transfer, need use
+	  two dma channel.
+
+config SPI_2_ACTS_DELAY_CHAIN
+	int "SPI delaychain config for SPI1 transfer"
+	depends on SPI_ACTS && SPI_2
+	default 8
+	help
+	  SPI delaychain config for SPI2 transfer.
+
+endif # SPI_ACTS

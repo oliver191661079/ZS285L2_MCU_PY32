@@ -1,0 +1,1 @@
+obj-$(CONFIG_PA_TAS2780) += driver.o

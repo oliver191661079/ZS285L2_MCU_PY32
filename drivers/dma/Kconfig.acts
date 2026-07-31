@@ -1,0 +1,55 @@
+# Kconfig - Actions SoC DMA configuration options
+#
+# Copyright (c) 2018 Actions Semiconductor Co., Ltd
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+menuconfig DMA_ACTS_ROCKY
+	bool "DMA driver for Actions Rocky SoC"
+	default n
+	depends on SOC_SERIES_ROCKY
+	help
+	  Actions Rocky SoC DMA driver.
+
+menuconfig DMA_ACTS_ANDES
+	bool "DMA driver for Actions Andes SoC"
+	default n
+	depends on SOC_SERIES_ANDES
+	help
+	  Actions Andes SoC DMA driver.
+
+config VDMA_ACTS_ANDES
+	bool "Virtual DMA driver for Actions ATS282X"
+	default n
+	depends on SOC_FAMILY_ACTS
+	help
+	  Actions SoC Virtual DMA driver.
+
+config VDMA_ACTS_PCHAN_NUM
+	int "DMA physical dma channel for VDMA used"
+	default 6
+	depends on VDMA_ACTS_ANDES
+	help
+	  DMA physical dma channel for VDMA used.       
+
+config VDMA_ACTS_PCHAN_START
+	int "The start DMA physical dma channel for VDMA used"
+	default 2
+	depends on VDMA_ACTS_ANDES
+	help
+	  DMA physical dma channel for VDMA used.    
+
+config VDMA_ACTS_VCHAN_NUM
+	int "Number of DMA virtual dma channels"
+	default 10
+	depends on VDMA_ACTS_ANDES     
+
+config DMA_ACTS_DEVICE_INIT_PRIORITY
+	int "DMA Init Priority"
+	default 30
+	depends on DMA_ACTS_ROCKY || DMA_ACTS_ANDES || VDMA_ACTS_ANDES
+	help
+	  This option controls the priority of dma device initialization.
+	  Higher priority ensures that the device is initialized earlier
+	  in the startup cycle. If unsure, leave at default value.

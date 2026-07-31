@@ -1,0 +1,9 @@
+# Kconfig - Actions library
+
+#
+# Copyright (c) 2016 Actions Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+source "ext/actions/library/mips/al/Kconfig"

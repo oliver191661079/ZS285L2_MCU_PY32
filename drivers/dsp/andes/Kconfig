@@ -1,0 +1,59 @@
+# Kconfig - DSP device configuration options
+#
+#
+# Copyright (c) 2018 Actions Semiconductor Co., Ltd
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+#
+# DSP options
+#
+
+config DSP_ACTS_DEV_NAME
+	string "Device name of DSP Controller"
+	default "DSP_ANDES"
+	help
+	  Device name of DSP Controller
+
+config DSP_ACTIVE_POWER_LATENCY_MS
+	int "dsp active power latency in milliseconds"
+	default -1
+	depends on DSP
+	help
+	  Set the latency of power-off dsp after dsp became idle. Set negative (< 0)
+	  if you want to disable this feature.
+
+config DSP_WAIT_THRESHOLD
+	int "dsp work time percent if low than that will have chance to enter wait status"
+	default 95
+	depends on DSP
+	range 0,99
+
+config DSP_SET_FRE_AS_CPU_IN_WAIT
+	bool "set dsp freq same as cpu or not while dsp in wait"
+	default y
+	depends on DSP
+
+
+
+config DSP_DEBUG_PRINT
+    bool "enable dsp debug print"
+    default n
+    depends on DSP
+    help
+       enable dsp debug print
+
+config DSP_LIGHT_SLEEP
+    bool "enable dsp light sleep"
+    default n
+    depends on DSP
+    help
+       enable dsp light sleep
+
+config DSP_SUSPEND
+    bool "enable dsp suspend"
+    default n
+    depends on DSP
+    help
+       enable dsp suspend

@@ -1,0 +1,55 @@
+subdir-ccflags-y += -I$(srctree)/include/drivers
+
+obj-y = console/
+obj-y += random/
+obj-y += serial/
+obj-y += display/
+obj-$(CONFIG_SYS_CLOCK_EXISTS) += timer/
+obj-y += interrupt_controller/
+obj-$(CONFIG_GROVE) += grove/
+obj-$(CONFIG_PCI) += pci/
+obj-$(CONFIG_BT_DRV) += bluetooth/
+obj-$(CONFIG_SHARED_IRQ) += shared_irq/
+obj-$(CONFIG_SPI) += spi/
+obj-$(CONFIG_FLASH) += flash/
+obj-$(CONFIG_COUNTER) += counter/
+obj-$(CONFIG_GPIO) += gpio/
+obj-$(CONFIG_I2C) += i2c/
+obj-$(CONFIG_I2S) += i2s/
+obj-$(CONFIG_PWM) += pwm/
+obj-$(CONFIG_ADC) += adc/
+obj-$(CONFIG_NET_L2_ETHERNET) += ethernet/
+obj-$(CONFIG_SLIP) += slip/
+obj-$(CONFIG_IEEE802154) += ieee802154/
+obj-$(CONFIG_WATCHDOG) += watchdog/
+obj-$(CONFIG_RTC) += rtc/
+obj-$(CONFIG_CLOCK_CONTROL) += clock_control/
+obj-$(CONFIG_IPM) += ipm/
+obj-$(CONFIG_SENSOR) += sensor/
+obj-$(CONFIG_AIO_COMPARATOR) += aio/
+obj-$(CONFIG_PINMUX) += pinmux/
+obj-$(CONFIG_DMA) += dma/
+obj-y += usb/
+obj-$(CONFIG_CRYPTO) += crypto/
+obj-$(CONFIG_MMC) += mmc/
+obj-$(CONFIG_WIFI) += wifi/
+obj-$(CONFIG_AUDIO) += audio/
+obj-$(CONFIG_INPUT_DEV) += input/
+obj-$(CONFIG_NVRAM_CONFIG) += nvram/
+obj-$(CONFIG_POWER_SUPPLY) += power/
+obj-$(CONFIG_DSP) += dsp/
+obj-$(CONFIG_SBC_ENCODER) += sbc_encoder/
+obj-y += mpu/
+obj-$(CONFIG_SPIDEV_ACTS) += spidev/
+obj-$(CONFIG_STUB_DEV) += stub/
+obj-$(CONFIG_HOTPLUG) += hotplug/
+obj-$(CONFIG_COMPENSATION_ACTS) += compensation/
+obj-$(CONFIG_FM) += fm/
+obj-$(CONFIG_AMP_AW882XX) += amp/
+obj-$(CONFIG_PA_TAS2780) += pa_tas2780/
+obj-$(CONFIG_CODEC_ACM8635) += codec_acm8635/
+obj-$(CONFIG_LOGIC_MCU_LS8A10023T) += logic_mcu_ls8a10023t/
+
+ifndef CONFIG_ROM_COMPILE_UTILS
+obj-y += crc/
+endif

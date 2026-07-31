@@ -1,0 +1,493 @@
+commit 57bcecafcef7f3dc2b5bc0c8a67f90abb5436140
+Author: zhanglei <zhanglei@srv-pad-compile5.actions.com.cn>
+Date:   Wed Jun 11 13:29:00 2025 +0800
+
+    fix btcall upload resample not work
+    
+    Change-Id: I62ce4b023fbdfe880cb17b967d1bc1e91ae633e4
+
+commit d7f12f6ed72809322e3796392c350c079ec954b7
+Author: hanchenfeng <hanchenfeng@actionstech.com>
+Date:   Tue Jun 10 13:42:52 2025 +0800
+
+    Updated ZH/actions/ATS350B
+    Project: ZH/actions/ZSDK_LIB_BLUETOOTH  776f50f09cb385e26a03a213b5c99eb3acb5c8cf
+    
+    Add new bluetooth API bt_le_get_devices to fix compiling error.
+    
+    Change-Id: Iae9211e35d56034914756cd1120406bf6f5029a4
+
+commit 0d065af182ef10bf974dd84ceff4bcd8e6364150
+Author: hanchenfeng <hanchenfeng@actionstech.com>
+Date:   Sat Jun 7 10:53:20 2025 +0800
+
+    Updated ZH/actions/ATS350B
+    Project: ZH/actions/ZSDK_LIB_SYSTEM  fefaf52c2848adeca4151b928b3a802c76255fb5
+    
+    Sync HM branch.
+    
+    Change-Id: I34d7af3a83c8e5e2b058fad5b4bf31dd329f8dd7
+
+commit ae50944d1bf2ce55e0d5e5a44906f49007b5b8ee
+Author: lihongjiang <lihongjiang@actions-semi.com>
+Date:   Thu Jun 5 11:43:49 2025 +0800
+
+    Updated ZH/actions/ATS350B
+    Project: ZH/actions/ZSDK_LIB_BLUETOOTH  acd4989ff24931f40e250f511c2b0f771729914c
+    Updated ZH/actions/ZSDK_LIB_BLUETOOTH
+    Project: ZH/actions/ZSDK_LIB_BTSTACK  d94624350c9243b184fb78a7805756bde62f4160
+    
+    libbt_stack : sync libbt_stack from HM branch
+    
+    Change-Id: Ie447fbbc34bdc08071eede634d294422cc2a8f4e
+
+commit 36b5a18da54e58b66cc0d990c1a8e4fa8e8532d2
+Author: U-ACTIONS\wuguanglu <wuguanglu@CD0005.actions.com.cn>
+Date:   Wed Jun 4 19:45:47 2025 +0800
+
+    Updated ZH/actions/ATS350B
+    Project: ZH/actions/ZSDK_LIB_BLUETOOTH  6a3f4b6492de0d1636cb57ccf82b4efba0c7449a
+    Updated ZH/actions/ZSDK_LIB_BLUETOOTH
+    Project: ZH/actions/ZSDK_LIB_BTSTACK  4a832088d4bfaf95c288dee200bc3c021f25575b
+    
+    add avrcp get support feature
+    
+    Change-Id: Ibf8c906408aa3e880f5a4cb1edec21571e8faa3c
+
+commit b24dc584be4019f9d93f8b7aa4bc0e5a6aaf2241
+Author: U-ACTIONS\wuguanglu <wuguanglu@CD0005.actions.com.cn>
+Date:   Wed Jun 4 17:43:40 2025 +0800
+
+    Updated ZH/actions/ATS350B
+    Project: ZH/actions/ZSDK_LIB_BLUETOOTH  1b627a84350fae7d8e98bb69cb66295670779479
+    Updated ZH/actions/ZSDK_LIB_BLUETOOTH
+    Project: ZH/actions/ZSDK_LIB_BTSTACK  a398d1cb7ab5297588058ec48c13a0705f2d749e
+    
+    1. add BIP feature
+    
+    Change-Id: Idfbf470a923e43a4d0a8bda4ee6f3eebd2b30e98
+
+commit 9628e98317f2c7930571d686781e2cecd418d917
+Author: hanchenfeng <hanchenfeng@actionstech.com>
+Date:   Wed Jun 4 11:18:04 2025 +0800
+
+    Updated ZH/actions/ATS350B
+    Project: ZH/actions/ZSDK_LIB_SYSTEM  e9829015ab9d52e8965c061d0e96e7173aa00937
+    
+    Update system event definition.
+    
+    Change-Id: Ia8a55a8d19f907b35379be8408217fcc18c81552
+
+commit b10b83e7677a6f06f43dcd8dd8f55fb4258ff28a
+Author: hanchenfeng <hanchenfeng@actionstech.com>
+Date:   Wed Jun 4 09:35:47 2025 +0800
+
+    Use bug fix branch for submodule bluetooth.
+    
+    Change-Id: I926eabe7196556d84f67f3fd0e12a01cce7be211
+
+commit 24d36b0706b398f02c67b15caf4f80cea1e2e5f0
+Author: lihongjiang <lihongjiang@actions-semi.com>
+Date:   Wed Jun 4 09:10:14 2025 +0800
+
+    Updated ZH/actions/ATS350B
+    Project: ZH/actions/ZSDK_LIB_BLUETOOTH  d72b38abcaf7866382c335b03e6aff2d0cf29e86
+    
+    bt_service: sync bt_service from HM branch
+    
+    Change-Id: I6f7722ea46849b70663e965b4ddba531b7a0b95a
+
+commit 844d1d39a517f5da9d5d0275d58756f0fcef302e
+Author: lihongjiang <lihongjiang@actions-semi.com>
+Date:   Tue Jun 3 20:35:20 2025 +0800
+
+    Updated ZH/actions/ATS350B
+    Project: ZH/actions/ZSDK_LIB_BLUETOOTH  bac09473be84b88f8dd1b48089f578770ae5b722
+    Updated ZH/actions/ZSDK_LIB_BLUETOOTH
+    Project: ZH/actions/ZSDK_LIB_BTSERVICE  193c8b132105dbd72c253085b46c59b153e2e510
+    
+    libbt_service: sync libbt_service from HM branch
+    
+    Change-Id: Id28f1d8e1cb12cdc7b2e0060fbdf7454bfce3e7c
+
+commit 8e109150ef7a49779543840ffc9f9bfbc3504d58
+Author: hanchenfeng <hanchenfeng@actionstech.com>
+Date:   Tue Jun 3 11:23:05 2025 +0800
+
+    Use new branch for bluetooth module on bug fix branch.
+    
+    Change-Id: I59f114ba034b32f2216d11ada96dea9f0a39a8c1
+
+commit 227c51f65dc8913f16309989c9c898f7631d08e4
+Author: lihongjiang <lihongjiang@actions-semi.com>
+Date:   Fri May 30 17:20:03 2025 +0800
+
+    Updated ZH/actions/ATS350B
+    Project: ZH/actions/ZSDK_LIB_BLUETOOTH  f026760e40809a59ca140e2b669bd2274205475e
+    
+    bt_stack : sync bt_stack from HM branch
+    
+    Change-Id: I7fc747cb676ce00a3e32a1fb61e2bca872c4e48c
+
+commit 74fe6d8396e90033e5da498283677c161b353cf2
+Author: lihongjiang <lihongjiang@actions-semi.com>
+Date:   Fri May 30 11:14:06 2025 +0800
+
+    Updated ZH/actions/ATS350B
+    Project: ZH/actions/ZSDK_LIB_BLUETOOTH  f814837c7f85e205f4afab415487e9e642cc5b22
+    
+    lib : update libbt_service.a
+    
+    Change-Id: I881dc3a8557fd78ca32602c2cfe709b6ef53dadd
+    
+    fpms: add nearby fastpair message stream PSM
+    
+    Change-Id: I29362a4358a4046a2577829433a3d9279506e830
+
+commit 9db8f15e60d918e48404b1206aa7f58ccae449ad
+Author: lihongjiang <lihongjiang@actions-semi.com>
+Date:   Thu May 29 15:49:54 2025 +0800
+
+    Updated ZH/actions/ATS350B
+    Project: ZH/actions/ZSDK_LIB_BLUETOOTH  a1823bf7605ac343f78eb547784a432ec0f4daa6
+    
+    bt_stack: sync lea profile from HM branch
+    
+    Change-Id: I4c409e66775f68750500a0b48daa816894bc2ef4
+
+commit 9e5b8a63c439ed7a3c1554a68017b637a6596001
+Author: lihongjiang <lihongjiang@actions-semi.com>
+Date:   Thu May 29 15:17:36 2025 +0800
+
+    Updated ZH/actions/ATS350B
+    Project: ZH/actions/ZSDK_LIB_BLUETOOTH  9325d1b2f5d955cb556fe7ab61958121e1b4ef6c
+    Updated ZH/actions/ZSDK_LIB_BLUETOOTH
+    Project: ZH/actions/ZSDK_LIB_BTSTACK  982f6930eb7e20254a0d15bb853ec8b6c2e9b19e
+    
+    libbt_stack: sync lea profile from HM branch
+    
+    Change-Id: I1f93a490813a1c4835e58be3d8e0e5a03ae0fe54
+
+commit 3e563eaac21e23bd0bc10ef75b189ab9b3bd03da
+Author: zhanglei <zhanglei@srv-pad-compile5.actions.com.cn>
+Date:   Mon May 26 14:12:39 2025 +0800
+
+    add drc 4.0 board config
+    
+    Change-Id: Ia0dccb8433167bfa573a5a0c32e11663fd828043
+
+commit 545feb5713c6873b5adb66a91896bc61ece4aded
+Author: zhanglei <zhanglei@srv-pad-compile5.actions.com.cn>
+Date:   Thu May 15 14:50:50 2025 +0800
+
+    fix lcmusic play noise
+    
+    Change-Id: I980b50f19be3dfc4c13cb11a10d6de0c9b39de37
+
+commit 41c7f9df167e4e77a0d6a637990b1042efcb1af6
+Author: hanchenfeng <hanchenfeng@actionstech.com>
+Date:   Wed May 14 11:35:05 2025 +0800
+
+    Use bug fix branch for audio submodule.
+    
+    Change-Id: Iac53fee02573325fa2ce7c925e38ed62e9dd7b15
+
+commit 094344d1c51335126f048c57c13b65378952fbe2
+Author: lilian <lilian@actions-semi.com>
+Date:   Wed May 14 10:22:55 2025 +0800
+
+    Updated ZH/actions/ATS350B
+    Project: ZH/actions/ZSDK_LIB_BLUETOOTH  b82cae1f92a93dade71c1b0728160aaddf442604
+    
+    [bluetooth] support spp for all chidip.
+    
+    Change-Id: I440ef7ac087b227e139c8b65118d4ac39ead8588
+
+commit 37e14d6eb18812ab352eb64f8495d0e72012736f
+Author: lilian <lilian@actions-semi.com>
+Date:   Wed May 14 10:20:29 2025 +0800
+
+    Updated ZH/actions/ATS350B
+    Project: ZH/actions/ZSDK_LIB_BLUETOOTH  0e4e0478161bf0fd44b26ed46b243d96487389c2
+    Updated ZH/actions/ZSDK_LIB_BLUETOOTH
+    Project: ZH/actions/ZSDK_LIB_BTSTACK  8713f48331cdd4208877c62d49ffabe06cfc8654
+    
+    revert spp support for chipid.
+    
+    Change-Id: I32547065bf88088ef0ad2c34469151843ec81245
+
+commit 6ddd1444918ef5b3527ec5c57917cbd117e27f7c
+Author: hanchenfeng <hanchenfeng@actionstech.com>
+Date:   Tue May 13 10:17:59 2025 +0800
+
+    Updated ZH/actions/ATS350B
+    Project: ZH/actions/ZSDK_LIB_AUDIO  f63bd8bdd4170130d867ad387dfe97c33b315ce0
+    
+    Separate le volume to lea volume and bmr volume.
+    
+    Change-Id: I931c534dd8fb34a6b37b397cadb1f26c536d8491
+
+commit 768b5e1988610d7b2b1472aa534433ffc01ce02e
+Author: samonke <samonke@actions-semi.com>
+Date:   Mon May 12 15:29:39 2025 +0800
+
+    Updated ZH/actions/ATS350B
+    Project: ZH/actions/ZSDK_LIB_DISPLAY  d9d9952aace785834963715d5aa64ab55ac15d1d
+    
+    When the free msg is insufficient, modify the discard method
+    
+    Change-Id: I8cd84bc3ef36fe6afb8fce237541889304e5a850
+
+commit ebcc22762c7b7993a6a39dfed4efc389533bfdf5
+Author: hanchenfeng <hanchenfeng@actionstech.com>
+Date:   Mon Apr 28 15:13:01 2025 +0800
+
+    Use bug fix branch for ota.
+    
+    Change-Id: I0375957d84b051bf1df1e85893fb3cb9ff63b81f
+
+commit 93aae44d66d10b6a9e2d114903383ddbcc6104a5
+Author: zhanglei <zhanglei@srv-pad-compile5.actions.com.cn>
+Date:   Sun Apr 27 11:44:31 2025 +0800
+
+    fix auracast cannot play
+    
+    Change-Id: I3d7516234fd4aa3d487a4b5a9f5101a7557222ce
+
+commit d4490cdae9197e2ddfc5f94d2738bfb95cf5ca59
+Author: zhanglei <zhanglei@srv-pad-compile5.actions.com.cn>
+Date:   Sun Apr 27 11:15:42 2025 +0800
+
+    Updated ZH/actions/ATS350B
+    Project: ZH/actions/ZSDK_LIB_MEDIA_BASE  9bfffc1d6eef641834e758e154b7661f5fb2943c
+    Updated ZH/actions/ZSDK_LIB_MEDIA_BASE
+    Project: ZH/actions/ZSDK_LIB_MEDIA  5b86b05bcfc10394e242419f6063ac1bb7c6bea5
+    
+    fix tts play abnormal in usound
+    
+    Change-Id: I323cec5137953a90f19e7a0e32b10b766dd54809
+
+commit 2f083bbd0f8eee4e76c03eb06d832ae06f034870
+Author: zhanglei <zhanglei@srv-pad-compile5.actions.com.cn>
+Date:   Sun Apr 27 11:25:08 2025 +0800
+
+    Updated ZH/actions/ATS350B
+    Project: ZH/actions/ZSDK_LIB_MEDIA_BASE  448ef7579b81684bd304e17376996c65b411713f
+    
+    fix tts play abnormal in usound
+    
+    Change-Id: I5ad9ef113636dc5fb8e69d115ff2784773cbe83c
+
+commit d9a977531f7291afbfd8b0123d23086de587e350
+Author: wuyufan <wuyufan@actionstech.com>
+Date:   Thu Apr 24 10:37:16 2025 +0800
+
+    Updated ZH/actions/ATS350B
+    Project: ZH/actions/ZSDK_LIB_OTA  b8695c503249417cf5a8180697159023d78057b8
+    
+    ota:optimize ota code for reduce malloc data size
+    
+    Change-Id: I135c0d1a281e8db9ffeeadf4fbe444430150302d
+
+commit ece8a4278dff1ddd57816610f30bc152f7f8c63c
+Author: renyongkang <renyongkang@actionstech.com>
+Date:   Wed Apr 9 15:21:33 2025 +0800
+
+    fix dae vbuss gap
+    
+    Change-Id: Id20a69b42f33434189e9a79b72ada16161f5fa07
+    Signed-off-by: renyongkang <renyongkang@actionstech.com>
+
+commit 2a0391a0593f4277ac5370e8a0d281879d4debe6
+Author: hanchenfeng <hanchenfeng@actionstech.com>
+Date:   Tue Apr 8 10:25:20 2025 +0800
+
+    Enable VBASS 3.0 for ASET.
+    
+    Change-Id: I9a1d5e55a29f741054ae3d51e7c4b3cdf570ba9a
+
+commit 2c76746f26fb46db13da534a45be306263ce1f8f
+Merge: 6728d4fb7f 62d53eb6d9
+Author: Yongkang Ren (任永康) <renyongkang@actionstech.com>
+Date:   Tue Apr 1 11:32:36 2025 +0800
+
+    Merge "Enlarge flash size in link scrip." into BF_ZS283L2_release_V1.01_20250123
+
+commit 6728d4fb7fc499d6aa94e8e7f036050f8157e6cf
+Author: wuyufan <wuyufan@actionstech.com>
+Date:   Mon Mar 31 10:28:08 2025 +0800
+
+    Updated ZH/actions/ATS350B
+    Project: ZH/actions/ZSDK_LIB_OTA  b45a77c51d42498df674e7246ae68be0b4c8f89f
+    
+    ota:1.fix ota dfu bp save error 2. fix ota param data may not been saved
+    
+    Change-Id: I55a1f0333e6bbed9d523e80aad71e6f39fd61585
+
+commit 62d53eb6d9e4d20e0275c4e4fe5b6d14306afa9a
+Author: hanchenfeng <hanchenfeng@actionstech.com>
+Date:   Thu Mar 27 17:08:22 2025 +0800
+
+    Enlarge flash size in link scrip.
+    
+    Change-Id: I1974943d3ab20764cd8175228f6753f46944bcbf
+
+commit 99f438c10e4a17b9c3ce87c9b378faf0d50c1a1b
+Author: hanchenfeng <hanchenfeng@actionstech.com>
+Date:   Tue Mar 25 10:27:28 2025 +0800
+
+    Close pts in 285l2.
+    
+    Change-Id: I14862d536f6696890943a409c3b83156b9d90fcf
+
+commit d0468dfdbd30bc9c04a02a35855f68f80cf4e105
+Author: hanchenfeng <hanchenfeng@actionstech.com>
+Date:   Mon Mar 24 21:26:59 2025 +0800
+
+    Update linker script for pts.
+    
+    Change-Id: I964e146baad8ff121619682277bf8a9b457f9d0e
+
+commit 8f48d2aa13c7cf3b89e520ce4a750f5485ed2482
+Author: hanchenfeng <hanchenfeng@actionstech.com>
+Date:   Mon Mar 24 20:30:36 2025 +0800
+
+    Decrease size of vol_max.pcm.
+    
+    Change-Id: Ib9f82dc6a63130c8915192a63644c6211582e0b2
+
+commit e1d302c27b85afd20692c2348d5166b7cc1118a9
+Author: hanchenfeng <hanchenfeng@actionstech.com>
+Date:   Mon Mar 24 20:12:50 2025 +0800
+
+    Decrease size of vol_max.pcm.
+    
+    Change-Id: Ic308135ae3ffd2c6ec3c52738c9ff191c1f82f95
+
+commit dbb20d62509c98f5366ccb44a0052567911dc187
+Merge: 67f6113033 ef4b7ff411
+Author: Chenfeng Han (韩晨风) <hanchenfeng@actionstech.com>
+Date:   Mon Mar 24 11:43:58 2025 +0800
+
+    Merge "opt memory" into BF_ZS283L2_release_V1.01_20250123
+
+commit ef4b7ff41131fc55765704c6133596a3ae08ecc6
+Author: renyongkang <renyongkang@actionstech.com>
+Date:   Mon Mar 24 11:32:05 2025 +0800
+
+    opt memory
+    
+    Change-Id: I8095cd5f362c6a58cfa9bab6cd9d1ab53f62d8e0
+    Signed-off-by: renyongkang <renyongkang@actionstech.com>
+
+commit 67f611303304effaa8c5e1fc798276eddbe9e966
+Author: hanchenfeng <hanchenfeng@actionstech.com>
+Date:   Mon Mar 24 10:56:25 2025 +0800
+
+    Update bluetooth submodule.
+    
+    Change-Id: I75d907148fbdcc05ef832bbdbc29650292567a88
+
+commit a0523c1c3791c9ce1d68295668b3765aa579a001
+Author: renyongkang <renyongkang@actionstech.com>
+Date:   Mon Mar 24 10:25:31 2025 +0800
+
+    Updated ZH/actions/ATS350B
+    Project: ZH/actions/ZSDK_LIB_MEDIA_BASE  53e06d9d9fd5d4da0cca175df59c28c3e797a541
+    
+    opt memory
+    
+    Change-Id: I2fb4deb923ca5bc13bf0cd842c2dd76c9061f77f
+    Signed-off-by: renyongkang <renyongkang@actionstech.com>
+    
+    update libmedia BF_ZS283L2_release_V1.01_20250123
+    
+    Change-Id: Idd99030581c76c70954552da341eff9c5e3201a3
+    Signed-off-by: renyongkang <renyongkang@actionstech.com>
+
+commit 9231393dee3267a68fddffb959a05f0e58037b87
+Author: hanchenfeng <hanchenfeng@actionstech.com>
+Date:   Sat Mar 22 18:20:32 2025 +0800
+
+    Use bug fix branch of media.
+    
+    Change-Id: Id1c0ced3d26143033efcabacaccb012a0f0c922f
+
+commit a5119545d1ca18ef1c437b1d21a98387c1f41bee
+Author: hanchenfeng <hanchenfeng@actionstech.com>
+Date:   Sat Mar 22 18:13:12 2025 +0800
+
+    Revert "Updated ZH/actions/ATS350B"
+    
+    This reverts commit ea13d520fc7adc2986495261ec4ad96a92d8e58a.
+    
+    Change-Id: I3d6139ea674af1972e67c0502749984f66c76d7e
+
+commit 7f3ca7c8b642fc79c338f683f33d88e2d86c28d5
+Author: hanchenfeng <hanchenfeng@actionstech.com>
+Date:   Sat Mar 22 18:05:10 2025 +0800
+
+    Revert "Updated ZH/actions/ATS350B"
+    
+    This reverts commit 4585325908f1382bd762b42483494dec48dbc6c9.
+    
+    Change-Id: I122c026f131f8407e34d1a31c136fa281b72c5e5
+
+commit ea13d520fc7adc2986495261ec4ad96a92d8e58a
+Author: renyongkang <renyongkang@actionstech.com>
+Date:   Fri Mar 21 16:00:19 2025 +0800
+
+    Updated ZH/actions/ATS350B
+    Project: ZH/actions/ZSDK_LIB_MEDIA_BASE  106f80f54056915de3a566aa1be60d91be92a9ca
+    
+    opt memory
+    
+    Change-Id: I4d80df14a071765d67ddaaf2c92fb24c7bffe833
+    Signed-off-by: renyongkang <renyongkang@actionstech.com>
+
+commit 4585325908f1382bd762b42483494dec48dbc6c9
+Author: lilian <lilian@actions-semi.com>
+Date:   Fri Mar 21 15:35:06 2025 +0800
+
+    Updated ZH/actions/ATS350B
+    Project: ZH/actions/ZSDK_LIB_BLUETOOTH  3e428a499a3b1eef088815bcbfcae267b17efa00
+    
+    memory opti.
+    
+    Change-Id: I5c11b96389dba6ac133870ca6fc9644d5bd0a017
+
+commit f8821d81e51ffface9ec834227a2247e31e4a5b9
+Author: liubolong <liubolong@acitons-semi.com>
+Date:   Mon Mar 17 17:37:05 2025 +0800
+
+    Updated ZH/actions/ATS350B
+    Project: ZH/actions/ZSDK_LIB_FRAMEWORK_BASE  1a5a2ad4db746abd13301fa36f3f051a7ff728a5
+    
+    add rc filter circuit for load bin test
+    
+    Change-Id: Ie2f4a30c78cb386c4a118d859bd34936268b4625
+
+commit 504cda977641f48c9e60fe215eb7554063b34a83
+Author: hanchenfeng <hanchenfeng@actionstech.com>
+Date:   Wed Mar 19 14:45:12 2025 +0800
+
+    Use new branch for base submodule.
+    
+    Change-Id: I29866e6c11891e6ba065954da6f29b33baa9e27e
+
+commit 0f0891641cf4f771fb5f9f9390b5127946378b9d
+Author: liubolong <liubolong@acitons-semi.com>
+Date:   Tue Mar 18 17:23:35 2025 +0800
+
+    add rf rc bypass
+    
+    Change-Id: I08053566654ef3ac53044c98760c1aa1ba9f2128
+
+commit a975d2ea029000105a08b80dad1db2daebd16f49
+Author: xiaomaky <xiaomaky@actions-semi.com>
+Date:   Mon Mar 17 14:58:32 2025 +0800
+
+    [git ver---1d1e][rf] sdk can config rf bypass.
+    
+    Change-Id: Iaee440f44eb811d1e9beb8871887ff7063074a56
+
