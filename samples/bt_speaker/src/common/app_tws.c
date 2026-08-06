@@ -71,6 +71,8 @@ static int pawr_cmd_retry_count = 4;
 
 static void app_tws_pawr_adv_start(bool enable);
 static void app_tws_pawr_scan_start(u8_t type, bool enable);
+static void app_tws_pawr_adv_stop(void);
+static void app_tws_pawr_scan_stop(void);
 void app_tws_pawr_adv_set_media_ver(u16_t ver);
 int pawr_response_media_version(void);
 
@@ -108,6 +110,32 @@ bool app_tws_status_get_connected(void)
 void app_tws_status_set_connected(bool connect)
 {
 	tws_status_connected = connect;
+}
+
+/* 真立体声 TWS：TWS 连接/断开状态变化时，把当前播放器的 DAE 输出
+ * 模式刷新为分声道（主=L_ONLY / 从=R_ONLY）或双声道（DEFAULT），
+ * 使播放中连接/断开 TWS 也能即时切换。播放器不存在时忽略——播放器
+ * 创建时会按最新 TWS 状态自行设置（见各 media 文件的
+ * set_player_effect_output_mode）。 */
+static void app_tws_sync_effect_output_mode(void)
+{
+	media_player_t *player = media_player_get_current_main_player();
+	int mode = CONFIG_MEDIA_EFFECT_OUTMODE;
+
+	if (!player) {
+		return;
+	}
+
+	if (app_tws_status_get_connected() && app_tws_status_get_enable()) {
+		if (app_tws_status_get_role() == APP_TWS_ROLE_SECONDARY) {
+			mode = MEDIA_EFFECT_OUTPUT_R_ONLY;
+		} else {
+			mode = MEDIA_EFFECT_OUTPUT_L_ONLY;
+		}
+	}
+
+	SYS_LOG_INF("tws sync effect output mode %d", mode);
+	media_player_set_effect_output_mode(player, mode);
 }
 
 /* ---- TWS 使能开关（供外部调用）---- */
@@ -1066,6 +1094,7 @@ int app_tws_on_pawr_primary_sync(bool synced, u8_t *addr)
 			ver = media_player_get_version();
 			app_tws_pawr_adv_set_media_ver(ver);
 			sys_event_notify(SYS_EVENT_TWS_CONNECTED);
+			app_tws_sync_effect_output_mode();
 		} else if (0 == ver) {
 			app_tws_pawr_adv_start(false);
 		}
@@ -1075,6 +1104,7 @@ int app_tws_on_pawr_primary_sync(bool synced, u8_t *addr)
 		if(system_app_get_auracast_mode() != 0){
 			bis = 1;
 			sys_event_notify(SYS_EVENT_TWS_DISCONNECTED);
+			app_tws_sync_effect_output_mode();
 		}
 	}
 
@@ -1110,6 +1140,7 @@ void app_tws_on_pawr_secondary_sync(bool synced, u8_t *addr)
 				broadcast_set_tws_broadcast_name(str);
 			}
 			sys_event_notify(SYS_EVENT_TWS_CONNECTED);
+			app_tws_sync_effect_output_mode();
 			system_app_set_auracast_mode(2);
 			system_app_launch_add(DESKTOP_PLUGIN_ID_BMR);
 		}
@@ -1118,6 +1149,7 @@ void app_tws_on_pawr_secondary_sync(bool synced, u8_t *addr)
 		if (app_tws_status_get_mode() == APP_TWS_MODE_BIS 
 			|| app_tws_status_get_mode() == APP_TWS_MODE_NONE) {
 			app_tws_status_set_connected(false);
+			app_tws_sync_effect_output_mode();
 		}
 		if (bt_manager_is_tws_pair_search() ||
 			(bt_manager_tws_get_dev_role() != BTSRV_TWS_NONE)) {

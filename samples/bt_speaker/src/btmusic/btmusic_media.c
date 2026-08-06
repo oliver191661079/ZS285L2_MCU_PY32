@@ -69,7 +69,13 @@ static void set_player_effect_output_mode(media_player_t *player)
 			mode = MEDIA_EFFECT_OUTPUT_L_ONLY;
 		}
 	} else if (app_tws_status_get_connected() && app_tws_status_get_enable()){
-		mode = MEDIA_EFFECT_OUTPUT_L_ONLY;
+		/* 真立体声 TWS（BIS 模式）：主单元播左声道、从单元播右声道。
+		 * 未连接 TWS 时（connected=false）保持 DEFAULT = 双声道。 */
+		if (app_tws_status_get_role() == APP_TWS_ROLE_SECONDARY) {
+			mode = MEDIA_EFFECT_OUTPUT_R_ONLY;
+		} else {
+			mode = MEDIA_EFFECT_OUTPUT_L_ONLY;
+		}
 	}
 
 	if(btmusic_get_auracast_mode()) {

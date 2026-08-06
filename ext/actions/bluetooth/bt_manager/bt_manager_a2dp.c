@@ -342,6 +342,15 @@ static void _bt_manager_a2dp_callback(uint16_t hdl, btsrv_a2dp_event_e event, vo
 		dev_info->a2dp_codec_type = codec_info[0];
 		dev_info->a2dp_sample_khz = codec_info[1];
 
+		/* The A2DP CODEC_INFO payload only carries codec type + sample
+		 * rate (2 bytes); everything else in struct bt_audio_codec must be
+		 * initialized here. Without this, locations/frame_duration/blocks/
+		 * octets were stack garbage -> stream_config_codec() derived
+		 * chan->channels from garbage locations (observed channels 1 ->
+		 * MONO), so only one channel of audio came out (e.g. right only).
+		 */
+		memset(&codec, 0, sizeof(codec));
+
 		if (codec_info[0] == BTSRV_A2DP_SBC) { /*BT_A2DP_SBC*/
 			codec.format = BT_AUDIO_CODEC_SBC;
 		} else if (codec_info[0] == BTSRV_A2DP_MPEG2) { /*BT_A2DP_MPEG2*/
@@ -356,6 +365,12 @@ static void _bt_manager_a2dp_callback(uint16_t hdl, btsrv_a2dp_event_e event, vo
 		codec.sample_rate = codec_info[1];
 		codec.dir = BT_AUDIO_DIR_SINK;
 		codec.id = BT_AUDIO_ENDPOINT_MUSIC;
+		/* A2DP (SBC/AAC/LDAC) is stereo by default: FL + FR keeps
+		 * chan->channels = 2 and sink locations stereo. */
+		codec.locations = BT_AUDIO_LOCATIONS_FL | BT_AUDIO_LOCATIONS_FR;
+		codec.frame_duration = 7; /* 7.5 ms, standard for A2DP */
+		codec.blocks = 1;
+		codec.target_latency = 0;
 		SYS_LOG_INF("stream %x config %d %d\n",hdl,codec.format,codec.sample_rate);
 		SYS_EVENT_INF(EVENT_BT_A2DP_CONFIG_CODEC, hdl, codec.format, codec.sample_rate, os_uptime_get_32());
 		bt_manager_audio_stream_event(BT_AUDIO_STREAM_CONFIG_CODEC, (void*)&codec, sizeof(struct bt_audio_codec));
