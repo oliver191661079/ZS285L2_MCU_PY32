@@ -669,8 +669,11 @@ static const struct bt_sdp_attribute avrcp_target_attrs[] = {
 	BT_SDP_SERVICE_NAME("AVRCP target"),
 #endif
 	{
+		/* 0x0012 = Category2(0x02) | AbsoluteVolume(0x10)：
+		 * 声明支持绝对音量，手机才会默认开启"蓝牙设备音量与手机同步"(媒体音量同步)，
+		 * 否则手机 AVRCP 不启用 absolute volume，双向音量同步失效。 */
 		BT_SDP_ATTR_SUPPORTED_FEATURES,
-		{ BT_SDP_TYPE_SIZE(BT_SDP_UINT16), BT_SDP_ARRAY_16_CONST(0x0002) }
+		{ BT_SDP_TYPE_SIZE(BT_SDP_UINT16), BT_SDP_ARRAY_16_CONST(0x0012) }
 	},
 };
 

@@ -985,7 +985,9 @@ static int bt_manager_service_callback(btsrv_event_e event, void *param)
 	case BTSRV_REQ_FLUSH_PROPERTY:
 		//SYS_LOG_INF("Req flush %s\n", (char *)param);
 #ifdef CONFIG_PROPERTY
-		//property_flush_req(param);
+		/* 标记 property 缓存待写 flash（延迟到 media_player 创建时 flush_req_deal 批量写），
+		 * 否则 CFG_AUTOCONN_INFO 等设备记录只留在 RAM，关机丢失后无法自动重连。 */
+		property_flush_req(param);
 #endif
 		break;
 	case BTSRV_CHECK_NEW_DEVICE_ROLE:

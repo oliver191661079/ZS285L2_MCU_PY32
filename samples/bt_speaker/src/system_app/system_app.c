@@ -102,6 +102,13 @@ static void system_app_do_poweroff(int result)
 	data_analy_exit();
 #endif
 
+#ifdef CONFIG_PROPERTY
+	/* 关机前将 property 缓存（含自动重连设备列表 CFG_AUTOCONN_INFO）写入 nvram flash，
+	 * 否则设备记录只留在 RAM，关机丢失后下次开机 btif_br_get_auto_reconnect_info 读到空列表(s:0)，
+	 * 导致已配对手机无法自动重连。 */
+	property_flush(NULL);
+#endif
+
 	system_power_off();
 
 

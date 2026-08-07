@@ -211,7 +211,7 @@ int system_btmgr_config_update_2nd(void)
 
 	sync_ctrl_config->a2dp_volume_sync_when_playing = 0;//cfg_bt_music_vol_sync.Volume_Sync_Only_When_Playing? 1:0;
 	sync_ctrl_config->a2dp_Playing_volume_sync_delay_ms = 3000;//cfg_bt_music_vol_sync.Playing_Volume_Sync_Delay_Ms;
-	sync_ctrl_config->a2dp_origin_volume_sync_to_remote = 0;//cfg_bt_music_vol_sync.Origin_Volume_Sync_To_Remote? 1:0;
+	sync_ctrl_config->a2dp_origin_volume_sync_to_remote = 1;//cfg_bt_music_vol_sync.Origin_Volume_Sync_To_Remote? 1:0; /* 强制开启：AVRCP 连接后主动把本机音量推给手机，手机调音量即可控制音箱 */
 	sync_ctrl_config->a2dp_origin_volume_sync_delay_ms = 3000;//cfg_bt_music_vol_sync.Origin_Volume_Sync_Delay_Ms;
 		
 

@@ -261,6 +261,10 @@ static void ws2812_flush_pin(u32_t pin, const uint8_t *grb, size_t len,
 #endif
 	struct ws2812_timing local;
 
+	/* 播放中 CPU(DVFS) 频率会变（60MHz ↔ 171/198/234MHz），若仍用 init 时的 NOP 时序，
+	 * 升频后位宽变短，WS2812 解码失败导致灯灭/花屏。每次发送前按当前频率重算时序。 */
+	ws2812_refresh_timing();
+
 	if (!tm) {
 		ws2812_fill_timing(&local);
 		tm = &local;
@@ -276,6 +280,15 @@ static void ws2812_flush_pin(u32_t pin, const uint8_t *grb, size_t len,
 #endif
 	ws2812_gpio_set_pin(pin, 0);
 	k_busy_wait(reset_us);
+
+#if defined(CONFIG_BT_MUSIC_LED_STRIP_DEBUG_LOG)
+	if ((ws2812_show_cnt++ % 20U) == 0U) {
+		SYS_LOG_INF("flush pin=%u len=%u nop/cyc=%u t0h=%u t0l=%u t1h=%u t1l=%u\n",
+			    pin, (unsigned)len, ws2812_nop_per_cycle,
+			    ws2812_nop_t0h, ws2812_nop_t0l,
+			    ws2812_nop_t1h, ws2812_nop_t1l);
+	}
+#endif
 }
 
 #if WS2812_HAS_STRIP1
@@ -321,6 +334,7 @@ void btmusic_ws2812_ambient_set(uint8_t r, uint8_t g, uint8_t b)
 		ws2812_grb[off + 2] = b;
 	}
 	ws2812_flush();
+	SYS_LOG_INF("ambient_set R=%u G=%u B=%u\n", r, g, b);
 #endif
 }
 
@@ -347,6 +361,9 @@ static void ambient_cycle_cb(struct thread_timer *ttimer, void *arg)
 {
 	ARG_UNUSED(ttimer);
 	ARG_UNUSED(arg);
+	SYS_LOG_INF("ambient cycle mode=%d R=%u G=%u B=%u\n", ambient_mode,
+		    ambient_modes[ambient_mode].r, ambient_modes[ambient_mode].g,
+		    ambient_modes[ambient_mode].b);
 	btmusic_ws2812_ambient_set(ambient_modes[ambient_mode].r,
 				   ambient_modes[ambient_mode].g,
 				   ambient_modes[ambient_mode].b);

@@ -645,8 +645,14 @@ static void app_pawr_adv_retry_start(os_work *work)
 	SYS_LOG_INF("app adv retry %d.\n", app_adv_status);
 	if (true == app_adv_status) {
 		app_tws_pawr_adv_stop();
-		if (adv_retry_cnt < APP_PAWR_ADV_RETRY_COUNT)
+		if (adv_retry_cnt < APP_PAWR_ADV_RETRY_COUNT) {
 			os_delayed_work_submit(&app_pawr_adv_restart_work, APP_PAWR_ADV_REST_TIME);
+		} else if (app_tws_status_get_enable()) {
+			/* PAWR 组对超时（广播 retry 耗尽）：退出 TWS 组对模式并保存 mode=NONE，
+			 * 停止 PAWR 广播，避免 285L_PAWR 广播名被手机扫描到后覆盖设备名 */
+			SYS_LOG_INF("pawr adv retry timeout, exit tws pair mode");
+			app_tws_set_enable(false);
+		}
 	} else {
 		app_tws_pawr_adv_start(true);
 	}
@@ -658,8 +664,13 @@ static void app_pawr_scan_retry_start(os_work *work)
 	SYS_LOG_INF("app scan retry %d.\n", app_scan_status);
 	if (true == app_scan_status) {
 		app_tws_pawr_scan_stop();
-		if (scan_retry_cnt < APP_PAWR_SCAN_RETRY_COUNT)
+		if (scan_retry_cnt < APP_PAWR_SCAN_RETRY_COUNT) {
 			os_delayed_work_submit(&app_pawr_scan_restart_work, APP_PAWR_SCAN_REST_TIME);
+		} else if (app_tws_status_get_enable()) {
+			/* PAWR 扫描超时（retry 耗尽）：退出 TWS 组对模式，停止广播/扫描 */
+			SYS_LOG_INF("pawr scan retry timeout, exit tws pair mode");
+			app_tws_set_enable(false);
+		}
 	} else {
 		app_tws_pawr_scan_start(scan_type, true);
 	}
