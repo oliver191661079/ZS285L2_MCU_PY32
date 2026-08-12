@@ -777,6 +777,14 @@ static void py32_rx_feed_byte(u8_t c)
 {
 	switch (py32_parse_state) {
 	case PY32_RX_ADDR:
+		/* 只接受主机地址 0x01：避免误同步到数据中的随机字节 */
+		if (c != PY32_ADDR_HOST) {
+#if defined(CONFIG_SYSTEM_APP_PY32_UART_RX_DEBUG)
+			printk("[py32] discard unexpected addr 0x%02x\n",
+			       (unsigned)c);
+#endif
+			break;
+		}
 		py32_frame_addr = c;
 		py32_parse_state = PY32_RX_CMD;
 		break;
@@ -797,6 +805,17 @@ static void py32_rx_feed_byte(u8_t c)
 		}
 		break;
 	case PY32_RX_DATA:
+		/* 数据中途收到主机地址 0x01：判定上一帧被截断，重新同步 */
+		if (c == PY32_ADDR_HOST && py32_frame_got < py32_frame_len) {
+#if defined(CONFIG_SYSTEM_APP_PY32_UART_RX_DEBUG)
+			printk("[py32] resync on addr 0x01 (got %u/%u)\n",
+			       (unsigned)py32_frame_got,
+			       (unsigned)py32_frame_len);
+#endif
+			py32_parse_reset();
+			py32_rx_feed_byte(c);
+			break;
+		}
 		py32_frame_data[py32_frame_got++] = c;
 		if (py32_frame_got >= py32_frame_len) {
 			py32_parse_state = PY32_RX_CRC_L;
