@@ -32,6 +32,9 @@
 #include <soc_dvfs.h>
 #include <stream.h>
 
+/* WIO0 耳机检测：插入静音喇叭，拔出恢复播放（system_app_headphone_detect.c） */
+extern void system_app_headphone_detect_init(void);
+
 #ifdef CONFIG_PLAYTTS
 #include "tts_manager.h"
 #endif
@@ -237,6 +240,8 @@ void system_app_init(void)
 	system_library_version_dump();
 
 	system_init();
+
+	system_app_headphone_detect_init();
 
 	system_audio_policy_init();
 

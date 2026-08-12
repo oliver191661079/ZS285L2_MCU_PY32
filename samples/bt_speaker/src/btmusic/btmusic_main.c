@@ -240,10 +240,14 @@ static void btmusic_ws2812_show_spectrum_boosted(const uint8_t *band_lvl,
 	/* 判断播放状态 */
 	playing = (app && app->playback_player_run && app->media_opened) ? 1U : 0U;
 
-	/* 发送律动数据到 PY32（50ms 周期，PY32 端做律动灯） */
+	/* 发送律动数据到 PY32（50ms 周期，PY32 端做律动灯）：
+	 * 播放中发频谱；停止/数据无效时强制发全零，确保外部 MCU 点阵屏熄灭 */
 #if defined(CONFIG_SYSTEM_APP_PY32_UART)
-	if (band_lvl && band_num >= 10) {
+	if (playing && band_lvl && band_num >= BTMUSIC_RGB_BAND_NUM) {
 		py32_rhythm_set_data(band_lvl, playing);
+	} else {
+		static const uint8_t zero_bands[BTMUSIC_RGB_BAND_NUM] = {0};
+		py32_rhythm_set_data(zero_bands, 0);
 	}
 #endif
 
@@ -340,6 +344,11 @@ static void btmusic_rgb_rhythm_debug_poll(struct thread_timer *ttimer,
 #if BTMUSIC_RGB_RHYTHM_LED_SHOW && \
 	defined(CONFIG_BT_MUSIC_LED_STRIP2) && defined(CONFIG_BT_MUSIC_LED_RHYTHM)
 			btmusic_ws2812_strip2_clear();
+#endif
+			/* 停止播放：强制发送全零给 PY32，确保点阵屏熄灭 */
+#if defined(CONFIG_SYSTEM_APP_PY32_UART)
+			static const uint8_t zero_bands[BTMUSIC_RGB_BAND_NUM] = {0};
+			py32_rhythm_set_data(zero_bands, 0);
 #endif
 		}
 		return;
@@ -715,12 +724,11 @@ static int _btmusic_init(void *p1, void *p2, void *p3)
 			}
 	#endif
 		} else {
-			if(app_tws_status_get_mode() == APP_TWS_MODE_BIS) {
-				if (bt_manager_is_tws_paired_valid() && bt_manager_is_auto_reconnect_runing()) {
-					SYS_LOG_INF("snoop connecting.");
-				} else {
-					app_tws_bis_mode_auto_connect(app_tws_status_get_role());
-				}
+			if (bt_manager_is_tws_paired_valid() && bt_manager_is_auto_reconnect_runing()) {
+				SYS_LOG_INF("tws auto reconnect running.");
+			} else {
+				/* 默认开启 TWS（无按键）：进入音乐即自动 BIS 组对；组对超时后自动关闭 */
+				app_tws_bis_mode_auto_connect(app_tws_status_get_role());
 			}
 		}
 	}

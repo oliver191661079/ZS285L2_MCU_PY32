@@ -1,5 +1,6 @@
 obj-y += system_app_init.o
 obj-y += system_app_init_input.o
+obj-y += system_app_headphone_detect.o
 obj-y += system_le_audio.o
 obj-y += system_app_shell.o
 obj-y += system_audio_policy.o

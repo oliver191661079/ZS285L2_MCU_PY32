@@ -25,7 +25,8 @@ const ui_key_map_t common_keymap[] = {
 	{KEY_MENU, KEY_TYPE_LONG6S, 1, MSG_FACTORY_DEFAULT},
 	{KEY_POWER, KEY_TYPE_LONG_DOWN, 1, MSG_KEY_POWER_OFF},
 	{KEY_BT, KEY_TYPE_SHORT_UP, 1, MSG_ENTER_PAIRING_MODE}, //phone pair
-	{KEY_BT, KEY_TYPE_LONG_DOWN, 1, MSG_BT_PLAY_TWS_PAIR}, //tws pair/unpair
+	/* TWS 无按键控制：默认开启、组对超时自动关闭（见 btmusic _btmusic_init / app_tws.c） */
+	//{KEY_BT, KEY_TYPE_LONG_DOWN, 1, MSG_BT_PLAY_TWS_PAIR}, //tws pair/unpair
 	//{KEY_COMBO_VOL, KEY_TYPE_SHORT_UP, 1, MSG_DEMO_SWITCH},
 
 	{KEY_POWER, KEY_TYPE_DOUBLE_CLICK, 1, MSG_BT_CALL_LAST_NO},
