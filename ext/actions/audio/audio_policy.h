@@ -94,6 +94,9 @@ uint8_t audio_policy_dynamic_update_peq(u8_t * arr);
 
 int audio_policy_set_dynamic_peq_info(eq_band_t * eq);
 
+/** 按 DSP EQ 点序号更新动态 PEQ（index 1~max，见 eq_arr_t） */
+int audio_policy_set_dynamic_peq_band(u8_t index, eq_band_t *eq);
+
 int audio_policy_get_output_support_get_energy(u8_t stream_type);
 
 int audio_policy_postprocessor_use_input_sample_rate(uint8_t stream_type);

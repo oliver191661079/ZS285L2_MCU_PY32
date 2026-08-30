@@ -91,7 +91,10 @@ struct py32_params {
 	uint8_t last_error;
 };
 
-static struct py32_params py32_state;
+static struct py32_params py32_state = {
+	.treble = 12U,
+	.bass = 12U,
+};
 
 /* ---- 律动数据缓存（50ms 周期发送到 PY32）---- */
 #define PY32_RHYTHM_BAND_NUM    10U
@@ -513,7 +516,8 @@ static uint16_t py32_crc16(const uint8_t *data, uint16_t length)
 
 static void py32_parse_reset(void)
 {
-	py32_parse_state = PY32_RX_CMD;
+	py32_parse_state = PY32_RX_ADDR;
+	py32_frame_addr = 0;
 	py32_frame_cmd = 0;
 	py32_frame_len = 0;
 	py32_frame_got = 0;
@@ -559,34 +563,66 @@ static void py32_apply_volume(uint8_t volume_pct)
 	       (unsigned)volume_pct, level, audio_policy_get_volume_level());
 }
 
+#define PY32_PEQ_IDX_BASS	15U
+#define PY32_PEQ_IDX_TREBLE	16U
+
+static void py32_push_dynamic_peq(void)
+{
+#ifdef CONFIG_AUDIO_SUPPORT_DYNAMIC_PEQ
+	media_player_t *player = media_player_get_current_dumpable_player();
+
+	if (player) {
+		media_player_dynamic_update_peq(player, NULL, 0);
+	}
+#endif
+}
+
 static void py32_apply_treble_bass(uint8_t treble, uint8_t bass)
 {
-	eq_band_t eq;
-	media_player_t *player;
-	int db;
-
-	py32_state.treble = treble;
-	py32_state.bass = bass;
-
 	if (treble > 24U || bass > 24U) {
 		py32_state.last_error = PY32_ERR_BAD_VALUE;
 		return;
 	}
 
+	py32_state.treble = treble;
+	py32_state.bass = bass;
+
+#ifdef CONFIG_AUDIO_SUPPORT_DYNAMIC_PEQ
+	eq_band_t eq;
+	int db;
+
+	/* 低音 200Hz；0~24 映射 -12~+12 dB（0.1dB 步进） */
 	db = (int)bass - 12;
 	eq.cutoff = 200;
 	eq.q = 70;
 	eq.gain = (short)(db * 10);
 	eq.type = 1;
-	audio_policy_set_dynamic_peq_info(&eq);
+	audio_policy_set_dynamic_peq_band(PY32_PEQ_IDX_BASS, &eq);
 
-	player = media_player_get_current_dumpable_player();
-	if (player) {
-		media_player_dynamic_update_peq(player, NULL, 0);
-	}
+	/* 高音 8kHz；同上 */
+	db = (int)treble - 12;
+	eq.cutoff = 8000;
+	eq.q = 70;
+	eq.gain = (short)(db * 10);
+	eq.type = 1;
+	audio_policy_set_dynamic_peq_band(PY32_PEQ_IDX_TREBLE, &eq);
 
-	printk("[py32] treble enc=%u bass enc=%u (bass %ddB applied to PEQ)\n",
-	       (unsigned)treble, (unsigned)bass, db);
+	py32_push_dynamic_peq();
+#endif
+	printk("[py32] EQ bass=%ddB treble=%ddB (lvl %u/%u)%s\n",
+	       (int)bass - 12, (int)treble - 12,
+	       (unsigned)bass, (unsigned)treble,
+#ifdef CONFIG_AUDIO_SUPPORT_DYNAMIC_PEQ
+	       ""
+#else
+	       " [PEQ off]"
+#endif
+	       );
+}
+
+void system_app_py32_reapply_eq(void)
+{
+	py32_apply_treble_bass(py32_state.treble, py32_state.bass);
 }
 
 static uint8_t py32_get_bt_connected(void)

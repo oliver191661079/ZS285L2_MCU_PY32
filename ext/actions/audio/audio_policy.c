@@ -463,11 +463,15 @@ uint8_t audio_policy_get_out_effect_support_dynamic_peq(uint8_t stream_type)
 	return support;
 }
 
-static eq_arr_t dy_peq[]=
-{
-	{16, {20, 7, 0, 1}},
-};
+#define AUDIO_PEQ_IDX_TREBLE	16U
+#define AUDIO_PEQ_IDX_BASS	15U
 
+static eq_arr_t dy_peq[] = {
+	/* [0] 高音：shell dump_update_peq 仍写 dy_peq[0] */
+	{AUDIO_PEQ_IDX_TREBLE, {8000, 70, 0, 1}},
+	/* [1] 低音 */
+	{AUDIO_PEQ_IDX_BASS, {200, 70, 0, 1}},
+};
 
 uint8_t audio_policy_dynamic_update_peq(u8_t * arr)
 {
@@ -483,17 +487,34 @@ uint8_t audio_policy_dynamic_update_peq(u8_t * arr)
 	return 0;
 }
 
+int audio_policy_set_dynamic_peq_band(u8_t index, eq_band_t *eq)
+{
+	u8_t i;
+
+	if (!eq || index == 0U) {
+		return -1;
+	}
+
+	for (i = 0; i < ARRAY_SIZE(dy_peq); i++) {
+		if (dy_peq[i].index == index) {
+			memcpy((void *)&dy_peq[i].eq, (void *)eq, sizeof(eq_band_t));
+			return 0;
+		}
+	}
+
+	SYS_LOG_WRN("peq index %u not found\n", index);
+	return -1;
+}
 
 int audio_policy_set_dynamic_peq_info(eq_band_t * eq)
 {
-	if( eq )
-	{
+	if (eq) {
 		memcpy((void *)&dy_peq[0].eq, (void *)eq, sizeof(eq_band_t));
 		return 0;
-	}else{
-		SYS_LOG_WRN("info err!!\n");
-		return -1;
 	}
+
+	SYS_LOG_WRN("info err!!\n");
+	return -1;
 }
 
 int audio_policy_get_output_support_get_energy(u8_t stream_type)

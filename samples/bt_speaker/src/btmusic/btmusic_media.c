@@ -19,6 +19,9 @@
 #ifdef CONFIG_BT_SELF_APP
 #include "selfapp_api.h"
 #endif
+#if defined(CONFIG_SYSTEM_APP_PY32_UART)
+#include "../system_app/system_app.h"
+#endif
 
 #define SUPPORT_RETRANSMIT_NUM_ADJUST
 #define MEDIA_PACKET_TIME_THRESHOLD       20
@@ -306,6 +309,10 @@ int btmusic_start_playback(void)
 	media_player_play(btmusic->playback_player);
 
 	btmusic->playback_player_run = 1;
+
+#if defined(CONFIG_SYSTEM_APP_PY32_UART)
+	system_app_py32_reapply_eq();
+#endif
 
 #if defined(CONFIG_BT_MUSIC_LED_RHYTHM)
 	btmusic_ws2812_on_playback_start();
