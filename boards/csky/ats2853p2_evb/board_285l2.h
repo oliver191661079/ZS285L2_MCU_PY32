@@ -12,6 +12,7 @@
  * I2C    GPIO0/19  ACM8635 (TWI MFP=6, 表6.2)
  * GPIO5         ACM8635 PDN（板级 early init 拉高一次，驱动不控）
  * I2STX0 GPIO6/39/38 → ACM8635         CS86756 (IC2) 无驱动
+ * GPIO4         耳机插入检测（输入上拉，插入=低）
  * GPIO8         WS2812 氛围灯           DMIC GPIO44/45
  * GPIO14        AMBIC 律动矩阵          LCD/PWM 指示灯
  * USB  DP/DM                           OTA / SD 卡应用
@@ -34,6 +35,7 @@
 /* ACM8635 (IC3) — I2C + I2S TX */
 #define BOARD_285L2_I2C_SCL_GPIO	0
 #define BOARD_285L2_I2C_SDA_GPIO	19
+#define BOARD_285L2_HP_DETECT_GPIO	4	/* 耳机检测孔：内部上拉，未插=高，插入=低 */
 #define BOARD_285L2_ACM8635_PDN_GPIO	5	/* 经 R22 22Ω；低有效关机，运行=高 */
 #define BOARD_285L2_ACM8635_PDN_DELAY_MS 10
 #define BOARD_285L2_I2S_LRCLK_GPIO	6

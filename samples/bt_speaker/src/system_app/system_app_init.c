@@ -32,7 +32,7 @@
 #include <soc_dvfs.h>
 #include <stream.h>
 
-/* WIO0 耳机检测：插入静音喇叭，拔出恢复播放（system_app_headphone_detect.c） */
+/* GPIO4 耳机检测：插入静音喇叭，拔出恢复播放（system_app_headphone_detect.c） */
 extern void system_app_headphone_detect_init(void);
 
 #ifdef CONFIG_PLAYTTS

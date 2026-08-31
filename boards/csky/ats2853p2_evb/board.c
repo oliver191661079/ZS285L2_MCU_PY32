@@ -166,6 +166,11 @@ static const struct acts_pin_config board_pin_config[] = {
 	      | GPIO_CTL_PADDRV_LEVEL(3)},	/* ACM8635 PDN/SDZ */
 #endif
 
+#if defined(CONFIG_CODEC_ACM8635)
+	{BOARD_285L2_HP_DETECT_GPIO, GPIO_CTL_MFP_GPIO | GPIO_CTL_GPIO_INEN
+	      | GPIO_CTL_PULLUP | GPIO_CTL_SMIT | GPIO_CTL_PADDRV_LEVEL(0)},
+#endif
+
 	/* DMIC */
 #if (CONFIG_MIC0_HW_MAPPING == 4)
 	{44, 0x01 | 0}, 	   /* DMIC_CLK */
