@@ -167,7 +167,8 @@ int system_btmgr_config_update_2nd(void)
 	pair_config->pair_mode_duration_sec = 0;//cfg_bt_pair.Pair_Mode_Duration_Sec;<"配对模式持续时间 (秒)",     0 ~ 600, /* 设置为 0 时不限时间 */	
 	pair_config->bt_not_discoverable_when_connected = 0;//cfg_bt_pair.BT_Not_Discoverable_When_Connected ? 1 : 0;
 #else
-	pair_config->default_state_discoverable = 0;//cfg_bt_pair.Default_State_Discoverable ? 1 : 0;<"默认状态可被搜索发现",      CFG_TYPE_BOOL>
+	/* 断开后 wait_connect 仍可被搜索，避免「隐身」；已连接时不可被搜 */
+	pair_config->default_state_discoverable = 1;//cfg_bt_pair.Default_State_Discoverable ? 1 : 0;<"默认状态可被搜索发现",      CFG_TYPE_BOOL>
 	pair_config->default_state_wait_connect_sec = 0;//cfg_bt_pair.Default_State_Wait_Connect_Sec;<"默认状态等待配对连接 (秒)", 0 ~ 600, /* 设置为 0 时不限时间 */>
 	pair_config->pair_mode_duration_sec = 180;//cfg_bt_pair.Pair_Mode_Duration_Sec;<"配对模式持续时间 (秒)",     0 ~ 600, /* 设置为 0 时不限时间 */		
 	pair_config->bt_not_discoverable_when_connected = 1;//cfg_bt_pair.BT_Not_Discoverable_When_Connected ? 1 : 0;
@@ -176,6 +177,7 @@ int system_btmgr_config_update_2nd(void)
 	pair_config->clear_paired_list_when_enter_pair_mode = 0;//cfg_bt_pair.Clear_Paired_List_When_Enter_Pair_Mode ? 1 : 0;
 	pair_config->clear_tws_When_key_clear_paired_list = 0;//cfg_bt_pair.Clear_TWS_When_Key_Clear_Paired_List ? 1 : 0;
 	pair_config->enter_pair_mode_when_key_clear_paired_list = 1;//cfg_bt_pair.Enter_Pair_Mode_When_Key_Clear_Paired_List ? 1 : 0;
+	/* PY32 开机门控后：配对列表空则直接进配对（播 bt_pair.mp3） */
 	pair_config->enter_pair_mode_when_paired_list_empty = 1;//cfg_bt_pair.Enter_Pair_Mode_When_Paired_List_Empty ? 1 : 0;	
 
 	tws_pair_config->pair_key_mode = 2;//cfg_tws_pair.TWS_Pair_Key_Mode; 1:单方按键组队;2:双方按键组队
@@ -236,7 +238,8 @@ int system_btmgr_config_update_2nd(void)
 	reconnect_config->reconnect_tws_interval = 10;//cfg_reconnect.Reconnect_TWS_Interval;
 	reconnect_config->reconnect_tws_times_by_startup = 5;//cfg_reconnect.Reconnect_TWS_Times_By_Startup;
 	reconnect_config->reconnect_times_by_timeout = 30;//cfg_reconnect.Reconnect_Times_By_Timeout;<"超时断开回连尝试次数",           0 ~ 100, /* 设置为 0 时不限次数 */>
-	reconnect_config->enter_pair_mode_when_startup_reconnect_fail = 0;//cfg_reconnect.Enter_Pair_Mode_When_Startup_Reconnect_Fail;
+	/* 开机回连失败/超时后进配对（约 timeout×times ≈ 5s×5） */
+	reconnect_config->enter_pair_mode_when_startup_reconnect_fail = 1;//cfg_reconnect.Enter_Pair_Mode_When_Startup_Reconnect_Fail;
     
 	reconnect_config->always_reconnect_last_device = 0;
 	reconnect_config->reconnect_resume_play = 0;

@@ -446,13 +446,26 @@ void system_app_init_bte_ready(void)
 	system_app_py32_uart_init();
 #endif
 
+#if defined(CONFIG_SYSTEM_APP_PY32_UART)
+	/* 蓝牙可见/可连由 PY32 UART 活动决定，见 system_app_py32_uart.c */
+	if (system_app_py32_host_is_alive()) {
+		bt_manager_start_wait_connect();
+		if (bt_manager_power_on_setup) {
+			bt_manager_powon_auto_reconnect(0);
+		} else {
+			bt_manager_powon_auto_reconnect(BT_MANAGER_REBOOT_ENTER_PAIR_MODE);
+		}
+	} else {
+		bt_manager_set_user_visual(true, false, false, 0);
+	}
+#else
 	bt_manager_start_wait_connect();
-	if(bt_manager_power_on_setup){
-	    bt_manager_powon_auto_reconnect(0);
+	if (bt_manager_power_on_setup) {
+		bt_manager_powon_auto_reconnect(0);
+	} else {
+		bt_manager_powon_auto_reconnect(BT_MANAGER_REBOOT_ENTER_PAIR_MODE);
 	}
-	else{
-	    bt_manager_powon_auto_reconnect(BT_MANAGER_REBOOT_ENTER_PAIR_MODE);
-	}
+#endif
 
 #ifdef CONFIG_OTA_BACKEND_UART
 	ota_app_init_uart();

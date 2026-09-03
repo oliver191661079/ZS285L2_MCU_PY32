@@ -265,10 +265,8 @@ exit:
 
 }
 
-#if 0 /* DSP 能量采集已禁用 */
 #ifdef CONFIG_BT_MUSIC_FREQPOINT_ENERGY_DEMO
 static void btmusic_rgb_energy_path_reset(void);
-#endif
 #endif
 
 int btmusic_start_playback(void)
@@ -298,11 +296,10 @@ int btmusic_start_playback(void)
 	SYS_LOG_INF("bis_delay %d", btmusic->bis_delay);
 #endif
 
-#if 0 /* 假律动模式下不需要 DSP 能量，且 f_band_energy_en 会破坏 A2DP 音频 */
 #ifdef CONFIG_BT_MUSIC_FREQPOINT_ENERGY_DEMO
+	/* PY32 律动需要 DSP 频段能量；此前 #if 0 导致频谱恒为 0 */
 	btmusic_output_energy_sample_config(btmusic->playback_player);
 	btmusic_rgb_energy_path_reset();
-#endif
 #endif
 
 	media_player_fade_in(btmusic->playback_player, 120);
@@ -758,7 +755,7 @@ static int btmusic_rgb_fill_bands_from_input_level(struct btmusic_app_t *btmusic
 }
 #endif /* CONFIG_BT_MUSIC_RGB_STREAM_FALLBACK */
 
-#if 0 /* DSP 能量采集已禁用 */
+#ifdef CONFIG_BT_MUSIC_FREQPOINT_ENERGY_DEMO
 static void btmusic_rgb_energy_path_reset(void)
 {
 	btmusic_rgb_dsp_path_lock = BTMUSIC_RGB_DSP_PATH_UNLOCK;

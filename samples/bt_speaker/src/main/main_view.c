@@ -19,11 +19,16 @@
 #include "main_app.h"
 #include <sys_manager.h>
 #include <app_tws.h>
+#if defined(CONFIG_SYSTEM_APP_PY32_UART)
+#include "../system_app/system_app.h"
+#endif
 
 const ui_key_map_t common_keymap[] = {
 	{KEY_MENU, KEY_TYPE_SHORT_UP, 1, MSG_KEY_SWITCH_APP},
 	{KEY_MENU, KEY_TYPE_LONG6S, 1, MSG_FACTORY_DEFAULT},
 	{KEY_POWER, KEY_TYPE_LONG_DOWN, 1, MSG_KEY_POWER_OFF},
+	/* 开关机短按：未连接时进配对（btmusic 内另有已连接=播放/暂停逻辑） */
+	{KEY_POWER, KEY_TYPE_SHORT_UP, 1, MSG_ENTER_PAIRING_MODE},
 	{KEY_BT, KEY_TYPE_SHORT_UP, 1, MSG_ENTER_PAIRING_MODE}, //phone pair
 	/* TWS 无按键控制：默认开启、组对超时自动关闭（见 btmusic _btmusic_init / app_tws.c） */
 	//{KEY_BT, KEY_TYPE_LONG_DOWN, 1, MSG_BT_PLAY_TWS_PAIR}, //tws pair/unpair
@@ -158,14 +163,23 @@ static void main_app_view_deal(u32_t ui_event)
 #ifdef CONFIG_TWS_UI_EVENT_SYNC
 	system_do_event_notify(ui_event);
 #else
-	static uint32_t last_time = 0;
-	if(ui_event == UI_EVENT_MAX_VOLUME){
-		if(last_time && k_uptime_get_32() - last_time < 1100){
-			return;
+#if defined(CONFIG_SYSTEM_APP_PY32_UART)
+	/* PY32 无 UART 数据时不播本地 TTS（poweron/bt_music 等） */
+	if (!system_app_py32_host_is_alive()) {
+		/* skip */
+	} else
+#endif
+	{
+		static uint32_t last_time = 0;
+
+		if (ui_event == UI_EVENT_MAX_VOLUME) {
+			if (last_time && k_uptime_get_32() - last_time < 1100) {
+				return;
+			}
+			last_time = k_uptime_get_32();
 		}
-		last_time = k_uptime_get_32();
+		tts_manager_process_ui_event(ui_event);
 	}
-	tts_manager_process_ui_event(ui_event);
 #endif
 #endif
 

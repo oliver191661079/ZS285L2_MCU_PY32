@@ -97,7 +97,11 @@ static void btmusic_energy_demo_raw_hex_dump(struct thread_timer *ttimer,
  * 置 0：仅能量采样/平滑/日志，不刷灯带（避免音频 underrun 导致无声/死机）。
  * 测试律动时改为 1，出问题改回 0 即可还原。
  */
-#define BTMUSIC_RGB_RHYTHM_LED_SHOW	1  /* 律动灯刷新，irq_lock ~5ms */
+/*
+ * 本地 WS2812 律动刷新：产品律动在 PY32，BTM 侧保持 0。
+ * 置 1 仅用于本机灯带调试。
+ */
+#define BTMUSIC_RGB_RHYTHM_LED_SHOW	0
 
 static uint32_t btmusic_rgb_smooth[BTMUSIC_RGB_BAND_NUM];
 static uint32_t btmusic_rgb_peak[BTMUSIC_RGB_BAND_NUM];
@@ -226,8 +230,8 @@ static void btmusic_rgb_fill_band_levels_from_raw(const short *raw,
 	}
 }
 
-/* 律动 LED 安全刷新：检查播放状态，仅在播放中且 media 已就绪时刷新 */
-#if BTMUSIC_RGB_RHYTHM_LED_SHOW
+/* 本地律动灯已关闭；仅在同时打开 LED_SHOW + LED_RHYTHM 时需要 */
+#if BTMUSIC_RGB_RHYTHM_LED_SHOW && defined(CONFIG_BT_MUSIC_LED_RHYTHM)
 static uint8_t btmusic_rgb_led_skip_cnt;
 #endif
 
@@ -240,8 +244,7 @@ static void btmusic_ws2812_show_spectrum_boosted(const uint8_t *band_lvl,
 	/* 判断播放状态 */
 	playing = (app && app->playback_player_run && app->media_opened) ? 1U : 0U;
 
-	/* 发送律动数据到 PY32（50ms 周期，PY32 端做律动灯）：
-	 * 播放中发频谱；停止/数据无效时强制发全零，确保外部 MCU 点阵屏熄灭 */
+	/* 律动数据只发给 PY32，BTM 不再刷本地律动灯 */
 #if defined(CONFIG_SYSTEM_APP_PY32_UART)
 	if (playing && band_lvl && band_num >= BTMUSIC_RGB_BAND_NUM) {
 		py32_rhythm_set_data(band_lvl, playing);
@@ -688,16 +691,21 @@ static int _btmusic_init(void *p1, void *p2, void *p3)
 		    CONFIG_BT_MUSIC_LED_STRIP2_COUNT
 #endif
 		    );
-#if defined(CONFIG_BT_MUSIC_LED_RHYTHM) && !FAKE_RHYTHM_DEMO
+/* 本地律动灯 或 PY32 外发频谱：都要跑能量定时器 */
+#if (defined(CONFIG_BT_MUSIC_LED_RHYTHM) || \
+     defined(CONFIG_SYSTEM_APP_PY32_UART)) && !FAKE_RHYTHM_DEMO
 #if CONFIG_BT_MUSIC_RGB_RHYTHM_DEBUG
-	thread_timer_start(&p_btmusic_app->energy_timer, 500, 500);
+	thread_timer_start(&p_btmusic_app->energy_timer, 50, 50);
+	SYS_LOG_INF("[rgb] energy timer 50ms for py32/led rhythm\n");
 #else
 	thread_timer_start(&p_btmusic_app->energy_timer, 200, 500);
 #endif
 #endif
 #else
-#if CONFIG_BT_MUSIC_RGB_RHYTHM_DEBUG && !FAKE_RHYTHM_DEMO
-	thread_timer_start(&p_btmusic_app->energy_timer, 500, 500);
+#if (CONFIG_BT_MUSIC_RGB_RHYTHM_DEBUG || \
+     defined(CONFIG_SYSTEM_APP_PY32_UART)) && !FAKE_RHYTHM_DEMO
+	thread_timer_start(&p_btmusic_app->energy_timer, 50, 50);
+	SYS_LOG_INF("[rgb] energy timer 50ms (no local strip)\n");
 #else
 	thread_timer_start(&p_btmusic_app->energy_timer, 200, 500);
 #endif
@@ -727,8 +735,8 @@ static int _btmusic_init(void *p1, void *p2, void *p3)
 			if (bt_manager_is_tws_paired_valid() && bt_manager_is_auto_reconnect_runing()) {
 				SYS_LOG_INF("tws auto reconnect running.");
 			} else {
-				/* 默认开启 TWS（无按键）：进入音乐即自动 BIS 组对；组对超时后自动关闭 */
-				app_tws_bis_mode_auto_connect(app_tws_status_get_role());
+				/* 开机不自动进 TWS BIS：BIS 会 set_user_visual(disc=0)，手机搜不到经典蓝牙 */
+				SYS_LOG_INF("skip auto tws bis on boot");
 			}
 		}
 	}

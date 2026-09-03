@@ -1055,6 +1055,8 @@ void app_tws_mode_select(u8_t mode, u8_t role)
 			bt_manager_tws_disconnect();
 		}
 #endif
+		/* 退出 TWS 后恢复经典蓝牙可发现（BIS 曾强制 user_visual disc=0） */
+		bt_manager_set_user_visual(false, false, false, 0);
 
 	}
 

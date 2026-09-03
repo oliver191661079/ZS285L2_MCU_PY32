@@ -18,6 +18,7 @@
 #include <device.h>
 #include <uart.h>
 #include <misc/printk.h>
+#include <misc/util.h>
 #include <gpio.h>
 #include <soc.h>
 #include <soc_uart.h>
@@ -83,6 +84,25 @@
 #include <bt_manager.h>
 #endif
 
+#include "app_ui.h"
+#include <ui_manager.h>
+#include <desktop_manager.h>
+
+extern bool bt_manager_power_on_setup;
+
+static void py32_host_notify_ui(u32_t ui_event)
+{
+	ui_message_send_async(MAIN_VIEW, MSG_VIEW_PAINT, ui_event);
+}
+
+#ifndef PY32_HOST_IDLE_TIMEOUT_MS
+#define PY32_HOST_IDLE_TIMEOUT_MS	10000
+#endif
+
+/* PY32 UART 有数据=开机；超时无数据=关机（BT 隐藏+断连，禁本地 TTS） */
+static bool py32_host_alive;
+static os_delayed_work py32_host_idle_work;
+
 struct py32_params {
 	uint8_t volume;
 	uint8_t treble;
@@ -133,6 +153,94 @@ static int py32_dma_rx_err = -1;
 static uint8_t py32_init_banner_done;
 static os_delayed_work py32_uart_init_work;
 static u32_t py32_tx_frame_count;
+
+/* 去重：相同 PY32 上行帧只打印一次 */
+static struct {
+	uint8_t addr;
+	uint8_t cmd;
+	uint8_t len;
+	uint8_t data[PY32_FRAME_MAX];
+	uint16_t crc;
+} py32_last_rx_log;
+
+/* 去重：相同 BTM→PY32 下行帧只打印一次（律动变化时仍会打印） */
+static uint8_t py32_last_tx_log[PY32_FRAME_MAX];
+static size_t py32_last_tx_len;
+
+bool system_app_py32_host_is_alive(void)
+{
+	return py32_host_alive;
+}
+
+static void py32_host_bt_enable(void)
+{
+#ifdef CONFIG_BT_MANAGER
+	if (!bt_manager_is_inited()) {
+		return;
+	}
+
+	/* 先回连上次手机；失败/超时或列表空 → 进配对（见 system_btmgr_config） */
+	bt_manager_set_user_visual(false, false, false, 0);
+	bt_manager_start_wait_connect();
+	if (bt_manager_power_on_setup) {
+		printk("[py32] bt enable: reconnect then pair on fail\n");
+		bt_manager_powon_auto_reconnect(0);
+	}
+#endif
+}
+
+static void py32_host_bt_disable(void)
+{
+#ifdef CONFIG_BT_MANAGER
+	if (!bt_manager_is_inited()) {
+		return;
+	}
+
+	printk("[py32] bt disable: end pair, disconnect, hide\n");
+	bt_manager_auto_reconnect_stop();
+	bt_manager_end_pair_mode();
+	bt_manager_br_disconnect_all_phone_device();
+	bt_manager_end_wait_connect();
+	bt_manager_set_user_visual(true, false, false, 0);
+#endif
+}
+
+static void py32_host_power_on(void)
+{
+	printk("[py32] host on (uart active)\n");
+	py32_host_alive = true;
+	py32_host_bt_enable();
+	py32_host_notify_ui(UI_EVENT_POWER_ON);
+	if (desktop_manager_get_plugin_id() == DESKTOP_PLUGIN_ID_BR_MUSIC) {
+		py32_host_notify_ui(UI_EVENT_ENTER_BTMUSIC);
+	}
+}
+
+static void py32_host_power_off(void)
+{
+	printk("[py32] host off (idle %dms)\n", PY32_HOST_IDLE_TIMEOUT_MS);
+	py32_host_alive = false;
+	py32_host_bt_disable();
+}
+
+static void py32_host_idle_work_handler(os_work *work)
+{
+	ARG_UNUSED(work);
+
+	if (py32_host_alive) {
+		py32_host_power_off();
+	}
+}
+
+static void py32_host_on_rx_activity(void)
+{
+	if (!py32_host_alive) {
+		py32_host_power_on();
+	}
+
+	os_delayed_work_cancel(&py32_host_idle_work);
+	os_delayed_work_submit(&py32_host_idle_work, PY32_HOST_IDLE_TIMEOUT_MS);
+}
 static u32_t py32_tx_byte_count;
 
 /* 硬件 TX：走 UART1 外设（CPU poll 模式），GPIO21 MFP=0xe */
@@ -280,6 +388,7 @@ static void py32_rx_ring_push(const uint8_t *data, uint32_t len, const char *via
 	irq_unlock(key);
 
 	if (pushed > 0U) {
+		/* 仅唤醒线程：host on/off / BT 不可在 ISR 中调用 */
 		k_sem_give(&py32_rx_wake);
 	}
 }
@@ -456,6 +565,31 @@ static int py32_uart_dma_setup(void)
 	return 0;
 }
 
+/** BTM→PY32 完整帧十六进制；内容不变则跳过（避免 50ms 空律动刷屏） */
+static void py32_print_tx_frame(const uint8_t *data, size_t len)
+{
+	size_t i;
+
+	if (!data || len == 0U || len > PY32_FRAME_MAX) {
+		return;
+	}
+
+	if (len == py32_last_tx_len &&
+	    memcmp(py32_last_tx_log, data, len) == 0) {
+		return;
+	}
+
+	memcpy(py32_last_tx_log, data, len);
+	py32_last_tx_len = len;
+
+	/* 与 RX 同格式，前缀 TX 区分方向：Addr CMD LEN DATA CRC16(LE) */
+	printk("[py32] TX");
+	for (i = 0U; i < len; i++) {
+		printk(" %02x", (unsigned)data[i]);
+	}
+	printk("\n");
+}
+
 /** 硬件 UART1 TX：逐字节写入 FIFO，发完后等待空闲 */
 static void py32_uart_tx_bytes(const uint8_t *data, size_t len)
 {
@@ -465,13 +599,7 @@ static void py32_uart_tx_bytes(const uint8_t *data, size_t len)
 		return;
 	}
 
-#if defined(CONFIG_SYSTEM_APP_PY32_UART_TX_DEBUG)
-	printk("[py32] TX %uB:", (unsigned)len);
-	for (i = 0U; i < len; i++) {
-		printk(" %02x", (unsigned)data[i]);
-	}
-	printk("\n");
-#endif
+	py32_print_tx_frame(data, len);
 
 	for (i = 0U; i < len; i++) {
 		py32_uart1_putc_hw(data[i]);
@@ -524,9 +652,24 @@ static void py32_parse_reset(void)
 	py32_crc_rx = 0;
 }
 
+/*
+ * 滚轮 0~100% → 系统音量档：
+ * 低区适当抬高（避免偏低时几乎听不见），高区放缓（避免越大跳变越猛）。
+ * 锚点（max=16 时）：0/10/20/30/40/50/60/70/80/90/100%
+ *                 → 0/ 3/ 6/ 8/10/11/12/13/14/15/ 16
+ */
 static int py32_volume_pct_to_level(uint8_t pct)
 {
+	static const uint8_t pct_anchor[] = {
+		0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100
+	};
+	static const uint8_t level_anchor[] = {
+		0, 3, 6, 8, 10, 11, 12, 13, 14, 15, 16
+	};
 	int max = audio_policy_get_volume_level();
+	unsigned i;
+	unsigned lo_pct, hi_pct, lo_lvl, hi_lvl;
+	int level;
 
 	if (max <= 0) {
 		return 0;
@@ -534,12 +677,54 @@ static int py32_volume_pct_to_level(uint8_t pct)
 	if (pct > 100U) {
 		pct = 100U;
 	}
-	return (int)((pct * max + 50U) / 100U);
+
+	for (i = 1; i < ARRAY_SIZE(pct_anchor); i++) {
+		if (pct <= pct_anchor[i]) {
+			break;
+		}
+	}
+	if (i >= ARRAY_SIZE(pct_anchor)) {
+		i = ARRAY_SIZE(pct_anchor) - 1U;
+	}
+
+	lo_pct = pct_anchor[i - 1U];
+	hi_pct = pct_anchor[i];
+	lo_lvl = level_anchor[i - 1U];
+	hi_lvl = level_anchor[i];
+
+	if (hi_pct == lo_pct) {
+		level = (int)lo_lvl;
+	} else {
+		level = (int)(lo_lvl +
+			      ((uint32_t)(pct - lo_pct) * (hi_lvl - lo_lvl) +
+			       (hi_pct - lo_pct) / 2U) / (hi_pct - lo_pct));
+	}
+
+	/* 表按 max=16 设计；其它 max 时按比例缩放 */
+	if (max != 16) {
+		level = (level * max + 8) / 16;
+	}
+	if (level < 0) {
+		level = 0;
+	}
+	if (level > max) {
+		level = max;
+	}
+	return level;
 }
 
 static uint8_t py32_volume_level_to_pct(int level)
 {
+	static const uint8_t pct_anchor[] = {
+		0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100
+	};
+	static const uint8_t level_anchor[] = {
+		0, 3, 6, 8, 10, 11, 12, 13, 14, 15, 16
+	};
 	int max = audio_policy_get_volume_level();
+	unsigned i;
+	unsigned lo_pct, hi_pct, lo_lvl, hi_lvl;
+	int mapped;
 
 	if (level < 0) {
 		level = 0;
@@ -550,17 +735,67 @@ static uint8_t py32_volume_level_to_pct(int level)
 	if (level > max) {
 		level = max;
 	}
-	return (uint8_t)((level * 100U + max / 2) / max);
+
+	/* 先把当前 max 映射回 0~16 表 */
+	if (max != 16) {
+		mapped = (level * 16 + max / 2) / max;
+	} else {
+		mapped = level;
+	}
+	if (mapped > 16) {
+		mapped = 16;
+	}
+
+	for (i = 1; i < ARRAY_SIZE(level_anchor); i++) {
+		if ((unsigned)mapped <= level_anchor[i]) {
+			break;
+		}
+	}
+	if (i >= ARRAY_SIZE(level_anchor)) {
+		i = ARRAY_SIZE(level_anchor) - 1U;
+	}
+
+	lo_pct = pct_anchor[i - 1U];
+	hi_pct = pct_anchor[i];
+	lo_lvl = level_anchor[i - 1U];
+	hi_lvl = level_anchor[i];
+
+	if (hi_lvl == lo_lvl) {
+		return (uint8_t)lo_pct;
+	}
+	return (uint8_t)(lo_pct +
+			 ((uint32_t)((unsigned)mapped - lo_lvl) *
+			  (hi_pct - lo_pct) + (hi_lvl - lo_lvl) / 2U) /
+			 (hi_lvl - lo_lvl));
+}
+
+static void py32_volume_log_map_table(void)
+{
+	static const uint8_t pcts[] = {
+		0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100
+	};
+	int max = audio_policy_get_volume_level();
+	unsigned i;
+
+	printk("[py32] vol map table (max=%d):\n", max);
+	for (i = 0; i < ARRAY_SIZE(pcts); i++) {
+		printk("[py32]   %3u%% -> level %d/%d\n",
+		       (unsigned)pcts[i],
+		       py32_volume_pct_to_level(pcts[i]),
+		       max);
+	}
 }
 
 static void py32_apply_volume(uint8_t volume_pct)
 {
+	int max = audio_policy_get_volume_level();
 	int level = py32_volume_pct_to_level(volume_pct);
 
 	py32_state.volume = volume_pct;
 	system_volume_set(AUDIO_STREAM_MUSIC, level, true);
-	printk("[py32] volume %u%% -> level %d/%d\n",
-	       (unsigned)volume_pct, level, audio_policy_get_volume_level());
+	printk("[py32] vol map: pct=%u -> lvl=%d/%d (prev_pct_of_lvl=%u)\n",
+	       (unsigned)volume_pct, level, max,
+	       (unsigned)py32_volume_level_to_pct(level));
 }
 
 #define PY32_PEQ_IDX_BASS	15U
@@ -649,6 +884,7 @@ static void py32_tx_status_frame(uint8_t err_code)
 	uint8_t data[PY32_RSP_DATA_LEN];
 	uint16_t crc;
 	unsigned int key;
+	uint8_t media_playing = 0U;
 
 	if (err_code == PY32_ERR_NONE) {
 		py32_sync_status_for_response();
@@ -662,12 +898,26 @@ static void py32_tx_status_frame(uint8_t err_code)
 	data[4] = py32_get_bt_connected();
 	data[5] = err_code;
 
-	/* 律动数据（后 11 字节）：频谱 + 播放状态 */
+	/* DATA[16]：手机媒体播放状态（AVRCP），非本地 DSP/A2DP 出声 */
+#ifdef CONFIG_BT_MANAGER
+	media_playing =
+		(bt_manager_media_get_status() == BT_STATUS_PLAYING) ? 1U : 0U;
+#else
+	media_playing = py32_rhythm_playing;
+#endif
+
+	/* 律动：播放中带频谱；暂停时频谱清零，避免灯带误律动 */
 	key = irq_lock();
-	memcpy(&data[PY32_RSP_STATE_LEN], py32_rhythm_bands, PY32_RSP_RHYTHM_LEN - 1U);
-	data[PY32_RSP_DATA_LEN - 1U] = py32_rhythm_playing;
+	if (media_playing) {
+		memcpy(&data[PY32_RSP_STATE_LEN], py32_rhythm_bands,
+		       PY32_RSP_RHYTHM_LEN - 1U);
+	} else {
+		memset(&data[PY32_RSP_STATE_LEN], 0, PY32_RSP_RHYTHM_LEN - 1U);
+	}
+	py32_rhythm_playing = media_playing;
 	py32_rhythm_dirty = 0U;
 	irq_unlock(key);
+	data[PY32_RSP_DATA_LEN - 1U] = media_playing;
 
 	/* [V1.1] 帧格式: Addr(0x02) + CMD(0x10) + LEN + DATA + CRC16 */
 	frame[0] = PY32_ADDR_SLAVE;
@@ -679,13 +929,6 @@ static void py32_tx_status_frame(uint8_t err_code)
 	frame[4 + PY32_RSP_DATA_LEN] = (uint8_t)((crc >> 8) & 0xFFU);
 
 	py32_uart_tx_bytes(frame, 5U + PY32_RSP_DATA_LEN);
-#if defined(CONFIG_SYSTEM_APP_PY32_UART_TX_DEBUG)
-	printk("[py32] TX vol=%u tre=%u bas=%u vib=%u bt=%u err=%u b0=%u b5=%u b9=%u play=%u\n",
-	       (unsigned)data[0], (unsigned)data[1], (unsigned)data[2],
-	       (unsigned)data[3], (unsigned)data[4], (unsigned)data[5],
-	       (unsigned)data[6], (unsigned)data[11], (unsigned)data[15],
-	       (unsigned)data[16]);
-#endif
 }
 
 static void py32_send_status_response(uint8_t err_code)
@@ -720,6 +963,49 @@ void py32_rhythm_set_data(const uint8_t *bands, uint8_t playing)
 	irq_unlock(key);
 }
 
+static bool py32_rx_frame_same(uint8_t addr, uint8_t cmd,
+			       const uint8_t *data, uint8_t len, uint16_t crc)
+{
+	if (py32_last_rx_log.addr != addr || py32_last_rx_log.cmd != cmd ||
+	    py32_last_rx_log.len != len || py32_last_rx_log.crc != crc) {
+		return false;
+	}
+
+	if (len == 0U) {
+		return true;
+	}
+
+	return (data != NULL) &&
+	       (memcmp(py32_last_rx_log.data, data, len) == 0);
+}
+
+static void py32_save_rx_log(uint8_t addr, uint8_t cmd,
+			     const uint8_t *data, uint8_t len, uint16_t crc)
+{
+	py32_last_rx_log.addr = addr;
+	py32_last_rx_log.cmd = cmd;
+	py32_last_rx_log.len = len;
+	py32_last_rx_log.crc = crc;
+	if (len > 0U && data != NULL) {
+		memcpy(py32_last_rx_log.data, data, len);
+	}
+}
+
+static void py32_print_rx_frame(uint8_t addr, uint8_t cmd,
+				const uint8_t *data, uint8_t len, uint16_t crc)
+{
+	unsigned int i;
+
+	/* 完整 UART 帧：Addr CMD LEN DATA CRC16(LE) */
+	printk("[py32] %02x %02x %02x",
+	       (unsigned)addr, (unsigned)cmd, (unsigned)len);
+	for (i = 0U; i < len; i++) {
+		printk(" %02x", (unsigned)data[i]);
+	}
+	printk(" %02x %02x\n",
+	       (unsigned)(crc & 0xffU), (unsigned)((crc >> 8) & 0xffU));
+}
+
 static void py32_handle_set_params(const uint8_t *data, uint8_t len)
 {
 	uint8_t err = PY32_ERR_NONE;
@@ -729,10 +1015,6 @@ static void py32_handle_set_params(const uint8_t *data, uint8_t len)
 		py32_send_status_response(PY32_ERR_BAD_LEN);
 		return;
 	}
-
-	printk("[py32] RX set vol=%u tre=%u bas=%u vib=%u\n",
-	       (unsigned)data[0], (unsigned)data[1],
-	       (unsigned)data[2], (unsigned)data[3]);
 
 	if (data[0] > 100U || data[1] > 24U || data[2] > 24U || data[3] > 100U) {
 		err = PY32_ERR_BAD_VALUE;
@@ -765,7 +1047,6 @@ static void py32_handle_frame(uint8_t addr, uint8_t cmd, const uint8_t *data, ui
 		py32_handle_set_params(data, len);
 		break;
 	default:
-		printk("[py32] unsupported CMD 0x%02x\n", (unsigned)cmd);
 		py32_state.last_error = PY32_ERR_UNSUPPORTED;
 		py32_send_status_response(PY32_ERR_UNSUPPORTED);
 		break;
@@ -801,9 +1082,16 @@ static void py32_process_complete_frame(void)
 		return;
 	}
 
-	printk("[py32] frame OK addr=0x%02x cmd=0x%02x len=%u\n",
-	       (unsigned)py32_frame_addr, (unsigned)py32_frame_cmd,
-	       (unsigned)py32_frame_len);
+	if (py32_rx_frame_same(py32_frame_addr, py32_frame_cmd,
+			       py32_frame_data, py32_frame_len, py32_crc_rx)) {
+		py32_parse_reset();
+		return;
+	}
+
+	py32_save_rx_log(py32_frame_addr, py32_frame_cmd,
+			 py32_frame_data, py32_frame_len, py32_crc_rx);
+	py32_print_rx_frame(py32_frame_addr, py32_frame_cmd,
+			    py32_frame_data, py32_frame_len, py32_crc_rx);
 	py32_handle_frame(py32_frame_addr, py32_frame_cmd,
 			   py32_frame_data, py32_frame_len);
 	py32_parse_reset();
@@ -932,14 +1220,17 @@ static void py32_uart_thread(void *p1, void *p2, void *p3)
 
 	for (;;) {
 		(void)k_sem_take(&py32_rx_wake, K_MSEC(10));
-		py32_uart_ring_drain();
+		if (py32_uart_ring_drain() > 0) {
+			/* 线程上下文处理开/关机，避免 ISR 调 BT/work 崩溃 */
+			py32_host_on_rx_activity();
+		}
 
-		/* 状态+律动数据：每 50ms 发送一次（CMD=0x80, LEN=17） */
+		/* 状态+律动：每 50ms 发一帧（Addr=0x02 CMD=0x10 LEN=17） */
 		{
 			static u32_t last_rhythm_tx_ms;
 			u32_t now = k_uptime_get_32();
 
-			if (py32_init_banner_done &&
+			if (py32_init_banner_done && py32_host_alive &&
 			    (now - last_rhythm_tx_ms) >= 50U) {
 				py32_tx_status_frame(PY32_ERR_NONE);
 				last_rhythm_tx_ms = now;
@@ -1001,6 +1292,7 @@ static void py32_uart_do_init(void)
 
 	printk("[py32] UART1 ready TX=GPIO%d RX=GPIO%d\n",
 	       CONFIG_BOARD_UART1_TX_GPIO, CONFIG_BOARD_UART1_RX_GPIO);
+	py32_volume_log_map_table();
 
 	k_thread_create(&py32_uart_tid, py32_uart_stack,
 			K_THREAD_STACK_SIZEOF(py32_uart_stack),
@@ -1017,6 +1309,7 @@ static void py32_uart_delayed_init_handler(os_work *work)
 
 void system_app_py32_uart_init(void)
 {
+	os_delayed_work_init(&py32_host_idle_work, py32_host_idle_work_handler);
 	os_delayed_work_init(&py32_uart_init_work, py32_uart_delayed_init_handler);
 	os_delayed_work_submit(&py32_uart_init_work,
 			       CONFIG_SYSTEM_APP_PY32_UART_INIT_DELAY_MS);

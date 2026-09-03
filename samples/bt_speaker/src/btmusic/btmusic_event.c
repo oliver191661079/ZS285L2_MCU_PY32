@@ -245,6 +245,7 @@ static void btmusic_handle_playback_status(struct bt_media_play_status *status)
 	if (status->status == BT_STATUS_PAUSED) {
 		SYS_LOG_INF("pause\n");
 		btmusic->media_state = 0;
+		btmusic->playing = 0;
 	} else if (status->status == BT_STATUS_PLAYING) {
 		SYS_LOG_INF("play\n");
 		btmusic->media_state = 1;
@@ -795,7 +796,14 @@ void btmusic_input_event_proc(struct app_msg *msg)
 
 	switch (msg->cmd) {
 	case MSG_BT_PLAY_PAUSE_RESUME:
-		bt_manager_media_playpause();
+		/* 未连接：开关机短按进入配对；已连接：播放/暂停 */
+		if (bt_manager_get_connected_dev_num() == 0) {
+			sys_event_notify(SYS_EVENT_ENTER_PAIR_MODE);
+			bt_manager_set_user_visual(false, false, false, 0);
+			bt_manager_enter_pair_mode();
+		} else {
+			bt_manager_media_playpause();
+		}
 		break;
 
 	case MSG_BT_PLAY_NEXT:

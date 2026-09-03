@@ -64,6 +64,7 @@ void system_app_init(void);
 void system_app_py32_uart_init(void);
 void system_app_py32_reapply_eq(void);
 void py32_rhythm_set_data(const uint8_t *bands, uint8_t playing);
+bool system_app_py32_host_is_alive(void);
 #endif
 
 int system_bt_event_callback(uint8_t event, uint8_t* extra, uint32_t extra_len);

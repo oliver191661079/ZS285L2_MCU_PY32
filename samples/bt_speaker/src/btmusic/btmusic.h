@@ -67,7 +67,8 @@
  *   1 - 将频段能量平滑/归一化到 0~255，打印 bass/mid/high 与 R/G/B
  *   0 - 原厂 demo：以十六进制打印各频段原始能量
  */
-#if defined(CONFIG_BT_MUSIC_LED_RHYTHM)
+/* 本地 LED_RHYTHM 或 PY32 律动都需要频段能量 → RGB poll */
+#if defined(CONFIG_BT_MUSIC_LED_RHYTHM) || defined(CONFIG_SYSTEM_APP_PY32_UART)
 #define CONFIG_BT_MUSIC_RGB_RHYTHM_DEBUG 1
 #else
 #define CONFIG_BT_MUSIC_RGB_RHYTHM_DEBUG 0
@@ -79,10 +80,14 @@
 #define CONFIG_BT_MUSIC_RGB_PCM_DUMP 0
 
 /*
- * 最后回退：A2DP sink 缓冲长度（非音乐频谱，仅蓝牙数据量）。
- * src=2 时律动与节拍无关，应优先让 src=0（DSP）或 src=1（PCM）生效。
+ * A2DP sink 缓冲长度回退（非真实频谱）。DSP 失败时仍给 PY32 一点动态，
+ * 有 src=0 后日志会切到真实频段。
  */
+#if defined(CONFIG_SYSTEM_APP_PY32_UART)
+#define CONFIG_BT_MUSIC_RGB_STREAM_FALLBACK 1
+#else
 #define CONFIG_BT_MUSIC_RGB_STREAM_FALLBACK 0
+#endif
 
 #if CONFIG_BT_MUSIC_RGB_PCM_DUMP || CONFIG_BT_MUSIC_RGB_STREAM_FALLBACK
 #define CONFIG_BT_MUSIC_RGB_PCM_FALLBACK 1

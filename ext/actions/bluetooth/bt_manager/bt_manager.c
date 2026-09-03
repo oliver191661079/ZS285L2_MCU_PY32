@@ -938,6 +938,7 @@ void bt_manager_auto_reconnect_complete(void)
         if (bt_manager_audio_get_cur_dev_num()> 0){
             return;
         }
+        sys_event_notify(SYS_EVENT_ENTER_PAIR_MODE);
         bt_manager_enter_pair_mode();
 	}
 }
